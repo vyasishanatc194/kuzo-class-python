@@ -83,6 +83,8 @@ THIRD_PARTY_APPS = [
     "rest_framework_swagger",
     "corsheaders",
     "widget_tweaks",
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
     # "sorl.thumbnail",
     # "phonenumber_field",
     # "django_countries",
