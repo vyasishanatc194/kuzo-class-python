@@ -79,8 +79,8 @@ THIRD_PARTY_APPS = [
     'rest_auth.registration',
 
     "allauth.socialaccount",
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.facebook',
+    # 'allauth.socialaccount.providers.google',
 
     "django_celery_beat",
     "django_celery_results",

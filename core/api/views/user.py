@@ -94,7 +94,6 @@ class AccountCreateApiView(APIView):
         
         if serializer.is_valid(raise_exception = True):
             try:
-                
                 otp=send_otp_user(username, mobile_num)
                 serializer.save()  
             except:
