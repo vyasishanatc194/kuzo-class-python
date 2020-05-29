@@ -73,22 +73,32 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
+
     "allauth",
     "allauth.account",
+    'rest_auth.registration',
+
     "allauth.socialaccount",
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
+
     "django_celery_beat",
     "django_celery_results",
+    
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_swagger",
+    'rest_auth',
+
     "corsheaders",
     "widget_tweaks",
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google',
+    
     # "sorl.thumbnail",
     # "phonenumber_field",
     # "django_countries",
     "ckeditor",
+    
+    
 ]
 
 LOCAL_APPS = [
@@ -433,3 +443,14 @@ ADMIN_HIDE_PERMS = [
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+
+REST_USE_JWT = True
+ACCOUNT_LOGOUT_ON_GET = True
+OLD_PASSWORD_FIELD_ENABLED = True
+LOGOUT_ON_PASSWORD_CHANGE = False
+
+
+REST_AUTH_SERIALIZERS = {
+    'LOGIN_SERIALIZER': 'core.api.serializers.rest_auth.LoginSerializer',
+    'TOKEN_SERIALIZER': 'core.api.serializers.rest_auth.TokenSerializer'
+}
