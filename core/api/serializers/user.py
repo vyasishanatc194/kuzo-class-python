@@ -22,6 +22,7 @@ class MyUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            "id",
             "username",
             "first_name",
             "last_name",
@@ -30,4 +31,5 @@ class MyUserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "is_staff",
             "is_active",
+            "mobile"
         )

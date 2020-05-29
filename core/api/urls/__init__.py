@@ -3,6 +3,7 @@ from django.urls import include, path
 from . import user
 from . import social_login
 from . import social_connect
+from .import user_registration
 
 
 
@@ -14,5 +15,8 @@ urlpatterns = [
     path("login/", include(social_login)),
     
     path("connect/", include(social_connect)),
+
+    path("", include(user_registration)),
+
 
 ]
