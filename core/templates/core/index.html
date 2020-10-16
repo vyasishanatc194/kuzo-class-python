@@ -1,4 +1,4 @@
-{% extends 'core/home.html' %}
+{% extends 'core/base.html' %}
 
 {% load static %}
 {% load admin_extras %}
@@ -19,60 +19,140 @@
 
 
 
-<header class="list-header card mb-4">
-  <div class="card-body clearfix">
-    <div class="float-left">
-      <h5 class="card-title">Welcome to {{ PROJECT_TITLE }} {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user }}{% endif %}!</h5>
-      <p class="lead">{{ PROJECT_TITLE }} is a lorem ipsum dolar sit amet...</p>
+
+<div class="wrapper wrapper-content">
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="ibox ">
+        <div class="ibox-title">
+          <div class="ibox-tools">
+            <span class="label label-success float-right">Monthly</span>
+          </div>
+          <h5>Users</h5>
+        </div>
+        <div class="ibox-content">
+          <h3 class="no-margins">{{ user_count }}</h3>
+          <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
+          <small>Recently joined</small>
+        </div>
+      </div>
     </div>
-      
-    
-    <div class="float-right lead">
-      <a href="{% url opts|admin_urlname:'create' %}" class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> New {{ opts.verbose_name|capfirst }}</a>
+    <div class="col-lg-3">
+      <div class="ibox ">
+        <div class="ibox-title">
+          <div class="ibox-tools">
+            <span class="label label-info float-right">Annual</span>
+          </div>
+          <h5>Invited Users</h5>
+        </div>
+        <div class="ibox-content">
+          <h3 class="no-margins">{{ get_total_invited_user }}</h3>
+          <div class="stat-percent font-bold text-info">20% <i class="fa fa-arrow-up"></i></div>
+          <small>Newly registered</small>
+        </div>
+      </div>
     </div>
-    
+    <div class="col-lg-3">
+      <div class="ibox ">
+        <div class="ibox-title">
+          <div class="ibox-tools">
+            <span class="label label-primary float-right">Today</span>
+          </div>
+          <h5>Plan</h5>
+        </div>
+        <div class="ibox-content">
+          <h3 class="no-margins">{{ get_total_plan }}</h3>
+          <div class="stat-percent font-bold text-navy">44% <i class="fa fa-thumbs-up"></i></div>
+          <small>Recently created</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="ibox ">
+        <div class="ibox-title">
+          <div class="ibox-tools">
+            <span class="label label-danger float-right">Low value</span>
+          </div>
+          <h5>Order</h5>
+        </div>
+        <div class="ibox-content">
+          <h3 class="no-margins">{{ get_total_order }}</h3>
+          <div class="stat-percent font-bold text-danger">38% <i class="fa fa-angle-down"></i></div>
+          <small>Newly registered</small>
+        </div>
+      </div>
+    </div>
   </div>
-</header>
+</div>
 
-<!-- <div class="jumbotron">
-  <h1>Welcome to {{ PROJECT_TITLE }}
-    {% if request.user.first_name %}{{ request.user.first_name }}{% else %}{{ request.user }}{% endif %}!</h1>
-  <p class="lead">{{ PROJECT_TITLE }} is a lorem ipsum dolar sit amet...</p>
-  <hr class="my-4">
-    <p>To get started, select an option from the buttons below, or menu:</p>
-  <div class="lead">
-    <a class="btn btn-primary btn-lg" href="" role="button">Button 1</a> <a
-      class="btn btn-primary btn-lg"
-      href="" role="button">Button 2</a>
-  </div>  
-</div> -->
 
- 
+
 <div class="row">
-
-  {% for o in object_list %}
-  <div class="col-lg-3">
+  <div class="col-lg-12">
     <div class="ibox ">
       <div class="ibox-title">
+        <h5>Orders</h5>
         <div class="ibox-tools">
-          <!-- <span class="label label-success float-right">{{ o.plan }}</span> -->
+          <div class="btn-group">
+            <button type="button" class="btn btn-xs btn-white active">Today</button>
+            <button type="button" class="btn btn-xs btn-white">Monthly</button>
+            <button type="button" class="btn btn-xs btn-white">Annual</button>
+          </div>
         </div>
-        <h5>ID: {{ o.id }}</h5>
       </div>
       <div class="ibox-content">
-        <h1 class="no-margins">
-          <a href="{% url opts|admin_urlname:'select' o.pk|admin_urlquote %}"  >
-            {{ o.name }}
-          </a>  
-        </h1>
-        <!-- <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div> -->
-        <!-- <small>Total income</small> -->
+        <div class="row">
+          <div class="col-lg-9">
+            <div class="flot-chart">
+              <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <ul class="stat-list">
+              <li>
+                <h2 class="no-margins">{{ user_count }}</h2>
+                <small>Recent Users</small>
+                <div class="stat-percent">48% <i class="fa fa-arrow-up text-navy"></i></div>
+                <div class="progress progress-mini">
+                  <div style="width: 48%;" class="progress-bar"></div>
+                </div>
+              </li>
+              <li>
+                <h2 class="no-margins ">{{ get_total_invited_user }}</h2>
+                <small>Recent Invited Users</small>
+                <div class="stat-percent">60% <i class="fa fa-arrow-down text-navy"></i></div>
+                <div class="progress progress-mini">
+                  <div style="width: 60%;" class="progress-bar"></div>
+                </div>
+              </li>
+              <li>
+                <h2 class="no-margins ">{{ get_total_plan }}</h2>
+                <small>Recent Plan</small>
+                <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
+                <div class="progress progress-mini">
+                  <div style="width: 22%;" class="progress-bar"></div>
+                </div>
+              </li>
+              <li>
+                <h2 class="no-margins ">{{ get_total_order }}</h2>
+                <small>Plan Order</small>
+                <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i></div>
+                <div class="progress progress-mini">
+                  <div style="width: 38%;" class="progress-bar"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  {% endfor %}
-
 </div>
+
+
+
+
+
 
 {% comment %} <div class="row">
 
@@ -127,25 +207,4 @@
 </div> {% endcomment %}
 <!-- /row -->
 
-
-<div class="row">
-
-  {% if perms.users or perms.auth %}
-  {% comment %} <div class="col-lg-4">
-    <div class="ibox float-e-margins">
-      <div class="ibox-title">
-        <!-- <span class="label label-primary pull-right">Today</span> -->
-        <h5><i class="fa fa-users"></i> Users & Groups</h5>
-      </div>
-      <div class="ibox-content no-padding">
-        <ul class="list-group">
-          <li class="list-group-item"><a href="{% url 'core:user-list' %}">Users</a></li>
-          <li class="list-group-item"><a href="{% url 'core:group-list' %}">Groups</a></li>
-        </ul>
-      </div>
-    </div>
-  </div> {% endcomment %}
-  {% endif %}
-
-</div>
 {% endblock %}

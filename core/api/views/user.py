@@ -7,16 +7,23 @@ from rest_framework.mixins import (ListModelMixin, RetrieveModelMixin,
                                    UpdateModelMixin)
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.views import APIView
 
 from core.api.serializers import UserSerializer, MyUserSerializer
 
+from rest_framework.permissions import AllowAny
+
+import random
+from twilio.rest import Client
+
 from django.utils import timezone
 from datetime import datetime, timedelta, date
+from core.api.apiviews import MyAPIView
 
-from core.utils.send_otp import send_otp_user
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAdminUser
 
+account_sid = 'ACbd44dd22794ad8e0268615ea28eca6fa'
+auth_token = 'd4e874adeace90e6cecdc46fb3ca450c'
+twilio = '+15005550006'
 
 User = get_user_model()
 
@@ -40,6 +47,7 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
 
 
 class MyUserViewSet(MyModelViewSet):
+    
     """
     list:
     List all User
@@ -67,7 +75,20 @@ class MyUserViewSet(MyModelViewSet):
 
 
 
-class AccountCreateApiView(APIView):
+def send_otp(name, recv):        
+    my = recv    
+    name = name
+    client = Client(account_sid, auth_token)
+    otp = random.randint(111111, 999999)    
+    my_msg = "Hi " + name + " !" + "\n" + "Your Night Market account verification otp is : " + str(otp)
+    message = client.messages.create(body=my_msg, from_=twilio, to=my)  
+    return otp
+
+
+
+
+class AccountCreateApiView(MyAPIView):
+
     """
     User register view
     """
@@ -75,7 +96,6 @@ class AccountCreateApiView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, *args, **kwargs):
-        
         data= request.data
         email = data['email']
         username = data['username']
@@ -84,45 +104,45 @@ class AccountCreateApiView(APIView):
         mobile = User.objects.filter(mobile=mobile_num).distinct()
 
         if user.exists() and mobile.exists():
-            return Response({
-                "data": [],
-                "status": False,
-                "code" : status.HTTP_200_OK,
-                "message" : "Account is already exists."
-                }, status=status.HTTP_200_OK)
-        serializer = MyUserSerializer(data= data)
-        
+            return Response({"status": "FAIL", "message": "Account is already exists", "data": []})
+#                "data": [],
+#                "status": False,
+#                "code" : status.HTTP_200_OK,
+#                "message" : "Account is already exists."
+#                }, status=status.HTTP_200_OK)
+        serializer = UserSerializer(data= data)
+
         if serializer.is_valid(raise_exception = True):
             try:
-                otp=send_otp_user(username, mobile_num)
+                
+                otp=send_otp(username, mobile_num)
                 serializer.save()  
             except:
-                return Response({
-                    "status": False,
-                    "code" : status.HTTP_400_BAD_REQUEST,
-                    "message" : "Cannot sent otp"
-                }, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"status": "FAIL", "message": "Cannot sent otp", "data": []})
+#                    "status": False,
+#                    "code" : status.HTTP_400_BAD_REQUEST,
+#                    "message" : "Cannot sent otp"
+#                }, status=status.HTTP_400_BAD_REQUEST)
 
             User.objects.filter(email=email).update(otp=otp)                
-            
-            return Response({
-                            "data": serializer.data,
-                            "status": True,
-                            "code" : status.HTTP_200_OK,
-                            "message" : "Successfully registered User"
-                            }, status=status.HTTP_201_CREATED)
-        return Response({
-                        "data": serializer.errors,
-                        "status": False,
-                        "code" : status.HTTP_200_OK,
-                        "message" : "Cannot register new user"
-                        }, status=status.HTTP_200_OK)
+          
+            return Response({"status": "OK", "message": "Successfully registered User", "data": serializer.data})
+#                            "data": serializer.data,
+#                            "status": True,
+#                            "code" : status.HTTP_200_OK,
+#                            "message" : "Successfully registered User"
+#                            }, status=status.HTTP_201_CREATED)
+        return Response({"status": "FAIL", "message": "Cannot register new user", "data": serializer.errors})
+#                        "data": serializer.errors,
+#                        "status": False,
+#                        "code" : status.HTTP_200_OK,
+#                        "message" : "Cannot register new user"
+#                        }, status=status.HTTP_200_OK)
         
         
         
-class UserOtpVerificationAPIView(APIView):
+class UserOtpVerificationAPIView(MyAPIView):
     permission_classes = (AllowAny,)
-    
     def post(self, request, pk, *args, **kwargs):
         try:
             user = User.objects.get(pk=pk)
@@ -131,35 +151,37 @@ class UserOtpVerificationAPIView(APIView):
            
             if request.data['otp'] == '' or 'otp' not in request.data:
                
-                return Response({
-                    "status": False,
-                    "code" : status.HTTP_400_BAD_REQUEST,
-                    "message" : "OTP is required"
-                    }, status=status.HTTP_400_BAD_REQUEST)
-                      
+                return Response({"status": "FAIL", "message": "OTP is required", "data": []})
+#                    "status": False,
+#                    "code" : status.HTTP_400_BAD_REQUEST,
+#                    "message" : "OTP is required"
+#                    }, status=status.HTTP_400_BAD_REQUEST)
+            
+                                
             else:
                 if int(request.data['otp']) == user.otp:
                     user.sms_verification = True
                     user.save()
                     
-                    return Response({
-                        "status": True,
-                        "code" : status.HTTP_200_OK,
-                        "message" : "User verified successfully"
-                        }, status=status.HTTP_200_OK)
+                    return Response({"status": "OK", "message": "User verified successfully", "data": []})
+#                        "status": False,
+#                        "code" : status.HTTP_200_OK,
+#                        "message" : "User verified successfully"
+#                        }, status=status.HTTP_200_OK)
             
             
                 else:
                     
-                    return Response({
-                        "status": False,
-                        "code" : status.HTTP_404_NOT_FOUND,
-                        "message" : "OTP is not match."
-                        }, status=status.HTTP_404_NOT_FOUND)  
+                    return Response({"status": "FAIL", "message": "OTP is not match", "data": []})
+#                        "status": False,
+#                        "code" : status.HTTP_404_NOT_FOUND,
+#                        "message" : "OTP is not match."
+#                        }, status=status.HTTP_404_NOT_FOUND)
+              
         except:
                         
-            return Response({
-                "status": False,
-                "code" : status.HTTP_400_BAD_REQUEST,
-                "message" : "Cannot varify otp"
-                }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "FAIL", "message": "Cannot verify otp", "data": []})
+#                "status": False,
+#                "code" : status.HTTP_400_BAD_REQUEST,
+#                "message" : "Cannot varify otp"
+#                }, status=status.HTTP_400_BAD_REQUEST)

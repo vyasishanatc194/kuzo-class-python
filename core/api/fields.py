@@ -7,7 +7,9 @@ from rest_framework import serializers
 
 
 class DateTimeTzAwareField(serializers.DateTimeField):
-    """Ensure UTC time is in our local timezone."""
+    """
+    Ensure UTC time is in our local timezone.
+    """
 
     def to_representation(self, value):
         value = timezone.localtime(value)

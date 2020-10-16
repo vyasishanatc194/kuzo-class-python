@@ -9,7 +9,9 @@ from django.shortcuts import redirect
 
 
 class SuccessMessageMixin(object):
-    """CBV mixin which adds a success message on form save."""
+    """
+    CBV mixin which adds a success message on form save.
+    """
 
     success_message = ""
 
@@ -34,7 +36,9 @@ class SuccessMessageMixin(object):
 
 
 class ModelOptsMixin(object):
-    """CBV mixin which adds model options to the context."""
+    """
+    CBV mixin which adds model options to the context.
+    """
 
     def get_context_data(self, **kwargs):
         """Returns the context data to use in this view."""
@@ -45,9 +49,12 @@ class ModelOptsMixin(object):
 
 
 class HasPermissionsMixin(object):
-    """CBV mixin which adds has_permission options to the context."""
+    """
+    CBV mixin which adds has_permission options to the context.
+    """
 
     def has_add_permission(self, request):
+
         """
         Return True if the given request has permission to add an object.
         Can be overridden by the user in subclasses.
@@ -55,8 +62,9 @@ class HasPermissionsMixin(object):
         opts = self.model._meta
         codename = get_permission_codename("add", opts)
         
+
         
-        return request.user.has_perm("%s.%s" % (opts.app_label, codename))
+        return request.user.has_perm("%s.%s" % (opts.app_label, codename)) or request.user.is_staff
 
     def has_change_permission(self, request, obj=None):
         """
@@ -71,7 +79,7 @@ class HasPermissionsMixin(object):
         """
         opts = self.model._meta
         codename = get_permission_codename("change", opts)
-        return request.user.has_perm("%s.%s" % (opts.app_label, codename))
+        return request.user.has_perm("%s.%s" % (opts.app_label, codename)) or request.user.is_staff
 
     def has_delete_permission(self, request, obj=None):
         """
@@ -86,7 +94,7 @@ class HasPermissionsMixin(object):
         """
         opts = self.model._meta
         codename = get_permission_codename("delete", opts)
-        return request.user.has_perm("%s.%s" % (opts.app_label, codename))
+        return request.user.has_perm("%s.%s" % (opts.app_label, codename)) or request.user.is_staff
 
     def has_view_permission(self, request, obj=None):
         """
@@ -102,14 +110,15 @@ class HasPermissionsMixin(object):
         opts = self.model._meta
         codename_view = get_permission_codename("view", opts)
         codename_change = get_permission_codename("change", opts)
+
         return request.user.has_perm(
             "%s.%s" % (opts.app_label, codename_view)
-        ) or request.user.has_perm("%s.%s" % (opts.app_label, codename_change))
+        ) or request.user.has_perm("%s.%s" % (opts.app_label, codename_change)) or request.user.is_staff
 
     def has_view_or_change_permission(self, request, obj=None):
         return self.has_view_permission(request, obj) or self.has_change_permission(
             request, obj
-        )
+        ) or request.user.is_staff
 
     def has_module_permission(self, request):
         """
@@ -123,7 +132,7 @@ class HasPermissionsMixin(object):
         `ModelAdmin.has_(add|change|delete)_permission` for that.
         """
         opts = self.model._meta
-        return request.user.has_module_perms(opts.app_label)
+        return request.user.has_module_perms(opts.app_label) or request.user.is_staff
 
     def get_context_data(self, **kwargs):
         """Returns the context data to use in this view."""

@@ -9,12 +9,28 @@
       <h5 class="card-title">{{ title }}</h5>
       <p class="card-subtitle text-muted">{{ subtitle }}</p>
     </div>
-      
-    {% if has_add_permission and show_button %}
+
     <div class="float-right lead">
+      
+      {% if opts.verbose_name_plural == 'groups' %}
+
+      <a href="{% url opts|admin_urlname:'create' %}" class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> New Role</a>
+
+     
+      {% elif opts.verbose_name_plural == 'Flash Deal' %}
+
+      <a href="{% url 'core:master-flash-deal' %}" class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> Flash Deal Sync</a>
+
+
+     
+      {% else %}
+  
       <a href="{% url opts|admin_urlname:'create' %}" class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> New {{ opts.verbose_name|capfirst }}</a>
+  
+      {% endif %}
+      
     </div>
-    {% endif %}
+   
   </div>
 </header>
 <!-- /card -->

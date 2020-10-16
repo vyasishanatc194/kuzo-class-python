@@ -7,11 +7,23 @@
 
 {% block title %}
     {{ opts.verbose_name_plural|capfirst }}
+
 {% endblock%}
 
 
 {% block page_header %}
+
+    {% if opts.verbose_name_plural == 'groups' %}
+
+    User Roles
+
+    {% else %}
+
     {{ opts.verbose_name_plural|capfirst }}
+
+    {% endif %}
+
+    
 {% endblock%}
 
 
@@ -20,7 +32,20 @@
     <a href="{% url 'core:index' %}">{% trans 'Home' %}</a>
 </li>
 <li class="breadcrumb-item active">
+
+
+  {% if opts.verbose_name_plural == 'groups' %}
+
+    User Roles
+
+    {% else %}
+
     {{ opts.verbose_name_plural|capfirst }}
+
+    {% endif %}
+
+
+
 </li>
 {% endblock%}
 

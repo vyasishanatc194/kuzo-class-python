@@ -20,7 +20,7 @@
 
                 <div class="row">
                     <div class="col-sm-6">
-                        {{ form.username|as_crispy_field }}
+                        {{ form.name|as_crispy_field }}
                     </div>
                 </div>
 
@@ -50,20 +50,21 @@
             {% include "core/partials/ibox_title.html" with ibox_title="Personal Info" icon_class="fas fa-user" only %}
 
             <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-6">
-                        {{ form.first_name|as_crispy_field }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form.last_name|as_crispy_field }}
-                    </div>
-                </div>
 
                 <div class="row">
                     <div class="col-sm-6">
                         {{ form.email|as_crispy_field }}
                     </div>
+                   
                 </div>
+ 
+
+             
+
+                
+
+
+                
             </div>
             <!-- /ibox-content -->
 
@@ -80,21 +81,23 @@
                     <div class="col-sm-4">
                         {% input_icheck form.is_active %}
                     </div>
+                    {% if request.user.is_superuser %}
                     <div class="col-sm-4">
                         {% input_icheck form.is_staff %}
                     </div>
                     <div class="col-sm-4">
                         {% input_icheck form.is_superuser %}
                     </div>
+                    {% endif%}
                 </div>
 
+{#                <hr/>#}
+{##}
+
                 <hr/>
 
-                {{ form.groups|attr:"class:groups-select"|attr:"size:10"|as_crispy_field }}
+              
 
-                <hr/>
-
-                {{ form.user_permissions|attr:"class:permissions-select"|attr:"size:10"|as_crispy_field }}
             </div>
             <!-- /ibox-content -->
 

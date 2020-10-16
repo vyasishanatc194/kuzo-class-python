@@ -12,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # nightmarket/
-APPS_DIR = ROOT_DIR / "nightmarket"
+APPS_DIR = ROOT_DIR / "kuzo-class-python"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
@@ -47,7 +47,7 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {
-    "default": env.db("DATABASE_URL", default="postgres:///nightmarket2")
+    "default": env.db("DATABASE_URL", default="postgres:///kuzo-class-python")
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
@@ -73,14 +73,14 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
-
+  
     "allauth",
     "allauth.account",
     'rest_auth.registration',
 
     "allauth.socialaccount",
-    # 'allauth.socialaccount.providers.facebook',
-    # 'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 
     "django_celery_beat",
     "django_celery_results",
@@ -93,12 +93,11 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "widget_tweaks",
     
-    # "sorl.thumbnail",
     # "phonenumber_field",
-    # "django_countries",
     "ckeditor",
-    
-    
+    "sorl.thumbnail",
+    'drf_multiple_model',
+    'django_countries',
 ]
 
 LOCAL_APPS = [
@@ -122,7 +121,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = "core.User"
+AUTH_USER_MODEL = "core.user"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = "core:user-list"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
@@ -165,12 +164,32 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 # STATIC
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR / "staticfiles")
+STATIC_ROOT = str(ROOT_DIR / "static")
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
@@ -253,12 +272,30 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "webmaster.citrusbug@gmail.com"
+EMAIL_HOST_PASSWORD = "mdgutpvqfeglinbh"
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL
+
+DEFAULT_FROM_EMAIL = env(
+    "DJANGO_DEFAULT_FROM_EMAIL", default="kuzo-class-python <noreply@example.com>"
+)
+# https://docs.djangoproject.com/en/dev/ref/settings/#server-email
+SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
+EMAIL_SUBJECT_PREFIX = env(
+    "DJANGO_EMAIL_SUBJECT_PREFIX", default="[kuzo-class-python]"
+)
+
+
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Tim Santor""", "tsantor@xstudios.agency")]
+ADMINS = [("""Malkesh""", "themalkesh@gmail.com")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
@@ -317,24 +354,30 @@ CELERY_RESULT_BACKEND = "django-db"
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_AUTHENTICATION_METHOD = "email"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "core.adapters.AccountAdapter"
-# ACCOUNT_FORMS = {"signup": "core.forms_allauth.CustomSignupForm"}
+ACCOUNT_FORMS = {"signup": "core.forms.allauth.MyCustomSignupForm"}
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "core.adapters.SocialAccountAdapter"
 # SOCIALACCOUNT_FORMS = {
 #     "signup": "core.forms_allauth.CustomSocialSignupForm"
 # }
 
+ACCOUNT_USERNAME_REQUIRED  = False
+
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
+ 
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+
     "DATETIME_FORMAT": "%Y-%m-%d %H:%M:%S",  # 'iso-8601'
     "DATE_FORMAT": "%Y-%m-%d",
     "TIME_FORMAT": "%H:%M:%S",
@@ -343,7 +386,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication', 
         #"rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
         'rest_framework.authentication.BasicAuthentication',
     ),
     "DEFAULT_PERMISSION_CLASSES": (
@@ -351,7 +394,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ),
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
-    # "EXCEPTION_HANDLER": "api.exceptions.custom_exception_handler",
+    "EXCEPTION_HANDLER": "core.api.exceptions.custom_exception_handler",
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
 
@@ -394,30 +437,30 @@ CKEDITOR_CONFIGS = {
                 "Undo",
                 "Redo",
                 "-",
-                # "Format",
+                "Format",
                 "Bold",
                 "Italic",
                 "Underline",
-                # "Strike",
+                "Strike",
                 "-",
                 "NumberedList",
                 "BulletedList",
                 "-",
-                # "JustifyLeft",
-                # "JustifyCenter",
-                # "JustifyRight",
-                # "JustifyBlock",
-                # "-",
-                # "Link",
-                # "Unlink",
-                # "Anchor",
-                # "-",
-                # "Table",
-                # "HorizontalRule",
-                # "SpecialChar",
-                # "-",
-                # "TextColor",
-                # "BGColor",
+                "JustifyLeft",
+                "JustifyCenter",
+                "JustifyRight",
+                "JustifyBlock",
+                "-",
+                "Link",
+                "Unlink",
+                "Anchor",
+                "-",
+                "Table",
+                "HorizontalRule",
+                "SpecialChar",
+                "-",
+                "TextColor",
+                "BGColor",
                 "-",
                 "Source",
             ]
@@ -438,6 +481,7 @@ ADMIN_HIDE_PERMS = [
     "account",
     "socialaccount",
     "django_celery_beat",
+    "django_celery_results"
 ]
 
 
@@ -452,5 +496,65 @@ LOGOUT_ON_PASSWORD_CHANGE = False
 
 REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'core.api.serializers.rest_auth.LoginSerializer',
-    'TOKEN_SERIALIZER': 'core.api.serializers.rest_auth.TokenSerializer'
+    'TOKEN_SERIALIZER': 'core.api.serializers.rest_auth.TokenSerializer',
+    'JWT_SERIALIZER' : 'core.api.serializers.rest_auth.JwtSerializer', 
+    'USER_DETAILS_SERIALIZER' : 'core.api.serializers.rest_auth.UserDetailsSerializer', 
 }
+REST_AUTH_REGISTER_SERIALIZERS = {
+    "REGISTER_SERIALIZER":'core.api.serializers.rest_auth.RegisterSerializer'
+} 
+
+import datetime
+
+JWT_AUTH = {
+    'JWT_ENCODE_HANDLER':
+    'rest_framework_jwt.utils.jwt_encode_handler',
+
+    'JWT_DECODE_HANDLER':
+    'rest_framework_jwt.utils.jwt_decode_handler',
+
+    'JWT_PAYLOAD_HANDLER':
+    'rest_framework_jwt.utils.jwt_payload_handler',
+
+    'JWT_PAYLOAD_GET_USER_ID_HANDLER':
+    'rest_framework_jwt.utils.jwt_get_user_id_from_payload_handler',
+
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    'rest_framework_jwt.utils.jwt_response_payload_handler',
+
+    'JWT_GET_USER_SECRET_KEY': None,
+    'JWT_PUBLIC_KEY': None,
+    'JWT_PRIVATE_KEY': None, 
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_VERIFY': True,
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_LEEWAY': 0,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=43200),
+    'JWT_AUDIENCE': None,
+    'JWT_ISSUER': None,
+
+    'JWT_ALLOW_REFRESH': False,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
+
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_AUTH_COOKIE': None,
+
+}
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
+
+CURRENCY = "inr"
+
+ACCOUNT_SID = env("ACCOUNT_SID")
+AUTH_TOKEN = env("AUTH_TOKEN")
+FROM_NUMBER = env("FROM_NUMBER")
+
+API_KEY = env("stripe_api_key")
+
+#django-cors
+CORS_ALLOWED_ORIGINS = [
+    "http://3.6.9.168:3000/",
+    "http://localhost:3005/",
+    "http://127.0.0.1:3005/",
+]

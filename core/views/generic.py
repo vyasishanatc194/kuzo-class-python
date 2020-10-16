@@ -69,7 +69,15 @@ class MyListView(
 ):
     """ListView CBV with LoginRequiredMixin and PermissionRequiredMixin."""
 
-    pass 
+    def has_permission(self):
+
+        print('----------------------------is staff------------------------------------')
+        print(self.request.user.is_staff)
+        print('----------------------------is staff------------------------------------')
+        if(self.request.user.is_staff == True):
+            return True
+        else:
+            return super().has_permission() 
 
     # def get_permission_required(self):
     #     """Default to view and change perms."""
@@ -111,7 +119,15 @@ class MyCreateView(
         opts = self.model._meta
         return reverse(admin_urlname(opts, "list"))
 
-   
+    def has_permission(self):
+
+        print('----------------------------is staff------------------------------------')
+        print(self.request.user.is_staff)
+        print('----------------------------is staff------------------------------------')
+        if(self.request.user.is_staff == True):
+            return True
+        else:
+            return super().has_permission() 
 
 
 class MyUpdateView(
@@ -150,6 +166,16 @@ class MyUpdateView(
         #     return reverse(
         #         admin_urlname(opts, "update"), kwargs={"pk": self.get_object().pk}
         #     )
+
+    def has_permission(self):
+
+        print('----------------------------is staff------------------------------------')
+        print(self.request.user.is_staff)
+        print('----------------------------is staff------------------------------------')
+        if(self.request.user.is_staff == True):
+            return True
+        else:
+            return super().has_permission() 
 
 
 class MyDeleteView(
@@ -209,6 +235,15 @@ class MyDeleteView(
         ctx["protected"] = protected
         return ctx
 
+    def has_permission(self):
+
+        print('----------------------------is staff------------------------------------')
+        print(self.request.user.is_staff)
+        print('----------------------------is staff------------------------------------')
+        if(self.request.user.is_staff == True):
+            return True
+        else:
+            return super().has_permission() 
 
 class MyCancelView(
     LoginRequiredMixin,
@@ -272,6 +307,17 @@ class MyNewFormsetCreateView(
         return reverse(admin_urlname(opts, "list"))
 
 
+    def has_permission(self):
+
+        print('----------------------------is staff------------------------------------')
+        print(self.request.user.is_staff)
+        print('----------------------------is staff------------------------------------')
+        if(self.request.user.is_staff == True):
+            return True
+        else:
+            return super().has_permission() 
+
+
 class MyNewFormsetUpdateView(
     LoginRequiredMixin,
     PermissionRequiredMixin,
@@ -289,7 +335,15 @@ class MyNewFormsetUpdateView(
         opts = self.model._meta
         return reverse(admin_urlname(opts, "list"))
 
+    def has_permission(self):
 
+        print('----------------------------is staff------------------------------------')
+        print(self.request.user.is_staff)
+        print('----------------------------is staff------------------------------------')
+        if(self.request.user.is_staff == True):
+            return True
+        else:
+            return super().has_permission() 
 # -----------------------------------------------------------------------------
 # Multi Form Views
 # -----------------------------------------------------------------------------

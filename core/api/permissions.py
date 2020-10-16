@@ -27,11 +27,19 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
  
 
 class IsSuperUser(IsAdminUser):
+    """
+    Check whether the current user is Super user or not
+    """
+
     def has_permission(self, request, view):
         return bool(request.user and request.user.is_superuser)
 
 
 class IsUser(IsAuthenticated):
+    """
+    Check whether the current user exist or not
+    """
+
     def has_permission(self, request, view):
          
         return bool(request.user and request.user.groups.filter(name='User').exists())

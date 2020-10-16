@@ -105,7 +105,7 @@ def input_group_typeahead(field, icon_class=None):
 # @register.filter
 # def has_perm(user, perm):
 #     if user.is_authenticated:
-#         if user.is_superuser or user.has_perm(perm):
+#         if user.is_superuser or user.is_staff or user.has_perm(perm):
 #             return True
 #         return False
 #     return False

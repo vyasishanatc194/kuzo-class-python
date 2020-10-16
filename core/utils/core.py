@@ -8,7 +8,9 @@ from django.utils.encoding import force_text
 from django.utils.html import format_html
 from django.utils.text import capfirst
 from django.urls.exceptions import NoReverseMatch
-
+from django.contrib.auth.models import Group, Permission
+from django.conf import settings
+from core.models import User
 # -----------------------------------------------------------------------------
 
 
@@ -73,8 +75,15 @@ def get_deleted_objects(objs):
 def admin_urlname(value, arg):
     """Given model opts (model._meta) and a url name, return a named pattern.
     URLs should be named as: core:app_label:model_name-list"""
-    pattern = "%s:%s-%s" % (value.app_label, value.model_name, arg)
-    # print(pattern)
+
+    if value.model_name == 'groupinvitation':
+        pattern = "%s:%s-%s" % (value.app_label, 'groups', arg)
+
+    elif value.model_name == 'eventinvitation' :
+        pattern = "%s:%s-%s" % (value.app_label, 'event', arg)
+    else:
+        pattern = "%s:%s-%s" % (value.app_label, value.model_name, arg)
+
     return pattern
 
 
@@ -84,3 +93,21 @@ def filter_perms():
         content_type_id__app_label__in=settings.ADMIN_HIDE_PERMS
     )
 
+
+def filter_superadmin():
+    return User.objects.exclude(
+        is_superuser=True
+        )
+
+
+def filter_admin():
+    return User.objects.exclude(
+        is_staff=True
+        )
+
+
+def filter_vendor():
+    vendor = Group.objects.get(name="Vendor")
+    return User.objects.filter(
+        groups=vendor
+    )

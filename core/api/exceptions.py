@@ -20,7 +20,9 @@ def get_api_error(source, detail, code):
 
 
 def get_clean_errors(data):
-    """DRF will send errors through as data so let's rework it."""
+    """
+    DRF will send errors through as data so let's rework it.
+    """
     errors = []
     for k, v in data.items():
         ed = ErrorDetail(v)
@@ -54,7 +56,9 @@ def get_api_error_response(response):
 
 
 def custom_exception_handler(exc, context):
-    """Custom exception handler."""
+    """
+    Custom exception handler.
+    """
     # Call REST framework's default exception handler first,
     # to get the standard error response.
     response = exception_handler(exc, context)

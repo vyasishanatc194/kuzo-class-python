@@ -6,9 +6,11 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 
-admin.site.site_title = "Night Maket"
-admin.site.site_header = "Night Maket"
+admin.site.site_title = "kuzo-class-python"
+admin.site.site_header = "kuzo-class-python"
 admin.site.index_title = "Site Administration"
+from core.api.views.user import AccountCreateApiView,UserOtpVerificationAPIView
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 # Hide these allauth models from the Django admin
 # admin.site.unregister(EmailAddress)
@@ -17,9 +19,6 @@ admin.site.index_title = "Site Administration"
 # admin.site.unregister(SocialToken)
 
 urlpatterns = [
-
-    
-    
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
@@ -30,11 +29,12 @@ urlpatterns = [
     
     path("customadmin/", include("core.urls")),
     
-    # User management 
-    path("accounts/", include("allauth.urls")),
+   
     
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns()
 
 # # API URLS
 urlpatterns += [
@@ -64,6 +64,12 @@ if settings.DEBUG:
             kwargs={"exception": Exception("Page not Found")},
         ),
         path("500/", default_views.server_error),
+        
+        # path("user-create/",AccountCreateApiView.as_view(),name="user-create"),
+        # path('verify/<int:pk>', UserOtpVerificationAPIView.as_view(), name='verify'),
+
+
+
     ]
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar

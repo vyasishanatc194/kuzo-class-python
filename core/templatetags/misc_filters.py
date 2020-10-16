@@ -14,7 +14,6 @@ register = template.Library()
 
 @register.filter
 def model_uname(value):
-    """Returns a model name such as 'baking_oils'"""
     words = value._meta.verbose_name.lower().replace("&", "").split()
     return "_".join(words)
 
@@ -56,6 +55,7 @@ def admin_urlquote(value):
 
 @register.simple_tag
 def field_name(instance, field_name):
+
     """
     Django template filter which returns the verbose name of an object's,
     model's or related manager's field.
@@ -63,23 +63,3 @@ def field_name(instance, field_name):
     return instance._meta.get_field(field_name).verbose_name.title()
 
 
-# @register.simple_tag
-# def static_email(path):
-#     """
-#     Returns an absolute URL to a hosted static image for use in emails.
-#     Typically only needed when using local file storage.
-#     """
-#     if not hasattr(settings, "EMAIL_STATIC_URL"):
-#         raise ImproperlyConfigured("The EMAIL_STATIC_URL setting must not be empty.")
-#     return f"{settings.EMAIL_STATIC_URL}{path}"
-
-
-# @register.simple_tag
-# def media_email(path):
-#     """
-#     Returns an absolute URL to a hosted media image for use in emails.
-#     Typically only needed when using local file storage.
-#     """
-#     if not hasattr(settings, "EMAIL_MEDIA_URL"):
-#         raise ImproperlyConfigured("The EMAIL_MEDIA_URL setting must not be empty.")
-#     return f"{settings.EMAIL_MEDIA_URL}{path}"

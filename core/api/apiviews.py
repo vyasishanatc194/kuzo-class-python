@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from rest_framework.response import Response
 from rest_framework import generics, mixins
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -13,7 +13,9 @@ from core.utils import modify_api_response
 
 
 class MyObtainAuthToken(ObtainAuthToken):
-    """Override ObtainAuthToken to add in user ID."""
+    """
+    Override ObtainAuthToken to add in user ID.
+    """
 
     authentication_classes = ()
 
@@ -42,7 +44,8 @@ class MyGenericAPIView(generics.GenericAPIView):
 
 
 class MyUpdateAPIView(mixins.UpdateModelMixin, MyGenericAPIView):
-    """UpdateAPIView
+    """
+    UpdateAPIView
     UpdateModelMixin
     GenericAPIView
     APIView
@@ -50,3 +53,22 @@ class MyUpdateAPIView(mixins.UpdateModelMixin, MyGenericAPIView):
     """
 
     pass
+
+
+class MyListAPIView(generics.ListAPIView):
+    def finalize_response(self, request, response, *args, **kwargs):
+        # Override response (is there a better way to do this?)
+        response = modify_api_response(response)
+        return super().finalize_response(request, response, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+        #    return self.get_paginated_response(serializer.data)
+            return Response({"message": "Successfully fetched data", "data": self.get_paginated_response(serializer.data)})
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"message": "Successfully fetched data", "data": serializer.data})

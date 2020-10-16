@@ -859,7 +859,7 @@ h3, h4, h5 {
   color: #ffffff; }
 
 .navbar-default .nav > li > a:hover, .navbar-default .nav > li > a:focus {
-  background-color: #142668;
+  background-color: #4e4e4e;
   color: white; }
 
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
@@ -2499,7 +2499,7 @@ div.dt-button-info {
   display: none; }
 
 .pace .pace-progress {
-  background: #036ce2;
+  background: #000000;
   position: fixed;
   z-index: 2040;
   top: 0;
@@ -4165,7 +4165,7 @@ code, kbd, pre, samp {
 
 body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #162b75;
+  background-color: #000000;
   font-size: 13px;
   color: #676a6c;
   overflow-x: hidden; }
@@ -9260,7 +9260,7 @@ h5 {
 .navbar-default {
   background-color: transparent;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #3554a3), color-stop(25%, #1c3385));
-  background: linear-gradient(to bottom, #3554a3 0, #1c3385 25%); }
+  background: linear-gradient(to bottom, #141414 0, #01040f 25%); }
 
 .nav > li.active,
 ul.nav-second-level {
@@ -9272,16 +9272,16 @@ ul.nav-second-level {
     padding: 0; }
 
 .nav li.active {
-  border-left: 4px solid #0367d8;
-  background-color: transparent; }
+  border-left: 4px solid #cd1b1c;
+  background-color: #4e4e4e; }
 
 /* Top nav overrides */
 .nav.navbar-right li a {
-  color: #0266d5; }
+  color: #000000; }
 
 /* Footer overrides */
 .footer strong {
-  color: #0266d5; }
+  color: #000000; }
 
 .footer a.hidden-link {
   color: #676a6c;

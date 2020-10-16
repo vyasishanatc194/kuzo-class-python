@@ -7,7 +7,7 @@
 
             <li class="nav-header">
                   <a href="{% url 'core:index' %}">  
-                <img class="nav-image" src="{% static 'img/django-logo-white.svg' %}" width="100%" />
+                <img class="nav-image" src="http://13.235.236.166/HTML/kuzo-development/assets/images/logo.png" width="100%" />
                  </a>  
                 {% comment %} <div class="dropdown profile-element">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -35,21 +35,19 @@
                 </div>
             </li>
 
-           
 
-            {% if perms.users %}
+
+            {% if perms.users or request.user.is_staff %}
             <li {% if 'users/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'core:user-list' %}">Users</a>
+                <a href="{% url 'core:user-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Users</span>
+                </a>
             </li>
             {% endif %}
 
-            {% if perms.auth %}
-            <li {% if 'groups/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'auth:group-list' %}">User groups</a>
-            </li>
-            {% endif %}
- 
-                
+
+           
 
         </ul>
 

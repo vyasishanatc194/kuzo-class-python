@@ -13,25 +13,34 @@ from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.template.loader import get_template
 from django.utils.text import Truncator
 from django.views.generic import TemplateView
 from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import MyGroupForm, MyUserChangeForm, MyUserCreationForm
- 
+from ..forms import MyUserChangeForm, MyUserCreationForm
 
-User = get_user_model()
+from core.models import User 
 
- 
+import csv
 
-# -----------------------------------------------------------------------------
+from core.models import User
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+
+
 
 
 class IndexView(LoginRequiredMixin, TemplateView): 
     template_name = "core/index.html"
 
+    
+    def get(self, request):
+      
+        self.context = {
+          
+        }
+        return render(request, self.template_name, self.context)
 
 # -----------------------------------------------------------------------------
 # Users
@@ -39,31 +48,47 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
 
 class UserListView(MyListView):
-    paginate_by = 25
-    ordering = ["username"]
+    """
+    View for User listing
+    """
+
+    # paginate_by = 25
+    ordering = ["id"]
     model = User
-    # queryset = model.objects.exclude(username="manifestingest")
+    queryset = model.objects.exclude(username="admin")
     template_name = "core/adminuser/user_list.html"
-    permission_required = ("users.view_user",)
+    permission_required = ("core.view_user",)
+
+    def get_queryset(self):
+        
+        return self.model.objects.exclude(username="admin").exclude(username=self.request.user)
 
 
 class UserCreateView(MyCreateView):
+    """
+    View to create User
+    """
+
     model = User
     form_class = MyUserCreationForm
     template_name = "core/adminuser/user_form.html"
-    permission_required = ("users.add_user",)
+    permission_required = ("core.add_user",)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
+        kwargs["user"] = self.request.user 
         return kwargs
 
 
 class UserUpdateView(MyUpdateView):
+    """
+    View to update User
+    """
+
     model = User
     form_class = MyUserChangeForm
     template_name = "core/adminuser/user_form.html"
-    permission_required = ("users.change_user",)
+    permission_required = ("core.change_user",)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -72,16 +97,24 @@ class UserUpdateView(MyUpdateView):
 
 
 class UserDeleteView(MyDeleteView):
+    """
+    View to delete User
+    """
+
     model = User
     template_name = "core/confirm_delete.html"
-    permission_required = ("users.delete_user",)
+    permission_required = ("core.delete_user",)
 
 
 class UserPasswordView(MyUpdateView):
+    """
+    View to change User Password
+    """
+    
     model = User
     form_class = AdminPasswordChangeForm
     template_name = "core/adminuser/password_change_form.html"
-    permission_required = ("users.change_user",)
+    permission_required = ("core.change_user",)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -91,19 +124,25 @@ class UserPasswordView(MyUpdateView):
 
 
 class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
-    """Built this before realizing there is
-    https://bitbucket.org/pigletto/django-datatables-view."""
+    """
+    Built this before realizing there is
+    https://bitbucket.org/pigletto/django-datatables-view.
+    """
 
     model = User
     queryset = User.objects.all().order_by("last_name")
 
     def _get_is_superuser(self, obj):
-        """Get boolean column markup."""
+        """
+        Get boolean column markup.
+        """
         t = get_template("core/partials/list_boolean.html")
         return t.render({"bool_val": obj.is_superuser})
 
     def _get_actions(self, obj, **kwargs):
-        """Get actions column markup."""
+        """
+        Get actions column markup.
+        """
         # ctx = super().get_context_data(**kwargs)
         t = get_template("core/partials/list_basic_actions.html")
         # ctx.update({"obj": obj})
@@ -111,7 +150,9 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
         return t.render({"o": obj})
 
     def filter_queryset(self, qs):
-        """Return the list of items for this view."""
+        """
+        Return the list of items for this view.
+        """
         # If a search term, filter the query
         if self.search:
             return qs.filter(

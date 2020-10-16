@@ -7,7 +7,9 @@ from core.utils import modify_api_response
  
 
 class MyGenericViewSet(viewsets.GenericViewSet):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     def finalize_response(self, request, response, *args, **kwargs):
         # Override response (is there a better way to do this?)
@@ -23,13 +25,17 @@ class MyModelViewSet(
     mixins.DestroyModelMixin,
     MyGenericViewSet,
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
 
 class MyCreateViewSet(mixins.CreateModelMixin, MyGenericViewSet):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
@@ -37,7 +43,9 @@ class MyCreateViewSet(mixins.CreateModelMixin, MyGenericViewSet):
 class MyCreateListViewSet(
     mixins.CreateModelMixin, mixins.ListModelMixin, MyGenericViewSet
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
@@ -45,7 +53,9 @@ class MyCreateListViewSet(
 class MyCreateRetrieveViewSet(
     mixins.CreateModelMixin, mixins.RetrieveModelMixin, MyGenericViewSet
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
@@ -56,13 +66,17 @@ class MyCreateListRetrieveViewSet(
     mixins.RetrieveModelMixin,
     MyGenericViewSet,
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
 
 class MyListViewSet(mixins.ListModelMixin, MyGenericViewSet):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
@@ -70,7 +84,9 @@ class MyListViewSet(mixins.ListModelMixin, MyGenericViewSet):
 class MyListRetrieveViewSet(
     mixins.ListModelMixin, mixins.RetrieveModelMixin, MyGenericViewSet
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
@@ -78,19 +94,25 @@ class MyListRetrieveViewSet(
 class MyRetrieveUpdateViewSet(
     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, MyGenericViewSet
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
 
 class MyRetrieveViewSet(mixins.RetrieveModelMixin, MyGenericViewSet):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
 
 class MyUpdateViewSet(mixins.UpdateModelMixin, MyGenericViewSet):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
@@ -100,7 +122,9 @@ class MyRetrieveUpdateDestroyViewSet(
     mixins.DestroyModelMixin,
     MyGenericViewSet,
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
@@ -111,7 +135,9 @@ class MyCreateRetrieveUpdateDestroyViewSet(
     mixins.DestroyModelMixin,
     MyGenericViewSet,
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass
 
@@ -121,6 +147,8 @@ class MyCreateRetrieveUpdateViewSet(
     mixins.UpdateModelMixin, 
     MyGenericViewSet,
 ):
-    """Custom API response format."""
+    """
+    Custom API response format.
+    """
 
     pass

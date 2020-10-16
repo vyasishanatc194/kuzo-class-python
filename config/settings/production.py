@@ -6,7 +6,7 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["malkesh.com"])
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -78,26 +78,26 @@ AWS_DEFAULT_ACL = None
 AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
 # STATIC
 # ------------------------
-STATICFILES_STORAGE = "nightmarket.utils.storages.StaticRootS3Boto3Storage"
+STATICFILES_STORAGE = "core.utils.storages.StaticRootS3Boto3Storage"
 COLLECTFAST_STRATEGY = "collectfast.strategies.boto3.Boto3Strategy"
 STATIC_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/"
 # MEDIA
 # ------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = "nightmarket.utils.storages.MediaRootS3Boto3Storage"
+DEFAULT_FILE_STORAGE = "core.utils.storages.MediaRootS3Boto3Storage"
 MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/"
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
-TEMPLATES[-1]["OPTIONS"]["loaders"] = [  # type: ignore[index] # noqa F405
-    (
-        "django.template.loaders.cached.Loader",
-        [
-            "django.template.loaders.filesystem.Loader",
-            "django.template.loaders.app_directories.Loader",
-        ],
-    )
-]
+# TEMPLATES[-1]["OPTIONS"]["loaders"] = [  # type: ignore[index] # noqa F405
+#     (
+#         "django.template.loaders.cached.Loader",
+#         [
+#             "django.template.loaders.filesystem.Loader",
+#             "django.template.loaders.app_directories.Loader",
+#         ],
+#     )
+# ]
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ DEFAULT_FROM_EMAIL = env(
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = env(
-    "DJANGO_EMAIL_SUBJECT_PREFIX", default="[nightmarket]"
+    "DJANGO_EMAIL_SUBJECT_PREFIX", default="[kuzo-class-python]"
 )
 
 # ADMIN
@@ -170,7 +170,8 @@ LOGGING = {
         "file": {
             "backupCount": 10,
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": str(ROOT_DIR.path("logs/debug.log")),
+            # "filename": str(ROOT_DIR.path("logs/debug.log")),
+            "filename": os.path.join(ROOT_DIR, "logs/debug.log"),
             "formatter": "verbose",
             "level": "DEBUG",
             "maxBytes": 1000000,
