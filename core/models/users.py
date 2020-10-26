@@ -13,13 +13,13 @@ class User(AbstractUser):
 
     """This model stores the data into User table in db"""
 
-    name = CharField(_("Name"), max_length=255)
-    email = models.EmailField(max_length=255, unique=True)
-    is_influencer = models.BooleanField(default=False)
+    name = CharField(_("Name"), max_length=255, blank=True, null=True)
+    email = models.EmailField(max_length=255, unique=True, blank=True, null=True, verbose_name="Email")
+    is_influencer = models.BooleanField(default=False, blank=True, null=True, verbose_name="Influencer")
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True,)
-    customer_id = CharField(_("Customer Id"), blank=True, max_length=255)
-    firebase_token = models.TextField( _("Firebase Token"), blank=True, null=True)
+    customer_id = CharField(_("Customer Id"), max_length=255, blank=True, null=True,)
+    firebase_token = models.TextField( _("Firebase Token"), blank=True, null=True,)
  
 
     class Meta:
