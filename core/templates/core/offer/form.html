@@ -14,7 +14,7 @@
 
     <div class="ibox float-e-margins">
 
-        {% include "core/partials/ibox_title.html" with ibox_title="Banner Details" icon_class="fas fa-sign-in-alt" only %}
+        {% include "core/partials/ibox_title.html" with ibox_title="offer Details" icon_class="fas fa-sign-in-alt" only %}
 
         <div class="ibox-content">
 
@@ -24,19 +24,19 @@
                 </div>
 
                 <div class="col-sm-6">
-                    {{ form.description|as_crispy_field }}
+                    {{ form.icon|as_crispy_field }}
                 </div>
             </div>
 
             <div class="row">
-               
+            
 
                 <div class="col-sm-6">
-                    {{ form.image|as_crispy_field }}
+                    {{ form.description|as_crispy_field }}
                 </div>
             </div>
 
-            
+           
         </div>
         <!-- /ibox-content -->
 

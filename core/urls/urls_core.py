@@ -32,8 +32,21 @@ urlpatterns += [
     path("subscription-plan/<int:pk>/delete/", views.SubscriptionPlanDeleteView.as_view(), name="subscriptionplan-delete"),
     path("ajax-subscription-plan", views.SubscriptionPlanAjaxPagination.as_view(), name="subscriptionplan-list-ajax"),
    
+    #offer
 
+    path("offer/", views.OfferListView.as_view(), name="offer-list"),
+    path("offer/create/", views.OfferCreateView.as_view(), name="offer-create"),
+    path("offer/<int:pk>/update/", views.OfferUpdateView.as_view(), name="offer-update"),
+    path("offer/<int:pk>/delete/", views.OfferDeleteView.as_view(), name="offer-delete"),
+    path("ajax-offer", views.OfferAjaxPagination.as_view(), name="offer-list-ajax"),
+
+    
+    path("banner/", views.BannerListView.as_view(), name="banner-list"),
+    path("banner/create/", views.BannerCreateView.as_view(), name="banner-create"),
+    path("banner/<int:pk>/update/", views.BannerUpdateView.as_view(), name="banner-update"),
+    path("banner/<int:pk>/delete/", views.BannerDeleteView.as_view(), name="banner-delete"),
+    path("ajax-banner", views.BannerAjaxPagination.as_view(), name="banner-list-ajax"),
+   
 
 ]
-
 

@@ -21,5 +21,20 @@ from .subscription_plan import (
     SubscriptionPlanAjaxPagination,
 )
 
+from .offer import (
+    OfferListView,
+    OfferCreateView,
+    OfferUpdateView,
+    OfferDeleteView,
+    OfferAjaxPagination,
+)
+
+from .banner import (
+    BannerListView,
+    BannerCreateView,
+    BannerUpdateView,
+    BannerDeleteView,
+    BannerAjaxPagination,
+)
 
 

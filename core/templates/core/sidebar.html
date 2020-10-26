@@ -46,6 +46,26 @@
             </li>
             {% endif %}
 
+           
+
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'offer/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:offer-list' %}"> 
+                    <i class="fa fa-gift  fa-fw fa-2x"></i>
+                    <span class="nav-label">Offer</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'banner/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:banner-list' %}"> 
+                    <i class="fa fa-picture-o fa-fw fa-2x"></i>
+                    <span class="nav-label">Banner</span>
+                </a>
+            </li>
+            {% endif %}
+
             {% if perms.users or request.user.is_staff %}
             <li {% if 'subscriptionplan/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'core:subscriptionplan-list' %}"> 
@@ -54,9 +74,6 @@
                 </a>
             </li>
             {% endif %}
-
-
-           
 
         </ul>
 

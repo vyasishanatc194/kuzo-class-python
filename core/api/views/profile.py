@@ -67,7 +67,7 @@ class ProfileUpdateView(MyAPIView):
 
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status": "OK", "message": "Successfully updated user", "data": serializer.data})
+                return Response({"status": "OK", "message": "Account updated successfully", "data": serializer.data})
 
             else:
                 return Response({"status": "FAIL", "message": "Serializer validation error", "data": serializer.errors})
