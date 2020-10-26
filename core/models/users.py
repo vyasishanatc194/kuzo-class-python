@@ -14,9 +14,8 @@ class User(AbstractUser):
     """This model stores the data into User table in db"""
 
     name = CharField(_("Name"), max_length=255)
-    email = models.EmailField(max_length=255)
-    about = models.TextField(blank=True, null=True)
-    avatar = models.FileField(upload_to='avatar', default='sample.jpg', max_length=255)
+    email = models.EmailField(max_length=255, unique=True)
+    is_influencer = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True,)
     customer_id = CharField(_("Customer Id"), blank=True, max_length=255)

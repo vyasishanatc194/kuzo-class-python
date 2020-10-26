@@ -1,0 +1,37 @@
+from django.db.models import CharField
+from django.utils.translation import ugettext_lazy as _
+from django.db import models
+from django.urls import reverse
+
+
+# ----------------------------------------------------------------------
+# Class Model
+# ----------------------------------------------------------------------
+
+
+class SubscriptionOrder(models.Model):
+
+    """This model stores the data into SubscriptionOrder table in db"""
+
+    ORDER_STATUS = [
+        ('success','Success'),
+        ('pending','Pending')
+
+    ]
+
+    user = models.ForeignKey( 'core.user', on_delete=models.CASCADE, related_name="subscriptionorder_user", null=True, blank=True)
+    subscription = models.ForeignKey( 'core.SubscriptionPlan', on_delete=models.CASCADE, related_name="subscriptionorder_plan", null=True, blank=True)
+    amount = models.PositiveIntegerField(default=0, blank=True, null=True)
+    charge_id = models.CharField(max_length=222, blank=True, null=True)
+    ordre_status = models.CharField(max_length=222, blank=True, null=True, choices=ORDER_STATUS, default='pending')
+    expire_date =  models.DateTimeField(blank=True, null=True,)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
+
+
+    class Meta:
+        verbose_name = "Subscription Order"
+        verbose_name_plural = "Subscription Orders"
+
+
+    def __str__(self):
+        return "{0}".format(self.amount)

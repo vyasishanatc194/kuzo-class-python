@@ -12,14 +12,10 @@ class Card(models.Model):
     """This model stores the data into Card table in db"""
 
     user = models.ForeignKey("core.user", on_delete=models.CASCADE)
-    card_id = CharField(_("Card Id"), max_length=255, blank=True)
-    customer_id = CharField(_("Customer Id"), max_length=255, blank=True)
-    last4 = CharField(_("Last 4 digits"), max_length=255, blank=True)
-    brand = CharField(_("Brand of card"), max_length=255, blank=True)
-    exp_month = CharField(_("Exp. month"), max_length=255, blank=True)
-    exp_year = CharField(_("Exp. year"), max_length=255, blank=True)
-    name = CharField(_("Card holder name"), max_length=255, blank=True, null=True)
-
+    stripe_cusotmer_id = CharField(_("Stripe cusotmer Id"), max_length=255, blank=True)
+    card_number = CharField(_("Last 4 digits"), max_length=255, blank=True)
+    card_expiration_date = models.DateField(blank=True, null=True)
+    
     class Meta:
         verbose_name = "Card"
         verbose_name_plural = "Cards"

@@ -26,8 +26,14 @@ urlpatterns += [
     path("test_mail", views.send_test_mail, name="send-test-mail" ),
 
     #plan
-
+    path("subscription-plan/", views.SubscriptionPlanListView.as_view(), name="subscriptionplan-list"),
+    path("subscription-plan/create/", views.SubscriptionPlanCreateView.as_view(), name="subscriptionplan-create"),
+    path("subscription-plan/<int:pk>/update/", views.SubscriptionPlanUpdateView.as_view(), name="subscriptionplan-update"),
+    path("subscription-plan/<int:pk>/delete/", views.SubscriptionPlanDeleteView.as_view(), name="subscriptionplan-delete"),
+    path("ajax-subscription-plan", views.SubscriptionPlanAjaxPagination.as_view(), name="subscriptionplan-list-ajax"),
    
 
 
 ]
+
+

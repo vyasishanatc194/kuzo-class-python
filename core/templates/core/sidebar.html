@@ -46,6 +46,15 @@
             </li>
             {% endif %}
 
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'subscriptionplan/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:subscriptionplan-list' %}"> 
+                    <i class="fa fa-user fa-fw fa-2x"></i>
+                    <span class="nav-label">Subscriptions Plan</span>
+                </a>
+            </li>
+            {% endif %}
+
 
            
 
