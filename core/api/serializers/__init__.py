@@ -9,3 +9,5 @@ from .card_payment import CardSerializer
 
 from .charge import ChargeSerializer
 
+from .subscription_plan import SubscriptionPlanSerializer
+

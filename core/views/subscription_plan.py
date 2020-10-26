@@ -81,9 +81,6 @@ class SubscriptionPlanDeleteView(MyDeleteView):
     permission_required = ("core.delete_subscription_plan",)
 
 
-
-
-
 class SubscriptionPlanAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
 
     """

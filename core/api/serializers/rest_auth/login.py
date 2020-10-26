@@ -11,7 +11,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework import status
 from core.utils import CustomValidation
-from core.models import TokenModel, User
+from core.models import TokenModel, User, UserProfile
 from core.utils import import_callable
 
 from django.core import serializers as coreserializers
@@ -21,6 +21,8 @@ from sorl_thumbnail_serializer.fields import HyperlinkedSorlImageField
 from sorl.thumbnail import get_thumbnail
 
 from django.contrib.sites.models import Site
+
+from core.api.serializers.subscription_plan import SubscriptionPlanSerializer
 
 
 
@@ -120,7 +122,12 @@ class LoginSerializer(serializers.Serializer):
 
                 ob.save()
         else:
-            msg = _('Unable to log in with provided credentials.')
+            check_email = User.objects.filter(email=email).exists()
+            if not check_email:
+                msg = _('Email does not exist.')
+            else:
+                msg = _('The password you entered is incorrect')
+    
             raise CustomValidation(msg, status_code=status.HTTP_200_OK)
 
         # If required, is the email verified?
@@ -159,25 +166,55 @@ class UserGroupSerializer(serializers.ModelSerializer):
 
 
 class UserDetailsSerializer(serializers.ModelSerializer):
+
     """
     User model w/o password
     """
 
     class Meta:
-        model = UserModel
+        model = User
         fields = (
             'id',
             'name',
-            'dob',
             'email',
-            'mobile',
-            'city',
-            "role",
             'is_active',
+            "is_influencer",
         )
 
         read_only_fields = ('email', 'user_permissions')
-      
+
+
+
+class ProfileDetailsSerializer(serializers.ModelSerializer):
+
+    # subscription = serializers.SerializerMethodField("get_subscription")
+    # user = UserDetailsSerializer()
+
+
+    class Meta:
+        model = UserProfile
+        fields = (
+            'id',
+            'user',
+            'subscription',
+            'photo',
+            'video',
+            'about',
+            'credit',
+            'follower',
+            'is_popular',
+        )
+
+
+
+    # def get_subscription(self, obj):
+    #     request = self.context.get("request")
+    #     profile = UserProfile.objects.filter(user__id=obj.id).exists()
+    #     if profile:
+    #         serializer = SubscriptionPlanSerializer(profile.subscription, many=True, context={'request': request})
+    #         return serializer.data
+    #     else:
+    #         ''
 
 class JwtSerializer(serializers.Serializer):
     """

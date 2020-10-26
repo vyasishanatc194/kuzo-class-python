@@ -19,38 +19,15 @@ from datetime import datetime, timedelta, date
 from core.api.apiviews import MyAPIView, MyListAPIView
 
 from core.api.serializers import UserDetailsSerializer, UserUpdateDetailsSerializer
+from core.api.serializers.rest_auth.login import ProfileDetailsSerializer
+
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from core.utils import modify_api_response
+from core.models import User, UserProfile
 
 # ........................................................................................
 # API For Profile
 # ........................................................................................
-
-
-class UserDetailsView(MyListAPIView):
-
-    """
-    Reads and updates UserModel fields
-    Accepts GET, PUT, PATCH methods.
-
-    Default accepted fields: username, first_name, last_name
-    Default display fields: pk, username, email, first_name, last_name
-    Read-only fields: pk, email
-
-    Returns UserModel fields.
-    """
-    serializer_class = UserDetailsSerializer
-    permission_classes = (IsAuthenticated,)
-    pagination_class = CustomPagination
-    queryset = get_user_model().objects.all()
-
-    def get_queryset(self):
-        queryset = get_user_model().objects.all()
-        name = self.request.query_params.get("name", None)
-
-        if name is not None:
-            queryset = queryset.filter(name__icontains=name)
-        return queryset
 
 
 class ProfileDetailsView(MyAPIView):
@@ -66,8 +43,7 @@ class ProfileDetailsView(MyAPIView):
     Returns UserModel fields.
     """
 
-    queryset = get_user_model().objects.all()
-    serializer_class = UserDetailsSerializer
+    serializer_class = ProfileDetailsSerializer
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk, format=None):
@@ -76,12 +52,12 @@ class ProfileDetailsView(MyAPIView):
         """
 
         try:
-            user = get_user_model().objects.get(pk=pk)
+            user = UserProfile.objects.get(user__id=pk)
             if user is not None:
-                serializer = UserDetailsSerializer(user, context={"request": request})
+                serializer = self.serializer_class(user, context={"request": request})
                 return Response({"status": "OK", "message": "Successfully fetched user details", "data": serializer.data})
 
-        except get_user_model().DoesNotExist:
+        except UserProfile.DoesNotExist:
             return Response({"status": "FAIL", "message": "User not found", "data": []})
 
 

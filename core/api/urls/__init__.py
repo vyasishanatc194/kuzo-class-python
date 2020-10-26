@@ -2,46 +2,22 @@
 from django.urls import include, path
 
 
-from core.api.views import LoginView, LogoutView, UserDetailsView, ProfileDetailsView, ProfileUpdateView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+from core.api.views import (
+    MyRegisterView,
+    LoginView,
+    LogoutView,
+    ProfileDetailsView
 
-from . import (
-    user,
-    social_login,
-    social_connect,
-    card_payment,
-    charge,
-  
-)
+) 
 
 
 urlpatterns = [
-     
-
-    path("social-login/", include(social_login)),
-    
-    path("social-connect/", include(social_connect)),
 
 
-    
+    path('create-account/', MyRegisterView.as_view(), name='create-account'),    
     path('login/', LoginView.as_view(),name='core-auth-login'),
-
     path('logout/', LogoutView.as_view(),name='core-auth-logout'),
-
-
-
- 
-     path('profile/<int:pk>', ProfileDetailsView.as_view(),name='user-profile'),
- 
-     path('profile-update/<int:pk>', ProfileUpdateView.as_view(),name='user-update'),
-
-
-    path("card_payment/", include(card_payment)),
-#
-    path("charge/", include(charge)),
-
-
-
-    
-
+    path('profile-details/<int:pk>', ProfileDetailsView.as_view(),name='profile-details'),
+    # path('profile-update/<int:pk>', ProfileUpdateView.as_view(),name='user-update'),
 
 ]

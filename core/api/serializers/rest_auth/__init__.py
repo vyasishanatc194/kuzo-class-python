@@ -1,5 +1,5 @@
  
-from .login import LoginSerializer, TokenSerializer, JwtSerializer, UserDetailsSerializer, UserUpdateDetailsSerializer
+from .login import LoginSerializer, ProfileDetailsSerializer, TokenSerializer, JwtSerializer, UserDetailsSerializer, UserUpdateDetailsSerializer
 from .register import RegisterSerializer
 
  
