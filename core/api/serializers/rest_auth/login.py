@@ -187,8 +187,8 @@ class UserDetailsSerializer(serializers.ModelSerializer):
 
 class ProfileDetailsSerializer(serializers.ModelSerializer):
 
-    # subscription = serializers.SerializerMethodField("get_subscription")
-    # user = UserDetailsSerializer()
+    subscription = SubscriptionPlanSerializer()
+    user = UserDetailsSerializer()
 
 
     class Meta:
@@ -206,15 +206,6 @@ class ProfileDetailsSerializer(serializers.ModelSerializer):
         )
 
 
-
-    # def get_subscription(self, obj):
-    #     request = self.context.get("request")
-    #     profile = UserProfile.objects.filter(user__id=obj.id).exists()
-    #     if profile:
-    #         serializer = SubscriptionPlanSerializer(profile.subscription, many=True, context={'request': request})
-    #         return serializer.data
-    #     else:
-    #         ''
 
 class JwtSerializer(serializers.Serializer):
     """
@@ -372,11 +363,7 @@ class UserUpdateDetailsSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'name',
-            'dob',
             'email',
-            'mobile',
-            "role",
-            'city',
         )
 
         read_only_fields = ('email', 'user_permissions', 'password')

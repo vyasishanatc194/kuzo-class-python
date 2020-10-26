@@ -1,26 +1,9 @@
-from core.api.permissions import IsSuperUser
-from core.api.viewsets import MyModelViewSet
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.mixins import (ListModelMixin, RetrieveModelMixin,
-                                   UpdateModelMixin)
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView, RetrieveAPIView,UpdateAPIView
-from core.api.serializers import UserSerializer, MyUserSerializer
-from core.api.pagination import CustomPagination
-
-from twilio.rest import Client
-import re
-
-from django.utils import timezone
-from datetime import datetime, timedelta, date
-
-from core.api.apiviews import MyAPIView, MyListAPIView
-
-from core.api.serializers import UserDetailsSerializer, UserUpdateDetailsSerializer
+from core.api.apiviews import MyAPIView
+from core.api.serializers import UserUpdateDetailsSerializer
 from core.api.serializers.rest_auth.login import ProfileDetailsSerializer
-
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from core.utils import modify_api_response
 from core.models import User, UserProfile
@@ -63,7 +46,6 @@ class ProfileDetailsView(MyAPIView):
 
 class ProfileUpdateView(MyAPIView):
     
-    queryset = get_user_model().objects.all()
     serializer_class = UserUpdateDetailsSerializer
     permission_classes = (IsAuthenticated,)
 
