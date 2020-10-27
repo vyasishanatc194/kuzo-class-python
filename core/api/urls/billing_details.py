@@ -7,6 +7,6 @@ from core.api.views.billing_details import (
 
 urlpatterns = [
 
-    path("<int:pk>", CardAPIView.as_view(), name="card-list"),
+    path("", CardAPIView.as_view(), name="card-list"),
     path("add/", CardCreateAPI.as_view(), name="card-create"),
 ]

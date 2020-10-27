@@ -24,7 +24,8 @@ class CardAPIView(MyAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = CardSerializer
 
-    def get(self, request, pk, format=None):
+    def get(self, request, format=None):
+
         """GET method for retrieving the data"""
 
         if request.user.is_authenticated:
@@ -32,11 +33,10 @@ class CardAPIView(MyAPIView):
             """ use user id """
 
             try:
-                cards = Card.objects.filter(user_id=pk)
+                cards = Card.objects.filter(user_id=request.user.id)
 
-                if cards is not None:
-                    serializer = CardSerializer(cards, many=True, context={"request": request})
-                    return Response({"status": "OK", "message": "Successfully fetched cards", "data": serializer.data})
+                serializer = CardSerializer(cards, many=True, context={"request": request})
+                return Response({"status": "OK", "message": "Successfully fetched cards", "data": serializer.data})
 
             except Card.DoesNotExist:
                 return Response({"status": "FAIL", "message": "Cards not found", "data": []})
@@ -56,21 +56,24 @@ class CardCreateAPI(MyAPIView):
         """POST method to create the data"""
 
         if request.user.is_authenticated:
+
             stripe = MyStripe()
 
             """ Create Customer """
+
+            user_obj =User.objects.get(id=request.user.id)
 
             if not request.user.customer_id:
 
                 new_stripe_customer = stripe.createCustomer(request.user)
                 
-                User.objects.filter(id=request.user.id).update(customer_id=new_stripe_customer['id'])
+                user_obj.customer_id = new_stripe_customer['id']
+                user_obj.save()
 
 
+            """ Add Card in stripe """
 
-            """ Add Card """
-
-            new_card = stripe.createCard(request.user.customer_id, request.data)
+            new_card = stripe.createCard(user_obj.customer_id, request.data)
 
             data = {
                 "stripe_card_id":new_card['id'],
@@ -86,10 +89,9 @@ class CardCreateAPI(MyAPIView):
 
                 """ Remove old card from stripe """
 
-                stripe.deleteCard(request.user.customer_id, check_card.stripe_card_id)
+                stripe.deleteCard(user_obj.customer_id, check_card.stripe_card_id)
                 Card.objects.filter(user__id=request.user.id).update(**data)
                 return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
-
 
             else:    
 
@@ -100,8 +102,6 @@ class CardCreateAPI(MyAPIView):
 
                 else:
                     return Response({"status": "FAIL", "message": "Cannot create card", "data": serializer.errors})
-
-          
 
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})

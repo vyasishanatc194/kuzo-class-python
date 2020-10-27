@@ -32,6 +32,7 @@ class MyUserCreationForm(UserCreationForm):
             "is_superuser",
             "user_permissions",
             "name",
+            'customer_id',
                   
         ]
 
@@ -68,6 +69,7 @@ class MyUserChangeForm(UserChangeForm):
             "email",
             "is_superuser",
             "name",
+            'customer_id',
           
                   
         ]
