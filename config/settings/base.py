@@ -11,7 +11,7 @@ from django.contrib.messages import constants as messages
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-# nightmarket/
+# Kuzo class/
 APPS_DIR = ROOT_DIR / "kuzo-class-python"
 env = environ.Env()
 
@@ -93,7 +93,6 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "widget_tweaks",
     
-    # "phonenumber_field",
     "ckeditor",
     "sorl.thumbnail",
     'drf_multiple_model',
@@ -111,7 +110,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
-#MIGRATION_MODULES = {"sites": "nightmarket.contrib.sites.migrations"}
+#MIGRATION_MODULES = {"sites": "Kuzo class.contrib.sites.migrations"}
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------

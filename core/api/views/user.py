@@ -80,7 +80,7 @@ def send_otp(name, recv):
     name = name
     client = Client(account_sid, auth_token)
     otp = random.randint(111111, 999999)    
-    my_msg = "Hi " + name + " !" + "\n" + "Your Night Market account verification otp is : " + str(otp)
+    my_msg = "Hi " + name + " !" + "\n" + "Your Kuzo class account verification otp is : " + str(otp)
     message = client.messages.create(body=my_msg, from_=twilio, to=my)  
     return otp
 

@@ -16,7 +16,7 @@ class MyStripe():
         # phone
         # shipping    
 
-        return stripe.Customer.create(email=user.email,name=user.name,phone=user.mobile)
+        return stripe.Customer.create(email=user.email,name=user.name)
 
     def updateCustomer(self,customerId,user):
 
@@ -29,7 +29,7 @@ class MyStripe():
         # shipping    
 
         return stripe.Customer.modify(customerId,
-            metadata={"email": user.email,"name": user.name,"phone": user.mobile},
+            metadata={"email": user.email,"name": user.name},
         )
 
     def deleteCustomer(self,customerId):

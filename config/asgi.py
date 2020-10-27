@@ -1,5 +1,5 @@
 """
-ASGI config for nightmarket project.
+ASGI config for Kuzo class project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

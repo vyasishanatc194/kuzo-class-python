@@ -6,7 +6,7 @@ from core.api.pagination import CustomPagination
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from core.models import Card
+from core.models import Card, User
 from core.api.serializers import CardSerializer
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
@@ -50,55 +50,60 @@ class CardCreateAPI(MyAPIView):
 
     permission_classes = (IsAuthenticated,)
     serializer_class = CardSerializer
-    queryset = Card.objects.all()
 
     def post(self, request, format=None):
+
         """POST method to create the data"""
 
         if request.user.is_authenticated:
-            try:
-                print("***** Before Serializer *****")
-                stripe = MyStripe()
-                newcard = stripe.createCard(request.user.customer_id, request.data)
+            stripe = MyStripe()
 
-                data = create_card_object(newcard, request)
+            """ Create Customer """
+
+            if not request.user.customer_id:
+
+                new_stripe_customer = stripe.createCustomer(request.user)
+                
+                User.objects.filter(id=request.user.id).update(customer_id=new_stripe_customer['id'])
+
+
+
+            """ Add Card """
+
+            new_card = stripe.createCard(request.user.customer_id, request.data)
+
+            data = {
+                "stripe_card_id":new_card['id'],
+                "last4":new_card['last4'],
+                "card_expiration_date": "{0}/{1}".format(new_card['exp_month'], new_card['exp_year']),
+                "user":request.user.id,
+            }
+
+
+            check_card = Card.objects.filter(user__id=request.user.id).first()
+
+            if check_card:
+
+                """ Remove old card from stripe """
+
+                stripe.deleteCard(request.user.customer_id, check_card.stripe_card_id)
+                Card.objects.filter(user__id=request.user.id).update(**data)
+                return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
+
+
+            else:    
 
                 serializer = CardSerializer(data=data)
-
                 if serializer.is_valid():
                     serializer.save()
-
-                    return Response({"status": "OK", "message": "Successfully created card", "data": []})
+                    return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
 
                 else:
                     return Response({"status": "FAIL", "message": "Cannot create card", "data": serializer.errors})
 
-            except Exception as inst:
-                print(inst)
-                return Response({"status": "FAIL", "message": "Bad request", "data": []})
+          
 
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
 
 
-class CardDeleteAPIView(MyAPIView):
-    """API View to delete Card"""
-
-    permission_classes = (IsAuthenticated,)
-
-    def delete(self, request, pk, format=None):
-        """DELETE method to delete the data"""
-
-        if request.user.is_authenticated:
-            try:
-                cards = Card.objects.get(id=pk)
-                stripe = MyStripe()
-                stripe.deleteCard(request.user.customer_id, cards.card_id)
-                cards.delete()
-                return Response({"status": "OK", "message": "Successfully deleted registered card", "data": []})
-
-            except Card.DoesNotExist:
-                return Response({"status": "FAIL", "message": "Registered Card not found", "data": []})
-
-        else:
-            return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})

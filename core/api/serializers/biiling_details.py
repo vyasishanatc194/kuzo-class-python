@@ -19,11 +19,9 @@ class CardSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "user",
-            "card_id",
-            "customer_id",
-            "brand",
-            "exp_month",
-            "exp_year",
+            "stripe_card_id",
             "last4",
-            "name",
+            "card_expiration_date",
+        
         )
+
