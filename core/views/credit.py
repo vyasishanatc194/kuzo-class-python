@@ -12,17 +12,17 @@ from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import BannerForm
-from core.models import Banner
+from ..forms import CreditForm
+from core.models import Credit
 
 
 
 # -----------------------------------------------------------------------------
-# banner module
+# Credit module
 # -----------------------------------------------------------------------------
 
 
-class BannerListView(MyListView):
+class CreditListView(MyListView):
 
     """
     View for Offer listing
@@ -30,57 +30,57 @@ class BannerListView(MyListView):
 
     # paginate_by = 25
     ordering = ["id"]
-    model = Banner
+    model = Credit
     queryset = model.objects.all()
-    template_name = "core/banner/list.html"
-    permission_required = ("core.view_banner",)
+    template_name = "core/credit/list.html"
+    permission_required = ("core.view_credit",)
 
 
 
-class BannerCreateView(MyNewFormsetCreateView):
+class CreditCreateView(MyNewFormsetCreateView):
 
     """
-    View to create Banner
+    View to create Credit
     """
 
-    model = Banner
-    form_class = BannerForm
-    template_name = "core/banner/form.html"
-    permission_required = ("core.add_banner",)
+    model = Credit
+    form_class = CreditForm
+    template_name = "core/credit/form.html"
+    permission_required = ("core.add_credit",)
 
    
 
-class BannerUpdateView(MyNewFormsetUpdateView):
+class CreditUpdateView(MyNewFormsetUpdateView):
 
-    """View to update Banner """
+    """View to update Credit """
 
-    model = Banner
-    form_class = BannerForm
-    template_name = "core/banner/form.html"
-    permission_required = ("core.change_banner",)
+    model = Credit
+    form_class = CreditForm
+    template_name = "core/credit/form.html"
+    permission_required = ("core.change_Credit",)
 
 
 
-class BannerDeleteView(MyDeleteView):
+class CreditDeleteView(MyDeleteView):
 
     """
-    View to delete Banner Plan
+    View to delete Credit 
     """
 
-    model = Banner
+    model = Credit
     template_name = "core/confirm_delete.html"
-    permission_required = ("core.delete_banner",)
+    permission_required = ("core.delete_credit",)
 
 
-class BannerAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class CreditAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
 
     """
     Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view.
     """
 
-    model = Banner
-    queryset = Banner.objects.all().order_by("id")
+    model = Credit
+    queryset = Credit.objects.all().order_by("id")
 
     def _get_is_superuser(self, obj):
         """

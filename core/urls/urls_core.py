@@ -40,13 +40,30 @@ urlpatterns += [
     path("offer/<int:pk>/delete/", views.OfferDeleteView.as_view(), name="offer-delete"),
     path("ajax-offer", views.OfferAjaxPagination.as_view(), name="offer-list-ajax"),
 
-    
+    # Banner
     path("banner/", views.BannerListView.as_view(), name="banner-list"),
     path("banner/create/", views.BannerCreateView.as_view(), name="banner-create"),
     path("banner/<int:pk>/update/", views.BannerUpdateView.as_view(), name="banner-update"),
     path("banner/<int:pk>/delete/", views.BannerDeleteView.as_view(), name="banner-delete"),
     path("ajax-banner", views.BannerAjaxPagination.as_view(), name="banner-list-ajax"),
+
+    # faq
+    
+    path("faq/", views.FaqListView.as_view(), name="faq-list"),
+    path("faq/create/", views.FaqCreateView.as_view(), name="faq-create"),
+    path("faq/<int:pk>/update/", views.FaqUpdateView.as_view(), name="faq-update"),
+    path("faq/<int:pk>/delete/", views.FaqDeleteView.as_view(), name="faq-delete"),
+    path("ajax-faq", views.FaqAjaxPagination.as_view(), name="faq-list-ajax"),
+
+    # credit
+    
+    path("credit/", views.CreditListView.as_view(), name="credit-list"),
+    path("credit/create/", views.CreditCreateView.as_view(), name="credit-create"),
+    path("credit/<int:pk>/update/", views.CreditUpdateView.as_view(), name="credit-update"),
+    path("credit/<int:pk>/delete/", views.CreditDeleteView.as_view(), name="credit-delete"),
+    path("ajax-credit", views.CreditAjaxPagination.as_view(), name="credit-list-ajax"),
    
 
 ]
 
+ 

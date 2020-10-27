@@ -38,3 +38,21 @@ from .banner import (
 )
 
 
+from .faq import (
+    FaqListView,
+    FaqCreateView,
+    FaqUpdateView,
+    FaqDeleteView,
+    FaqAjaxPagination,
+    
+)
+
+from .credit import (
+    CreditListView,
+    CreditCreateView,
+    CreditUpdateView,
+    CreditDeleteView,
+    CreditAjaxPagination,
+  
+)
+

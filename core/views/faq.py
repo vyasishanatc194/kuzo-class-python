@@ -12,75 +12,75 @@ from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import BannerForm
-from core.models import Banner
+from ..forms import FaqForm
+from core.models import Faq
 
 
 
 # -----------------------------------------------------------------------------
-# banner module
+# Faq module
 # -----------------------------------------------------------------------------
 
 
-class BannerListView(MyListView):
+class FaqListView(MyListView):
 
     """
-    View for Offer listing
+    View for Faq listing
     """
 
-    # paginate_by = 25
+    paginate_by = 10
     ordering = ["id"]
-    model = Banner
+    model = Faq
     queryset = model.objects.all()
-    template_name = "core/banner/list.html"
-    permission_required = ("core.view_banner",)
+    template_name = "core/faq/list.html"
+    permission_required = ("core.view_faq",)
 
 
 
-class BannerCreateView(MyNewFormsetCreateView):
+class FaqCreateView(MyNewFormsetCreateView):
 
     """
-    View to create Banner
+    View to create Faq
     """
 
-    model = Banner
-    form_class = BannerForm
-    template_name = "core/banner/form.html"
-    permission_required = ("core.add_banner",)
+    model = Faq
+    form_class = FaqForm
+    template_name = "core/faq/form.html"
+    permission_required = ("core.add_faq",)
 
    
 
-class BannerUpdateView(MyNewFormsetUpdateView):
+class FaqUpdateView(MyNewFormsetUpdateView):
 
-    """View to update Banner """
+    """View to update Faq """
 
-    model = Banner
-    form_class = BannerForm
-    template_name = "core/banner/form.html"
-    permission_required = ("core.change_banner",)
+    model = Faq
+    form_class = FaqForm
+    template_name = "core/faq/form.html"
+    permission_required = ("core.change_faq",)
 
 
 
-class BannerDeleteView(MyDeleteView):
+class FaqDeleteView(MyDeleteView):
 
     """
-    View to delete Banner Plan
+    View to delete Faq 
     """
 
-    model = Banner
+    model = Faq
     template_name = "core/confirm_delete.html"
-    permission_required = ("core.delete_banner",)
+    permission_required = ("core.delete_Faq",)
 
 
-class BannerAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class FaqAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
 
     """
     Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view.
     """
 
-    model = Banner
-    queryset = Banner.objects.all().order_by("id")
+    model = Faq
+    queryset = Faq.objects.all().order_by("id")
 
     def _get_is_superuser(self, obj):
         """
@@ -114,6 +114,7 @@ class BannerAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredV
         return qs
 
     def prepare_results(self, qs):
+        
         # Create row data for datatables
         data = []
         for o in qs:
@@ -123,7 +124,6 @@ class BannerAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredV
                     "first_name": o.first_name,
                     "last_name": o.last_name,
                     "is_superuser": self._get_is_superuser(o),
-                    # "modified": o.modified.strftime("%b. %d, %Y, %I:%M %p"),
                     "actions": self._get_actions(o),
                 }
             )

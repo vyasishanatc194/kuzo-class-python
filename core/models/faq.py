@@ -17,7 +17,7 @@ class Faq(models.Model):
     ]
 
     faq_types = models.CharField(max_length=222, blank=True, null=True, verbose_name="Faq Types", choices=FAQ_TYPES)
-    question = models.CharField(max_length=222, blank=True, null=True, verbose_name="Question"), 
+    question = models.CharField(max_length=222, blank=True, null=True, verbose_name="Question")
     answer =  models.TextField(blank=True, null=True, verbose_name="Answer")
 
     class Meta:

@@ -6,3 +6,7 @@ from .offer import OfferForm
 
 from .banner import BannerForm
 
+from .faq import FaqForm
+
+from .credit import CreditForm
+

@@ -75,6 +75,25 @@
             </li>
             {% endif %}
 
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'credit/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:credit-list' %}"> 
+                    <i class="fa fa-credit-card fa-fw fa-2x"></i>
+                    <span class="nav-label">Credit</span>
+                </a>
+            </li>
+            {% endif %}
+
+
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'faq/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:faq-list' %}"> 
+                    <i class="fa fa-question-circle fa-fw fa-2x"></i>
+                    <span class="nav-label">Faq</span>
+                </a>
+            </li>
+            {% endif %}
+
         </ul>
 
     </div>
