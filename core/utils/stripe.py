@@ -59,7 +59,7 @@ class MyStripe():
         return stripe.Customer.delete_source(customerId, bankId)
 
     def createCharge(self, data, card, customerId):
-        return stripe.Charge.create(amount=int(data["final_price"])*100, currency=settings.CURRENCY, source=card, customer=customerId)
+        return stripe.Charge.create(amount=int(data["amount"])*100, currency=settings.CURRENCY, source=card, customer=customerId)
 
     def retrieveCharge(self, chargeId):
         return stripe.Charge.retrieve(chargeId)
@@ -69,3 +69,17 @@ class MyStripe():
 
     def captureCharge(self, chargeId):
         return stripe.Charge.capture(chargeId)
+
+
+    def createProduct(self, name):
+        return  stripe.Product.create(name=name)
+
+    def createPlan(self, amount, interval, product_id ):
+        return  stripe.Plan.create(amount=amount, currency=settings.CURRENCY, interval=interval, product=product_id)
+
+    def deletePlan(self, plan_id):
+        return stripe.Plan.delete(str(plan_id),)
+
+    def subscribePlan(self, customerId, plan_id):
+
+        return stripe.Subscription.create(customer=customerId, items=[{'price':plan_id}])

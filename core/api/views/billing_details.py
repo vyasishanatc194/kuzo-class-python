@@ -95,7 +95,7 @@ class CardCreateAPI(MyAPIView):
 
             else:    
 
-                serializer = CardSerializer(data=data)
+                serializer = CardSerializer(data=data,)
                 if serializer.is_valid():
                     serializer.save()
                     return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})

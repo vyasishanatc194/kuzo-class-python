@@ -13,6 +13,8 @@ from core.api.views import (
 
 from . import billing_details
 
+from .import subscribe_plan
+
 urlpatterns = [
 
     # User Account 
@@ -23,6 +25,7 @@ urlpatterns = [
     path('profile-details/<int:pk>', ProfileDetailsView.as_view(),name='profile-details'),
     path('profile-update/<int:pk>', ProfileUpdateView.as_view(),name='user-update'),
     path("billing-details/", include(billing_details)),
+    path("subscribe-plan/", include(subscribe_plan)),
 
 
 ]

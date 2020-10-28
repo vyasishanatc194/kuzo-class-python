@@ -2,7 +2,7 @@ from django.db.models import CharField
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.urls import reverse
-
+from core.utils import MyStripe
 
 # ----------------------------------------------------------------------
 # SubscriptionPlan Model
@@ -18,6 +18,7 @@ class SubscriptionPlan(models.Model):
     price = models.PositiveIntegerField(default=0, blank=True, null=True)
     number_of_credit = models.PositiveIntegerField(default=0, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+    stripe_plan_id = models.CharField(blank=True, null=True, max_length=222)
 
    
     class Meta:
@@ -26,3 +27,13 @@ class SubscriptionPlan(models.Model):
 
     def __str__(self):
         return "{0}".format(self.title)
+
+    def save(self, *args, **kwargs):
+
+        stripe = MyStripe()
+        product_obj = stripe.createProduct(self.title)
+        plan_id = stripe.createPlan(self.price, 'month', product_obj['id'])
+        self.stripe_plan_id = plan_id['id']
+
+        return super(SubscriptionPlan, self).save(*args, **kwargs)
+
