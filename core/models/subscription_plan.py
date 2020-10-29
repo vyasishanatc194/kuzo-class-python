@@ -32,7 +32,7 @@ class SubscriptionPlan(models.Model):
 
         stripe = MyStripe()
         product_obj = stripe.createProduct(self.title)
-        plan_id = stripe.createPlan(self.price, 'month', product_obj['id'])
+        plan_id = stripe.createPlan(self.price * 100, 'month', product_obj['id'])
         self.stripe_plan_id = plan_id['id']
 
         return super(SubscriptionPlan, self).save(*args, **kwargs)

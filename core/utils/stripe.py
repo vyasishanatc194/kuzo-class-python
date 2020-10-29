@@ -80,6 +80,21 @@ class MyStripe():
     def deletePlan(self, plan_id):
         return stripe.Plan.delete(str(plan_id),)
 
-    def subscribePlan(self, customerId, plan_id):
+    def subscribePlan(self, customerId, plan_id,payment_method):
 
-        return stripe.Subscription.create(customer=customerId, items=[{'price':plan_id}])
+        return stripe.Subscription.create(customer=customerId, default_payment_method=payment_method, items=[{'price':plan_id}], )
+
+
+    def CancelSubscriptionPlan(self, subscription_id):
+
+        return stripe.Subscription.delete(subscription_id)
+
+    def CreatePaymentMethod(self, token):
+        return stripe.PaymentMethod.create(type="card", card={"token": token},)
+
+    def PaymentMethodAttach(self, payment_method_id, customer_id):
+
+        return stripe.PaymentMethod.attach(payment_method_id, customer=customer_id)
+
+
+      

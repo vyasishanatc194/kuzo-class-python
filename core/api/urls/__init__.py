@@ -7,7 +7,8 @@ from core.api.views import (
     LoginView,
     LogoutView,
     ProfileDetailsView,
-    ProfileUpdateView
+    ProfileUpdateView,
+    ChangeCurrentPassword
 
 ) 
 
@@ -24,6 +25,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(),name='core-auth-logout'),
     path('profile-details/<int:pk>', ProfileDetailsView.as_view(),name='profile-details'),
     path('profile-update/<int:pk>', ProfileUpdateView.as_view(),name='user-update'),
+    path('change-current-password/', ChangeCurrentPassword.as_view(),name='change-current-password'),
     path("billing-details/", include(billing_details)),
     path("subscribe-plan/", include(subscribe_plan)),
 

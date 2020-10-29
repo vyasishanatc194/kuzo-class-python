@@ -24,5 +24,7 @@ class SubscriptionOrderSerializer(serializers.ModelSerializer):
             "amount",
             "charge_id",
             "ordre_status",
+            "stripe_subscription_id",
+            "plan_status",
             "expire_date"           
         )

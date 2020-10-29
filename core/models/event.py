@@ -24,7 +24,7 @@ class Event(models.Model):
     about = models.TextField(blank=True, null=True, verbose_name="About")
     event_class = models.ForeignKey( 'core.EventClass', on_delete=models.CASCADE, related_name="evnt_eventclass", null=True, blank=True)
     event_date_time = models.DateTimeField(blank=True, null=True, verbose_name="Event date & time")
-    price = models.PositiveIntegerField(default=0, blank=True, null=True, verbose_name="Event date & time")
+    price = models.PositiveIntegerField(default=0, blank=True, null=True, verbose_name="Event Price")
     photo = models.FileField(upload_to="event", blank=True, null=True)
     number_of_participants = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="Event number of participants")
     remianing_spots = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="Event Remianing spots")

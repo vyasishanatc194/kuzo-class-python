@@ -31,6 +31,7 @@ sensitive_post_parameters_m = method_decorator(
 )
 from core.models import User
 from core.utils import modify_api_response
+from django.contrib.auth.hashers import check_password
 
 
 class LoginView(MyGenericAPIView):
@@ -241,3 +242,36 @@ class PasswordChangeView(MyGenericAPIView):
             return Response({"status": "OK", "message": "New password has been saved.", "data": []})
         else:
             return Response({"status": "FAIL", "message": "Something is wrong with the password.", "data": serializer.errors})
+
+
+class ChangeCurrentPassword(APIView):
+
+    def put(self, request, format=None):
+
+
+        if request.user.is_authenticated:
+
+            try:
+                user = User.objects.get(pk=request.user.id)
+
+                current_password = request.data['current_password']
+                new_password1= request.data['new_password']
+                new_password2= request.data['confirm_password']
+
+                check_user_password = check_password(current_password, user.password)
+
+                if not check_user_password:
+                    return Response({"data":[],"status":False,"message":"The current password you entered is incorrect","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+
+                if new_password1!=new_password2:
+                    return Response({"data":[],"status":False,"message":"The new password you entered does not match","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+
+                user.set_password(new_password1)
+                user.save()
+                return Response({"data":{"id":user.id},"status":True,"message":"Successfully changed password.","code":status.HTTP_200_OK}, status=status.HTTP_200_OK)
+
+            except User.DoesNotExist:
+                    return Response({"data":[],"status":False,"message":"user not found","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response({"data":[],"status":False,"message":"user not found","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
