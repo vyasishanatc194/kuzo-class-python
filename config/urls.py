@@ -12,6 +12,7 @@ admin.site.index_title = "Site Administration"
 
 from core.api.views.user import AccountCreateApiView,UserOtpVerificationAPIView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
@@ -23,7 +24,11 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     
     path("customadmin/", include("core.urls")),
-    
+    path(
+        "auth_password/reset/complete/",
+        auth_views.PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
    
     
     # Your stuff: custom urls includes go here

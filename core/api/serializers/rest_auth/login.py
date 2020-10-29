@@ -256,6 +256,8 @@ class PasswordResetSerializer(serializers.Serializer):
         }
 
         opts.update(self.get_email_options())
+
+        print(opts,"okkkkkkkkkkkk")
         self.reset_form.save(**opts)
 
 

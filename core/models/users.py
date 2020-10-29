@@ -20,7 +20,7 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True, blank=True, null=True,)
     customer_id = CharField(_("Customer Id"), max_length=255, blank=True, null=True,)
     firebase_token = models.TextField( _("Firebase Token"), blank=True, null=True,)
- 
+    user_uuid= models.UUIDField(blank=True, null=True)
 
     class Meta:
         verbose_name = "User"

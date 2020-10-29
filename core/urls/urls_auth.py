@@ -46,11 +46,7 @@ urlpatterns += [
         auth_views.PasswordResetConfirmView.as_view(),
         name="auth_password_reset_confirm",
     ),
-    path(
-        "auth_password/reset/complete/",
-        auth_views.PasswordResetCompleteView.as_view(),
-        name="password_reset_complete",
-    ),
+    
     path(
         "auth_password/reset/done/",
         auth_views.PasswordResetDoneView.as_view(),
