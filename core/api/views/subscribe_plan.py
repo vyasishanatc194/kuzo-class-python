@@ -57,22 +57,6 @@ class SubscriptionPlanPurchaseAPI(MyAPIView):
 
             stripeErr.api_key = "sk_test_M59oeSkIQEUMGT9MEXaFgTzX00Wy4c7Ptb"
 
-
-            payment_method = stripeErr.PaymentMethod.create(
-                type="card",
-                card={
-                "number": "4242424242424242",
-                "exp_month": 10,
-                "exp_year": 2021,
-                "cvc": "314",
-            },
-
-            )
-            stripeErr.PaymentMethod.attach(
-                payment_method.id,
-                customer="cus_II5DappRw1q2QN",
-            )
-
             stripe = MyStripe()
 
             user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
