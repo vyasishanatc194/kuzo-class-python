@@ -109,9 +109,9 @@ var userroles = {
 
     // ------------------------------------------------------------------------
 
-    artist: {
+    offer: {
         index: function () {
-            $('#artist-table').DataTable({
+            $('#offer-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -134,9 +134,9 @@ var userroles = {
 
     // ----------------------------------------------------------------
 
-    language: {
+    banner: {
         index: function () {
-            $('#language-table').DataTable({
+            $('#banner-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -159,9 +159,9 @@ var userroles = {
 
     // ----------------------------------------------------------------
 
-    tag: {
+    subscriptionplan: {
         index: function () {
-            $('#tag-table').DataTable({
+            $('#subscriptionplan-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -183,9 +183,9 @@ var userroles = {
     },
 
     //-------------------------------------------------------------------------
-    plan: {
+    credit: {
         index: function () {
-            $('#plan-table').DataTable({
+            $('#credit-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -207,9 +207,9 @@ var userroles = {
     },
     //------------------------------------------------------------------------
 
-    playlist: {
+    faq: {
         index: function () {
-            $('#playlist-table').DataTable({
+            $('#faq-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{

@@ -42,7 +42,7 @@
                         <td>{{o.price}}</td>
                         <td>{{o.number_of_credit}}</td>
 
-                        <td>{{o.description}}</td>
+                        <td>{{o.description | safe }}</td>
 
                         <td class="row-actions">
                             {% include "core/partials/list_row_actions.html" %}
@@ -66,7 +66,7 @@
 <script>
     var pagination_url = "{% url opts|admin_urlname:'list-ajax' %}";
     $(function () {
-        userroles.banner.index();
+        userroles.subscriptionplan.index();
     });
 </script>
 {% endblock %}

@@ -40,7 +40,7 @@
 
                         <td>{{ o.faq_types }}</td>
                         <td>{{o.question}}</td>
-                        <td>{{o.answer}}</td>
+                        <td>{{o.answer | safe }}</td>
 
                         <td class="row-actions">
                             {% include "core/partials/list_row_actions.html" %}
@@ -64,7 +64,7 @@
 <script>
     var pagination_url = "{% url opts|admin_urlname:'list-ajax' %}";
     $(function () {
-        userroles.banner.index();
+        userroles.faq.index();
     });
 </script>
 {% endblock %}
