@@ -165,44 +165,6 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
 
                 return Response({"status": "OK", "message": "You have already participated in this event", "data": []})
 
-            if user_plan.subscription:
-
-                if int(user_plan.credit) < int(event.credit_required):
-
-                    return Response({"status": "OK", "message": "Please Change your current subscriptin plan or buy more credit.", "data": []})
-
-                else:
-
-                    transaction_data = {
-
-                            "user": request.user,
-                            "transaction_type" : 'credit',
-                            "amount" : subscription.price,
-                            "credit": subscription.number_of_credit,
-                            "types": "debit",
-                            "transaction_status": "success" ,   
-                            "transaction_id":'',       
-
-                    }
-
-                    event_order_data = {
-
-                        "user": request.user,
-                        "event" : event,
-                        "used_credit" : event.credit_required,
-
-                    }
-
-                    event.remianing_spots = int(event.remianing_spots) + 1
-                    event.save()
-                    Transactionlog.objects.create(**transaction_data)
-                    EventOrder.objects.create(**event_order_data)
-
-                    user_plan.credit =  int(user_plan.credit)  - int(event.credit_required)
-                    user_plan.save()
-
-                    return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": []})
-
            
             if not request.user.customer_id:
                 new_stripe_customer = stripe.createCustomer(request.user)
@@ -210,6 +172,46 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
                 user_obj.save()
 
             if request.data['is_subscription_access']=='true':
+
+                if user_plan.subscription:
+
+                    if int(user_plan.credit) < int(event.credit_required):
+
+                        return Response({"status": "OK", "message": "Please Change your current subscriptin plan or buy more credit.", "data": []})
+
+                    else:
+
+                        transaction_data = {
+
+                                "user": request.user,
+                                "transaction_type" : 'credit',
+                                "amount" : subscription.price,
+                                "credit": subscription.number_of_credit,
+                                "types": "debit",
+                                "transaction_status": "success" ,   
+                                "transaction_id":'',       
+
+                        }
+
+                        event_order_data = {
+
+                            "user": request.user,
+                            "event" : event,
+                            "used_credit" : event.credit_required,
+
+                        }
+
+                        event.remianing_spots = int(event.remianing_spots) + 1
+                        event.save()
+                        Transactionlog.objects.create(**transaction_data)
+                        EventOrder.objects.create(**event_order_data)
+
+                        user_plan.credit =  int(user_plan.credit)  - int(event.credit_required)
+                        user_plan.save()
+
+                        return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": []})
+
+
 
                 try:
                     if event.credit_required  > subscription.number_of_credit:
@@ -305,13 +307,13 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
 
                     new_card = stripe.createCard(user_obj.customer_id, data)
 
-                    transaction = stripe.createCharge(subscription.price, new_card, user_obj.customer_id)
+                    transaction = stripe.createCharge(event.price, new_card, user_obj.customer_id)
 
                     transaction_data = {
 
                             "user": request.user,
                             "transaction_type" : 'direct_purchase',
-                            "amount" : subscription.price,
+                            "amount" : event.price,
                             "credit": subscription.number_of_credit,
                             "types": "debit",
                             "transaction_status": "success" ,   

@@ -25,6 +25,8 @@ from .import subscribe_plan
 
 from .import offer
 
+from .import credit
+
 urlpatterns = [
 
     # User Account 
@@ -41,9 +43,10 @@ urlpatterns = [
     path("password/reset/", PasswordResetView.as_view(), name="reset-password"),
     path("password/reset/confirm/", PasswordResetConfirmView.as_view(), name="reset-password-confirm"),
     path("forget-password", ForgotPasswordAPIView.as_view(), name="forget-password"),
-
     url(r'^verify-link/(?P<uuid_string>.+)', ChangePasswordLinkCheckAPIView.as_view(), name= 'verify-link'),
     url(r'^set-new-password/(?P<uuid_string>.+)', SetPasswordAPIView.as_view(), name= 'set-new-password'),
     path("influencer-offer/", include(offer)),
+    path("credit/", include(credit)),
+
 
 ]
