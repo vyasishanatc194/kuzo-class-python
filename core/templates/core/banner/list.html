@@ -19,6 +19,8 @@
                 <thead>
                     <tr>
                         <th>Title</th>
+                        <th>Image</th>
+
                         <th>Description</th>
                         <th></th>
                     </tr>
@@ -26,6 +28,8 @@
                 <tfoot>
                     <tr>
                         <th>Title</th>
+                        <th>Image</th>
+
                         <th>Description</th>
                         <th></th>
                     </tr>
@@ -35,7 +39,12 @@
                     <tr>
 
                         <td>{{ o.title }}</td>
-                        <td>{{o.description}}</td>
+                        {% if o.image  %}
+
+                        <td><img src="{{o.image.url}}" width="85px" height="65px"></td>
+
+                        {% endif %}
+                        <td>{{o.description | safe }}</td>
 
                         <td class="row-actions">
                             {% include "core/partials/list_row_actions.html" %}

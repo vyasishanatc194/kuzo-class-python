@@ -37,7 +37,12 @@
                     <tr>
 
                         <td>{{ o.title }}</td>
-                        <td>{{o.icon}}</td>
+                        {% if o.icon %}
+
+                        <td><img src="{{o.icon.url}}" width="85px" height="65px"></td>
+
+                        {% endif %}
+
                         <td>{{o.description | safe}}</td>
 
                         <td class="row-actions">

@@ -26,13 +26,10 @@ class MyUserCreationForm(UserCreationForm):
         model = get_user_model()
         fields = [
             "password1",
-            "is_staff",
             "is_active",
             "email",
-            "is_superuser",
-            "user_permissions",
             "name",
-            'customer_id',
+            'is_influencer',
                   
         ]
 
@@ -64,14 +61,11 @@ class MyUserChangeForm(UserChangeForm):
         model = get_user_model()
 
         fields = [
-            "is_staff",
             "is_active",
             "email",
-            "is_superuser",
             "name",
-            'customer_id',
-          
-                  
+            'is_influencer',
+                          
         ]
 
    

@@ -52,8 +52,8 @@ class UserListView(MyListView):
     View for User listing
     """
 
-    # paginate_by = 25
-    ordering = ["id"]
+    paginate_by = 10
+    ordering = ["-created_at"]
     model = User
     queryset = model.objects.exclude(username="admin")
     template_name = "core/adminuser/user_list.html"

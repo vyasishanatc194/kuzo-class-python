@@ -19,23 +19,26 @@
         <div class="ibox-content">
 
             <div class="row">
-                <div class="col-sm-6">
-                    {{ form.faq_types|as_crispy_field }}
-                </div>
-
+                
                 <div class="col-sm-6">
                     {{ form.question|as_crispy_field }}
                 </div>
-            </div>
-
-            <div class="row">
-               
 
                 <div class="col-sm-6">
 
                     {% input_trix form.answer %}
 
                 </div>
+            </div>
+
+           
+
+            <div class="row">
+                <div class="col-sm-6">
+                    {{ form.faq_types|as_crispy_field }}
+                </div>
+
+               
             </div>
 
             

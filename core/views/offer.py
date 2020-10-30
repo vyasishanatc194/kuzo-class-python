@@ -37,7 +37,7 @@ class OfferListView(MyListView):
     View for Offer listing
     """
 
-    # paginate_by = 25
+    paginate_by = 10
     ordering = ["id"]
     model = Offer
     queryset = model.objects.all()
