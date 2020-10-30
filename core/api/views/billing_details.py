@@ -80,20 +80,22 @@ class CardCreateAPI(MyAPIView):
             payment_method = stripe.CreatePaymentMethod(request.data['source'])
             stripe.PaymentMethodAttach(payment_method.id, user_obj.customer_id)
 
-            current_subscription = SubscriptionOrder.objects.filter(user__id=user_obj.id, subscription__id=user_plan.subscription.id, plan_status='active').exists()
+            if user_plan.subscription:
+                
+                current_subscription = SubscriptionOrder.objects.filter(user__id=user_obj.id, subscription__id=user_plan.subscription.id, plan_status='active').exists()
 
-            check_card = Card.objects.filter(user__id=request.user.id).first()
+                check_card = Card.objects.filter(user__id=request.user.id).first()
 
-            if check_card:
-                stripeErr.PaymentMethod.detach(check_card.stripe_card_id,)
+                if check_card:
+                    stripeErr.PaymentMethod.detach(check_card.stripe_card_id,)
 
-                if current_subscription:
+                    if current_subscription:
 
-                    subscription_obj = SubscriptionOrder.objects.filter(user__id=user_obj.id, subscription__id=user_plan.subscription.id, plan_status='active').first()
-                    stripeErr.Subscription.modify(subscription_obj.stripe_subscription_id ,default_payment_method=payment_method.id,)
+                        subscription_obj = SubscriptionOrder.objects.filter(user__id=user_obj.id, subscription__id=user_plan.subscription.id, plan_status='active').first()
+                        stripeErr.Subscription.modify(subscription_obj.stripe_subscription_id ,default_payment_method=payment_method.id,)
 
-                Card.objects.filter(user__id=user_obj.id).update(stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
-                return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
+                    Card.objects.filter(user__id=user_obj.id).update(stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
+                    return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
 
             else:
                 Card.objects.create(user=user_obj, stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))

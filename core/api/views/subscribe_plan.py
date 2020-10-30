@@ -165,6 +165,45 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
 
                 return Response({"status": "OK", "message": "You have already participated in this event", "data": []})
 
+            if user_plan.subscription:
+
+                if int(user_plan.credit) < int(event.credit_required):
+
+                    return Response({"status": "OK", "message": "Please Change your current subscriptin plan or buy more credit.", "data": []})
+
+                else:
+
+                    transaction_data = {
+
+                            "user": request.user,
+                            "transaction_type" : 'credit',
+                            "amount" : subscription.price,
+                            "credit": subscription.number_of_credit,
+                            "types": "debit",
+                            "transaction_status": "success" ,   
+                            "transaction_id":'',       
+
+                    }
+
+                    event_order_data = {
+
+                        "user": request.user,
+                        "event" : event,
+                        "used_credit" : event.credit_required,
+
+                    }
+
+                    event.remianing_spots = int(event.remianing_spots) + 1
+                    event.save()
+                    Transactionlog.objects.create(**transaction_data)
+                    EventOrder.objects.create(**event_order_data)
+
+                    user_plan.credit =  int(user_plan.credit)  - int(event.credit_required)
+                    user_plan.save()
+
+                    return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": []})
+
+           
             if not request.user.customer_id:
                 new_stripe_customer = stripe.createCustomer(request.user)
                 user_obj.customer_id = new_stripe_customer['id']
@@ -173,6 +212,10 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
             if request.data['is_subscription_access']=='true':
 
                 try:
+                    if event.credit_required  > subscription.number_of_credit:
+
+                        return Response({"status": "OK", "message": "This Plan is not enought for this event.Please choose another plan.", "data": []})
+
 
                     payment_method = stripe.CreatePaymentMethod(request.data['stripe_token'])
 
@@ -216,7 +259,7 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
 
                         }
                 
-                        user_plan.credit =  float(user_plan.credit) + float(subscription.number_of_credit) - float(event.credit_required)
+                        user_plan.credit =  int(user_plan.credit) + int(subscription.number_of_credit) - int(event.credit_required)
                         user_plan.subscription = subscription
                         user_plan.save()
 
