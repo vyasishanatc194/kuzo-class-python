@@ -115,9 +115,6 @@ class SubscriptionPlanPurchaseAPI(MyAPIView):
 
 
             except stripeErr.error.CardError as e:
-
-
-
                 body = e.json_body
                 err  = body.get('error', {})
 
@@ -173,58 +170,145 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
                 user_obj.customer_id = new_stripe_customer['id']
                 user_obj.save()
 
+            if request.data['is_subscription_access']=='true':
 
-            payment_method = stripe.CreatePaymentMethod(request.data['stripe_token'])
+                try:
 
-            z=stripe.PaymentMethodAttach(payment_method.id, user_obj.customer_id)
-           
-            subscribe_new_plan = stripe.subscribePlan(user_obj.customer_id, subscription.stripe_plan_id, payment_method.id)
-            
-      
-            if subscribe_new_plan['status']=='active':
+                    payment_method = stripe.CreatePaymentMethod(request.data['stripe_token'])
 
-                subscripton_data = {
-                        "user":request.user,
-                        "subscription": subscription,
-                        "amount": subscription.price,
-                        "charge_id": subscribe_new_plan['id'],
-                        "ordre_status":"success",
-                        "plan_status":"active",
-                        "stripe_subscription_id":subscribe_new_plan['id'],
-                        "expire_date": nextmonth,   
-                }
+                    Card.objects.create(user=user_obj, stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
 
-                transaction_data = {
-
-                    "user": request.user,
-                    "transaction_type" : 'subscription',
-                    "amount" : subscription.price,
-                    "credit": subscription.number_of_credit,
-                    "types": "credit",
-                    "transaction_status": "success" ,   
-                    "transaction_id":subscribe_new_plan['id'] ,       
-
-                }
-
-                event_order_data = {
-
-                    "user": request.user,
-                    "event" : event,
-                    "used_credit" : event.credit_required,
-
-                }
-        
-                user_plan.credit =  float(user_plan.credit) + float(subscription.number_of_credit) - float(event.credit_required)
-                user_plan.subscription = subscription
-                user_plan.save()
-
-                event.remianing_spots = int(event.remianing_spots) + 1
-
-                SubscriptionOrder.objects.create(**subscripton_data)
-                Transactionlog.objects.create(**transaction_data)
-                EventOrder.objects.create(**event_order_data)
+                    stripe.PaymentMethodAttach(payment_method.id, user_obj.customer_id)
                 
-                return Response({"status": "OK", "message": "Subscription process completed successfully", "data": []})
+                    subscribe_new_plan = stripe.subscribePlan(user_obj.customer_id, subscription.stripe_plan_id, payment_method.id)
+                    
+            
+                    if subscribe_new_plan['status']=='active':
 
+                        subscripton_data = {
+                                "user":request.user,
+                                "subscription": subscription,
+                                "amount": subscription.price,
+                                "charge_id": subscribe_new_plan['id'],
+                                "ordre_status":"success",
+                                "plan_status":"active",
+                                "stripe_subscription_id":subscribe_new_plan['id'],
+                                "expire_date": nextmonth,   
+                        }
+
+                        transaction_data = {
+
+                            "user": request.user,
+                            "transaction_type" : 'subscription',
+                            "amount" : subscription.price,
+                            "credit": subscription.number_of_credit,
+                            "types": "credit",
+                            "transaction_status": "success" ,   
+                            "transaction_id":subscribe_new_plan['id'] ,       
+
+                        }
+
+                        event_order_data = {
+
+                            "user": request.user,
+                            "event" : event,
+                            "used_credit" : event.credit_required,
+
+                        }
+                
+                        user_plan.credit =  float(user_plan.credit) + float(subscription.number_of_credit) - float(event.credit_required)
+                        user_plan.subscription = subscription
+                        user_plan.save()
+
+                        event.remianing_spots = int(event.remianing_spots) + 1
+                        event.save()
+
+                        SubscriptionOrder.objects.create(**subscripton_data)
+                        Transactionlog.objects.create(**transaction_data)
+                        EventOrder.objects.create(**event_order_data)
+                        
+                        return Response({"status": "OK", "message": "Subscription process completed successfully", "data": []})
+
+                except stripeErr.error.CardError as e:
+
+                    body = e.json_body
+                    err  = body.get('error', {})
+
+                    return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+                except stripeErr.error.AuthenticationError as e:
+
+                    body = e.json_body
+                    err  = body.get('error', {})
+                    return Response({"status": "FAIL", "message": err['message'], "data": []})
 
         
+                except stripeErr.error.InvalidRequestError  as e:
+                    body = e.json_body
+                    err  = body.get('error', {})
+                    return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+                except Exception as e:
+
+                    return Response({"status": "FAIL", "message": str(e), "data": []})
+
+            else:
+
+                try:
+
+                    data={
+                        'source':request.data['stripe_token']
+                    }
+
+                    new_card = stripe.createCard(user_obj.customer_id, data)
+
+                    transaction = stripe.createCharge(subscription.price, new_card, user_obj.customer_id)
+
+                    transaction_data = {
+
+                            "user": request.user,
+                            "transaction_type" : 'direct_purchase',
+                            "amount" : subscription.price,
+                            "credit": subscription.number_of_credit,
+                            "types": "debit",
+                            "transaction_status": "success" ,   
+                            "transaction_id":transaction['id'] ,       
+
+                        }
+
+                    event_order_data = {
+
+                        "user": request.user,
+                        "event" : event,
+                        "used_credit" : event.credit_required,
+
+                    }
+
+                    event.remianing_spots = int(event.remianing_spots) + 1
+                    event.save()
+                    Transactionlog.objects.create(**transaction_data)
+                    EventOrder.objects.create(**event_order_data)
+
+                    return Response({"status": "OK", "message": "Event registration process completed successfully", "data": []})
+                
+                except stripeErr.error.CardError as e:
+                    body = e.json_body
+                    err  = body.get('error', {})
+
+                    return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+                except stripeErr.error.AuthenticationError as e:
+
+                    body = e.json_body
+                    err  = body.get('error', {})
+                    return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+        
+                except stripeErr.error.InvalidRequestError  as e:
+                    body = e.json_body
+                    err  = body.get('error', {})
+                    return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+                except Exception as e:
+
+                    return Response({"status": "FAIL", "message": str(e), "data": []})

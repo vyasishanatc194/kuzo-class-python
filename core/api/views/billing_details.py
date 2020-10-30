@@ -6,10 +6,11 @@ from core.api.pagination import CustomPagination
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from core.models import Card, User
+from core.models import Card, User, SubscriptionOrder, UserProfile
 from core.api.serializers import CardSerializer
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
+import stripe as stripeErr
 
 # .................................................................................
 # Credit/Debit Card API
@@ -63,6 +64,8 @@ class CardCreateAPI(MyAPIView):
 
             user_obj =User.objects.get(id=request.user.id)
 
+            user_plan = UserProfile.objects.filter(user__id=user_obj.id).first()
+
             if not request.user.customer_id:
 
                 new_stripe_customer = stripe.createCustomer(request.user)
@@ -73,36 +76,28 @@ class CardCreateAPI(MyAPIView):
 
             """ Add Card in stripe """
 
-            new_card = stripe.createCard(user_obj.customer_id, request.data)
 
-            data = {
-                "stripe_card_id":new_card['id'],
-                "last4":new_card['last4'],
-                "card_expiration_date": "{0}/{1}".format(new_card['exp_month'], new_card['exp_year']),
-                "user":request.user.id,
-            }
+            payment_method = stripe.CreatePaymentMethod(request.data['source'])
+            stripe.PaymentMethodAttach(payment_method.id, user_obj.customer_id)
 
+            current_subscription = SubscriptionOrder.objects.filter(user__id=user_obj.id, subscription__id=user_plan.subscription.id, plan_status='active').exists()
 
             check_card = Card.objects.filter(user__id=request.user.id).first()
 
             if check_card:
+                stripeErr.PaymentMethod.detach(check_card.stripe_card_id,)
 
-                """ Remove old card from stripe """
+                if current_subscription:
 
-                stripe.deleteCard(user_obj.customer_id, check_card.stripe_card_id)
-                Card.objects.filter(user__id=request.user.id).update(**data)
+                    subscription_obj = SubscriptionOrder.objects.filter(user__id=user_obj.id, subscription__id=user_plan.subscription.id, plan_status='active').first()
+                    stripeErr.Subscription.modify(subscription_obj.stripe_subscription_id ,default_payment_method=payment_method.id,)
+
+                Card.objects.filter(user__id=user_obj.id).update(stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
                 return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
 
-            else:    
-
-                serializer = CardSerializer(data=data,)
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
-
-                else:
-                    return Response({"status": "FAIL", "message": "Cannot create card", "data": serializer.errors})
-
+            else:
+                Card.objects.create(user=user_obj, stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
+                return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
 

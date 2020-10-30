@@ -23,6 +23,8 @@ from . import billing_details
 
 from .import subscribe_plan
 
+from .import offer
+
 urlpatterns = [
 
     # User Account 
@@ -41,7 +43,7 @@ urlpatterns = [
     path("forget-password", ForgotPasswordAPIView.as_view(), name="forget-password"),
 
     url(r'^verify-link/(?P<uuid_string>.+)', ChangePasswordLinkCheckAPIView.as_view(), name= 'verify-link'),
-
-    path("set-new-password/<int:pk>", SetPasswordAPIView.as_view(), name="set-new-password"),
+    url(r'^set-new-password/(?P<uuid_string>.+)', SetPasswordAPIView.as_view(), name= 'set-new-password'),
+    path("influencer-offer/", include(offer)),
 
 ]

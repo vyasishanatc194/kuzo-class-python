@@ -324,7 +324,7 @@ class ChangePasswordLinkCheckAPIView(APIView):
             
             if user:
                
-                return Response({"data":{"id":user.id, "email":user.email},"status":True,"message":"You can change your password now.","code":status.HTTP_200_OK}, status=status.HTTP_200_OK)
+                return Response({"data":{"user_uuid":user.user_uuid,},"status":True,"message":"You can change your password now.","code":status.HTTP_200_OK}, status=status.HTTP_200_OK)
             else:
                 return Response({"data":[],"status":False,"message":"Invalid link","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
               
@@ -338,12 +338,12 @@ class ChangePasswordLinkCheckAPIView(APIView):
 class SetPasswordAPIView(APIView):
     permission_classes = (AllowAny,)
 
-    def put(self, request, pk, format=None):
+    def put(self, request, uuid_string, format=None):
 
         try:
             new_password1= request.data['password']
             new_password2= request.data['confirm_password']
-            user = User.objects.get(pk=pk)
+            user = User.objects.get(user_uuid=uuid_string)
             if new_password1!=new_password2:
                 return Response({"data":[],"status":False,"message":"The password you entered do not match","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
 

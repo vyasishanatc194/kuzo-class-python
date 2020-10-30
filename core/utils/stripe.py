@@ -58,8 +58,8 @@ class MyStripe():
     def deleteBank(self, customerId, bankId):
         return stripe.Customer.delete_source(customerId, bankId)
 
-    def createCharge(self, data, card, customerId):
-        return stripe.Charge.create(amount=int(data["amount"])*100, currency=settings.CURRENCY, source=card, customer=customerId)
+    def createCharge(self, amount, card, customerId):
+        return stripe.Charge.create(amount=int(amount)*100, currency=settings.CURRENCY, source=card, customer=customerId)
 
     def retrieveCharge(self, chargeId):
         return stripe.Charge.retrieve(chargeId)
