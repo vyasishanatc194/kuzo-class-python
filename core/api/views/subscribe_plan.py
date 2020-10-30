@@ -7,7 +7,7 @@ from core.api.pagination import CustomPagination
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from core.models import Card, User, SubscriptionPlan, UserProfile, SubscriptionOrder, Transactionlog, Event, EventOrder
-from core.api.serializers import CardSerializer, SubscriptionPlanSerializer, TransactionlogSerializer, SubscriptionOrderSerializer
+from core.api.serializers import CardSerializer, EventOrderSerializer, SubscriptionPlanSerializer, TransactionlogSerializer, SubscriptionOrderSerializer
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
 import stripe as stripeErr
@@ -165,11 +165,14 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
 
                 return Response({"status": "OK", "message": "You have already participated in this event", "data": []})
 
-           
+            # Check stripe customer id 
+
             if not request.user.customer_id:
                 new_stripe_customer = stripe.createCustomer(request.user)
                 user_obj.customer_id = new_stripe_customer['id']
                 user_obj.save()
+
+            # New Subscription & event registration
 
             if request.data['is_subscription_access']=='true':
 
@@ -181,36 +184,37 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
 
                     else:
 
-                        transaction_data = {
-
-                                "user": request.user,
-                                "transaction_type" : 'credit',
-                                "amount" : subscription.price,
-                                "credit": subscription.number_of_credit,
-                                "types": "debit",
-                                "transaction_status": "success" ,   
-                                "transaction_id":'',       
-
-                        }
-
                         event_order_data = {
 
                             "user": request.user,
                             "event" : event,
                             "used_credit" : event.credit_required,
+                            "order_status": "success",
+                            "charge_id": "credit used",
 
                         }
 
                         event.remianing_spots = int(event.remianing_spots) + 1
                         event.save()
-                        Transactionlog.objects.create(**transaction_data)
-                        EventOrder.objects.create(**event_order_data)
+                        event_new = EventOrder.objects.create(**event_order_data)
 
+                        transaction_data = {
+
+                                "user": request.user,
+                                "transaction_type" : 'credit',
+                                "amount" : event.price,
+                                "credit": event.credit_required,
+                                "types": "debit",
+                                "transaction_status": "success" ,   
+                                "transaction_id": event_new.id,       
+
+                        }
+
+                        Transactionlog.objects.create(**transaction_data)
                         user_plan.credit =  int(user_plan.credit)  - int(event.credit_required)
                         user_plan.save()
-
-                        return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": []})
-
+                        serilzer = EventOrderSerializer(event_new)
+                        return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": serilzer.data})
 
 
                 try:
@@ -241,6 +245,26 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
                                 "expire_date": nextmonth,   
                         }
 
+                        event_order_data = {
+
+                            "user": request.user,
+                            "event" : event,
+                            "used_credit" : event.credit_required,
+                            "order_status": "success",
+                            "charge_id": "credit used",
+
+                        }
+
+                        user_plan.credit =  int(user_plan.credit) + int(subscription.number_of_credit) - int(event.credit_required)
+                        user_plan.subscription = subscription
+                        user_plan.save()
+
+                        event.remianing_spots = int(event.remianing_spots) + 1
+                        event.save()
+
+                        subscription_new = SubscriptionOrder.objects.create(**subscripton_data)
+
+
                         transaction_data = {
 
                             "user": request.user,
@@ -249,30 +273,27 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
                             "credit": subscription.number_of_credit,
                             "types": "credit",
                             "transaction_status": "success" ,   
-                            "transaction_id":subscribe_new_plan['id'] ,       
+                            "transaction_id": subscription_new.id ,       
 
                         }
+                        Transactionlog.objects.create(**transaction_data)
+                        event_new = EventOrder.objects.create(**event_order_data)
 
-                        event_order_data = {
+                        event_transaction_data = {
 
                             "user": request.user,
-                            "event" : event,
-                            "used_credit" : event.credit_required,
-
+                            "transaction_type" : 'credit',
+                            "amount" : event.price,
+                            "credit": event.credit_required,
+                            "types": "debit",
+                            "transaction_status": "success" ,   
+                            "transaction_id": event_new.id,       
                         }
-                
-                        user_plan.credit =  int(user_plan.credit) + int(subscription.number_of_credit) - int(event.credit_required)
-                        user_plan.subscription = subscription
-                        user_plan.save()
 
-                        event.remianing_spots = int(event.remianing_spots) + 1
-                        event.save()
+                        Transactionlog.objects.create(**event_transaction_data)
 
-                        SubscriptionOrder.objects.create(**subscripton_data)
-                        Transactionlog.objects.create(**transaction_data)
-                        EventOrder.objects.create(**event_order_data)
-                        
-                        return Response({"status": "OK", "message": "Subscription process completed successfully", "data": []})
+                        serilzer = EventOrderSerializer(event_new)
+                        return Response({"status": "OK", "message": "Subscription & event registration process completed successfully", "data": serilzer.data})
 
                 except stripeErr.error.CardError as e:
 
@@ -309,32 +330,38 @@ class NewSubscriptionPlanPurchaseAPI(MyAPIView):
 
                     transaction = stripe.createCharge(event.price, new_card, user_obj.customer_id)
 
-                    transaction_data = {
-
-                            "user": request.user,
-                            "transaction_type" : 'direct_purchase',
-                            "amount" : event.price,
-                            "credit": subscription.number_of_credit,
-                            "types": "debit",
-                            "transaction_status": "success" ,   
-                            "transaction_id":transaction['id'] ,       
-
-                        }
-
                     event_order_data = {
 
                         "user": request.user,
                         "event" : event,
                         "used_credit" : event.credit_required,
+                        "charge_id":transaction['id'],
+                        "order_status": "success",
 
                     }
+
+                    event_new = EventOrder.objects.create(**event_order_data)
+
+
+                    transaction_data = {
+
+                            "user": request.user,
+                            "transaction_type" : 'direct_purchase',
+                            "amount" : event.price,
+                            "credit": event.credit_required,
+                            "types": "debit",
+                            "transaction_status": "success" ,   
+                            "transaction_id": event_new.id,       
+
+                        }
 
                     event.remianing_spots = int(event.remianing_spots) + 1
                     event.save()
                     Transactionlog.objects.create(**transaction_data)
-                    EventOrder.objects.create(**event_order_data)
 
-                    return Response({"status": "OK", "message": "Event registration process completed successfully", "data": []})
+                    serializer = EventOrderSerializer(event_new)
+
+                    return Response({"status": "OK", "message": "Event registration process completed successfully", "data": serializer.data})
                 
                 except stripeErr.error.CardError as e:
                     body = e.json_body

@@ -27,6 +27,8 @@ from .import offer
 
 from .import credit
 
+from .import faq
+
 urlpatterns = [
 
     # User Account 
@@ -47,6 +49,7 @@ urlpatterns = [
     url(r'^set-new-password/(?P<uuid_string>.+)', SetPasswordAPIView.as_view(), name= 'set-new-password'),
     path("influencer-offer/", include(offer)),
     path("credit/", include(credit)),
+    path("faq/", include(faq)),
 
 
 ]

@@ -10,7 +10,7 @@ from core.models import Card, User,CreditOrder, UserProfile, Transactionlog, Cre
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
 import stripe as stripeErr
-from core.api.serializers import CreditSerializer, TransactionlogSerializer
+from core.api.serializers import CreditSerializer, TransactionlogSerializer, CreditOrderSerializer
 
 
 # .................................................................................
@@ -71,6 +71,17 @@ class CreditPurchaseAPI(MyAPIView):
                 new_card = stripe.createCard(user_obj.customer_id, data)
                 transaction = stripe.createCharge(credit_obj.price, new_card, user_obj.customer_id)
 
+                credit_order_data = {
+
+                    "user": request.user,
+                    "credit" : credit_obj,
+                    "amount" : credit_obj.price,
+                    "charge_id": transaction['id'] ,
+                    "order_status": "success",
+                }
+
+                new_credit = CreditOrder.objects.create(**credit_order_data)
+
                 transaction_data = {
 
                         "user": request.user,
@@ -79,22 +90,15 @@ class CreditPurchaseAPI(MyAPIView):
                         "credit": credit_obj.number_of_credit,
                         "types": "credit",
                         "transaction_status": "success" ,   
-                        "transaction_id":transaction['id'] ,       
+                        "transaction_id": new_credit.id ,       
 
                     }
 
-                credit_order_data = {
-
-                    "user": request.user,
-                    "credit" : credit_obj,
-                    "amount" : credit_obj.price,
-
-                }
                 ob=Transactionlog.objects.create(**transaction_data)
-                CreditOrder.objects.create(**credit_order_data)
-                user_plan.credit = credit_obj.number_of_credit
+
+                user_plan.credit = int(user_plan.credit) + int(credit_obj.number_of_credit)
                 user_plan.save()
-                serilizer = TransactionlogSerializer(ob)
+                serilizer = CreditOrderSerializer(new_credit)
 
                 return Response({"status": "OK", "message": "Successfully purchased credit", "data": serilizer.data})
                     

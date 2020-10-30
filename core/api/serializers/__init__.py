@@ -17,3 +17,9 @@ from .subscription_order import SubscriptionOrderSerializer
 from .offer import InfluencerOfferSerializer
 
 from .credit import CreditSerializer
+
+from .event_order import EventOrderSerializer
+
+from .credit_order import CreditOrderSerializer
+
+from .faq import FaqSerializer

@@ -50,4 +50,4 @@ class Transactionlog(models.Model):
 
 
     def __str__(self):
-        return "{0}".format(self.amount)
+        return "{0}".format(self.credit)

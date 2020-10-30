@@ -11,3 +11,5 @@ from .subscribe_plan import SubscriptionPlanListAPIView, SubscriptionPlanPurchas
 from .offer import InfluencerOfferAPIView, InfluencerOfferCreateAPI
 
 from .credit import CreditListAPIView, CreditPurchaseAPI
+
+from .faq import FaqListAPIView
