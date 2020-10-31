@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from django.urls import reverse
 from core.utils import MyStripe
+from .subscriptin_order import SubscriptionOrder
 
 # ----------------------------------------------------------------------
 # SubscriptionPlan Model
@@ -44,11 +45,13 @@ class SubscriptionPlan(models.Model):
 
 @receiver(pre_delete, sender=SubscriptionPlan)
 def delete_img_pre_delete_post(sender, instance, *args, **kwargs):
-    stripe = MyStripe()
-    stripe.deletePlan(instance.stripe_plan_id)
-    stripe.deleteProduct(instance.stripe_product_id)
-    return
-    
+    exist = SubscriptionOrder.objects.filter(subscription__id=instance.id).exists()
+    if not exist:
+        stripe = MyStripe()
+        stripe.deletePlan(instance.stripe_plan_id)
+        stripe.deleteProduct(instance.stripe_product_id)
+        return
+        
 
 
 
