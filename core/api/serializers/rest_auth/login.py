@@ -272,9 +272,7 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
     set_password_form_class = SetPasswordForm
 
-    def custom_validation(self, attrs):
-        pass
-
+    
     def validate(self, attrs):
         self._errors = {}
 

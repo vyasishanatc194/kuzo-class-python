@@ -10,12 +10,8 @@ from core.api.views import (
     ProfileDetailsView,
     ProfileUpdateView,
     ChangeCurrentPassword,
-    PasswordChangeView,
     PasswordResetView,
     PasswordResetConfirmView,
-    ForgotPasswordAPIView,
-    ChangePasswordLinkCheckAPIView,
-    SetPasswordAPIView,
 
 ) 
 
@@ -29,6 +25,8 @@ from .import credit
 
 from .import faq
 
+from  core.api.views import BookEventAPI
+
 urlpatterns = [
 
     # User Account 
@@ -41,15 +39,15 @@ urlpatterns = [
     path('change-current-password/', ChangeCurrentPassword.as_view(),name='change-current-password'),
     path("billing-details/", include(billing_details)),
     path("subscribe-plan/", include(subscribe_plan)),
-    path("password/change/", PasswordChangeView.as_view(), name="change-password"),
-    path("password/reset/", PasswordResetView.as_view(), name="reset-password"),
-    path("password/reset/confirm/", PasswordResetConfirmView.as_view(), name="reset-password-confirm"),
-    path("forget-password", ForgotPasswordAPIView.as_view(), name="forget-password"),
-    url(r'^verify-link/(?P<uuid_string>.+)', ChangePasswordLinkCheckAPIView.as_view(), name= 'verify-link'),
-    url(r'^set-new-password/(?P<uuid_string>.+)', SetPasswordAPIView.as_view(), name= 'set-new-password'),
+    path("forget-password/", PasswordResetView.as_view(), name="forget-password"),
+    path("set-new-password/", PasswordResetConfirmView.as_view(), name="set-new-password"),
     path("influencer-offer/", include(offer)),
     path("credit/", include(credit)),
     path("faq/", include(faq)),
-
+    path('book-event/', BookEventAPI.as_view(), name='book-event'),    
 
 ]
+
+
+
+

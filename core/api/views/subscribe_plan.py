@@ -137,7 +137,7 @@ class SubscriptionPlanPurchaseAPI(MyAPIView):
                 return Response({"status": "FAIL", "message": str(e), "data": []})
 
 
-class NewSubscriptionPlanPurchaseAPI(MyAPIView):
+class BookEventAPI(MyAPIView):
 
     """API View to create Card"""
 
