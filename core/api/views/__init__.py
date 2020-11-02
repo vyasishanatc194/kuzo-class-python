@@ -20,3 +20,5 @@ from .offer import InfluencerOfferAPIView, InfluencerOfferCreateAPI
 from .credit import CreditListAPIView, CreditPurchaseAPI
 
 from .faq import FaqListAPIView
+
+from .event import EventCreateAPI

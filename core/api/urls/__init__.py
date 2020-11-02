@@ -27,6 +27,11 @@ from .import faq
 
 from  core.api.views import BookEventAPI
 
+from .import event
+
+from .import event_class
+
+
 urlpatterns = [
 
     # User Account 
@@ -45,6 +50,8 @@ urlpatterns = [
     path("credit/", include(credit)),
     path("faq/", include(faq)),
     path('book-event/', BookEventAPI.as_view(), name='book-event'),    
+    path("event/", include(event)),
+    path("event-class/", include(event_class)),
 
 ]
 

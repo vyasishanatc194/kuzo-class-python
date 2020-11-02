@@ -24,15 +24,15 @@ class Event(models.Model):
     about = models.TextField(blank=True, null=True, verbose_name="About")
     event_class = models.ForeignKey( 'core.EventClass', on_delete=models.CASCADE, related_name="evnt_eventclass", null=True, blank=True)
     event_date_time = models.DateTimeField(blank=True, null=True, verbose_name="Event date & time")
-    price = models.PositiveIntegerField(default=0, blank=True, null=True, verbose_name="Event Price")
+    price = models.FloatField(default=0, blank=True, null=True, verbose_name="Event Price")
     photo = models.FileField(upload_to="event", blank=True, null=True)
-    number_of_participants = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="Event number of participants")
-    remianing_spots = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="Event Remianing spots")
-    credit_required = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="Event Credit required")
-    session_lenght = models.PositiveIntegerField(default=0, null=True, blank=True, verbose_name="Session lenght"), 
+    number_of_participants = models.IntegerField(default=0, null=True, blank=True, verbose_name="Event number of participants")
+    remianing_spots = models.IntegerField(default=0, null=True, blank=True, verbose_name="Event Remianing spots")
+    credit_required = models.IntegerField(default=0, null=True, blank=True, verbose_name="Event Credit required")
+    session_lenght = models.IntegerField(default=0, null=True, blank=True, verbose_name="Session lenght")
     is_featured = models.BooleanField(default=False, verbose_name="Is featured") 
     is_popular = models.BooleanField(default=False, verbose_name="Is popular") 
-    time_zone = models.CharField(max_length=222, blank=True, null=True, verbose_name="Event timezone"), 
+    time_zone = models.CharField(max_length=222, blank=True, null=True, verbose_name="Event timezone")
 
     class Meta:
         verbose_name = "Event"

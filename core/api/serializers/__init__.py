@@ -23,3 +23,7 @@ from .event_order import EventOrderSerializer
 from .credit_order import CreditOrderSerializer
 
 from .faq import FaqSerializer
+
+from .event import EventSerializer
+
+from .event_class import EventClassSerializer
