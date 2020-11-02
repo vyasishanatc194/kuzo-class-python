@@ -62,8 +62,11 @@ urlpatterns += [
     path("credit/<int:pk>/update/", views.CreditUpdateView.as_view(), name="credit-update"),
     path("credit/<int:pk>/delete/", views.CreditDeleteView.as_view(), name="credit-delete"),
     path("ajax-credit", views.CreditAjaxPagination.as_view(), name="credit-list-ajax"),
-   
 
+    path("credit-order/", views.CreditOrderListView.as_view(), name="credit-order-list"),
+    path("ajax-credit", views.CreditOrderAjaxPagination.as_view(), name="creditorder-list-ajax"),
+
+   
 ]
 
  

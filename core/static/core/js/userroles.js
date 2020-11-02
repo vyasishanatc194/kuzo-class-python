@@ -231,9 +231,9 @@ var userroles = {
     },
 
     //------------------------------------------------------------------------
-    song: {
+    creditorder: {
         index: function () {
-            $('#song-table').DataTable({
+            $('#creditorder-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
