@@ -31,6 +31,8 @@ from .import event
 
 from .import event_class
 
+from .import event_agenda
+
 
 urlpatterns = [
 
@@ -52,6 +54,7 @@ urlpatterns = [
     path('book-event/', BookEventAPI.as_view(), name='book-event'),    
     path("event/", include(event)),
     path("event-class/", include(event_class)),
+    path("event-agenda/", include(event_agenda)),
 
 ]
 
