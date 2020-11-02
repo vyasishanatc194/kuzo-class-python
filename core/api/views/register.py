@@ -47,10 +47,6 @@ class MyRegisterView(RegisterView):
         user = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
 
-        # welcome - user
-        email = Emails(subject="Welcome !!!", recipient_list=request.data["email"], )
-        email.set_html_message('welcome/user.html', {'user': request.data["name"]})
-        email.send()
         return Response({"status": "OK", "message": "Account created successfully.You will receive a link in email to login in your account", "data": self.get_response_data(user, request)})
 
 

@@ -9,8 +9,30 @@ from allauth.account.adapter import app_settings
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import status
 from core.utils import CustomValidation, validate_password
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
+from core.utils import Emails
+
 
 class AccountAdapter(DefaultAccountAdapter):
+
+    def send_confirmation_mail(self, request, emailconfirmation, signup):
+
+        current_site = get_current_site(request)
+        activate_url = self.get_email_confirmation_url(request, emailconfirmation)
+        ctx = {
+            "user": emailconfirmation.email_address.user,
+            "activate_url": activate_url,
+            "current_site": current_site,
+            "key": emailconfirmation.key,
+        }
+
+        email = Emails(subject="Welcome !!!", recipient_list=emailconfirmation.email_address.email, )
+        email.set_html_message('welcome/user.html',ctx)
+        email.send()
+        return 
+
+
     def is_open_for_signup(self, request: HttpRequest):
         return getattr(settings, "ACCOUNT_ALLOW_REGISTRATION", True)
 
@@ -70,3 +92,4 @@ class AccountAdapter(DefaultAccountAdapter):
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def is_open_for_signup(self, request: HttpRequest, sociallogin: Any):
         return getattr(settings, "ACCOUNT_ALLOW_REGISTRATION", True)
+
