@@ -179,12 +179,7 @@ class PasswordResetView(MyGenericAPIView):
             user = User.objects.filter(email__iexact=request.data["email"])
 
             if user.exists():
-
-                # forgot password - user
-                email = Emails(subject="Forgot Password???", recipient_list=request.data["email"], )
-                email.set_html_message('forgot_password/user.html', {'user': request.data["email"]})
-                email.send()
-
+        
                 # Return the success message with OK HTTP status
                 return Response({"status": "OK", "message": "Password reset e-mail has been sent.", "data": []})
             else:
