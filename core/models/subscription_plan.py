@@ -4,13 +4,13 @@ from django.db import models
 from django.urls import reverse
 from core.utils import MyStripe
 from .subscriptin_order import SubscriptionOrder
+from django.db.models.signals import pre_delete, post_save
+from django.dispatch.dispatcher import receiver
 
 # ----------------------------------------------------------------------
 # SubscriptionPlan Model
 # ----------------------------------------------------------------------
 
-from django.db.models.signals import pre_delete
-from django.dispatch.dispatcher import receiver
 
 class SubscriptionPlan(models.Model):
 
@@ -18,11 +18,12 @@ class SubscriptionPlan(models.Model):
 
 
     title = CharField(_("Title"), max_length=255,null=True, blank=True, unique=True)
-    price = models.PositiveIntegerField(default=0, blank=True, null=True)
+    price = models.FloatField(default=0, blank=True, null=True)
     number_of_credit = models.PositiveIntegerField(default=0, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     stripe_plan_id = models.CharField(blank=True, null=True, max_length=222)
     stripe_product_id = models.CharField(blank=True, null=True, max_length=222)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
 
    
     class Meta:
@@ -33,13 +34,6 @@ class SubscriptionPlan(models.Model):
         return "{0}".format(self.title)
 
     def save(self, *args, **kwargs):
-
-        stripe = MyStripe()
-        product_obj = stripe.createProduct(self.title)
-        plan_id = stripe.createPlan(int(self.price) * 100, 'month', product_obj['id'])
-        self.stripe_plan_id = plan_id['id']
-        self.stripe_product_id = product_obj['id']
-
         return super(SubscriptionPlan, self).save(*args, **kwargs)
 
 
@@ -55,3 +49,14 @@ def delete_img_pre_delete_post(sender, instance, *args, **kwargs):
 
 
 
+@receiver(post_save, sender=SubscriptionPlan)
+def create_plan(sender, instance, created, **kwargs):
+   if created:
+        stripe = MyStripe()
+        product_obj = stripe.createProduct(instance.title)
+        plan_id = stripe.createPlan(int(instance.price) * 100, 'month', product_obj['id'])
+        instance.stripe_plan_id = plan_id['id']
+        instance.stripe_product_id = product_obj['id']
+        instance.save()
+    
+        return
