@@ -13,6 +13,8 @@ from core.utils import MyStripe, create_card_object
 import stripe as stripeErr
 import datetime
 from dateutil import relativedelta
+from core.utils import Emails
+
 # .................................................................................
 # Subscription Plan API
 # .................................................................................
@@ -315,6 +317,10 @@ class CancelSubscriptionAPI(MyAPIView):
                     sub_object.plan_status='cancel'
                     sub_object.save()
 
+                email = Emails(subject="Cancel Subscription Plan Receipt", recipient_list=request.user.email, )
+                email.set_html_message('subscription/cancel_subscription.html', {"user":user_obj, 'user_plan':user_plan})
+                email.send()    
+                
                 stripe = MyStripe() 
                 subscription_stripe = stripe.CancelSubscriptionPlan(user_plan.stripe_subscription_id)  
                 user_plan.subscription = None
@@ -378,6 +384,7 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                 subscribe_new_plan = stripe.subscribePlan(user_obj.customer_id, subscription.stripe_plan_id, card.stripe_card_id)
                 
                 if subscribe_new_plan['status']=='active':
+                    
 
                     if user_plan.subscription:
                         subscription_order = SubscriptionOrder.objects.filter(user__id=user_obj.id, stripe_subscription_id=user_plan.stripe_subscription_id, plan_status='active')
@@ -386,6 +393,10 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                             sub_object = subscription_cancel_order = SubscriptionOrder.objects.filter(id=cancel.id).first()
                             sub_object.plan_status='cancel'
                             sub_object.save()
+
+                        email = Emails(subject="Cancel Subscription Plan Receipt", recipient_list=request.user.email, )
+                        email.set_html_message('subscription/cancel_subscription.html', {"user":user_obj, 'user_plan':user_plan})
+                        email.send()    
 
 
                     subscripton_data = {
@@ -420,6 +431,10 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                     Transactionlog.objects.create(**transaction_data)
 
                     serializer = SubscriptionOrderSerializer(subscription_new)
+
+                    email = Emails(subject="New Subscription Transaction Receipt", recipient_list=request.user.email, )
+                    email.set_html_message('subscription/subscription.html', {"user":user_obj, 'subscription_order':subscription_new})
+                    email.send()
                 
                     return Response({"status": "OK", "message": "Old subscription has been cancelled & new subscription started now", "data":serializer.data})
 
