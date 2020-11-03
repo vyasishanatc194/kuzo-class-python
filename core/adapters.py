@@ -25,12 +25,15 @@ class AccountAdapter(DefaultAccountAdapter):
             "activate_url": activate_url,
             "current_site": current_site,
             "key": emailconfirmation.key,
+            "subject":"Welcome !!!",
         }
 
         email = Emails(subject="Welcome !!!", recipient_list=emailconfirmation.email_address.email, )
         email.set_html_message('welcome/user.html',ctx)
         email.send()
         return 
+
+
 
 
     def is_open_for_signup(self, request: HttpRequest):
@@ -87,6 +90,8 @@ class AccountAdapter(DefaultAccountAdapter):
             # user.groups.add(group)
 
         return user
+
+        
 
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):

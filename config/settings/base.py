@@ -498,6 +498,9 @@ REST_AUTH_SERIALIZERS = {
     'TOKEN_SERIALIZER': 'core.api.serializers.rest_auth.TokenSerializer',
     'JWT_SERIALIZER' : 'core.api.serializers.rest_auth.JwtSerializer', 
     'USER_DETAILS_SERIALIZER' : 'core.api.serializers.rest_auth.UserDetailsSerializer', 
+    'PASSWORD_RESET_SERIALIZER' : 'core.api.serializers.rest_auth.PasswordResetSerializer', 
+
+
 }
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER":'core.api.serializers.rest_auth.RegisterSerializer'
