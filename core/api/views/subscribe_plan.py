@@ -118,6 +118,11 @@ class BookEventAPI(MyAPIView):
                         user_plan.credit =  int(user_plan.credit)  - int(event.credit_required)
                         user_plan.save()
                         serilzer = EventOrderSerializer(event_new)
+
+                        email = Emails(subject="Event booking Transaction Receipt", recipient_list=request.user.email, )
+                        email.set_html_message('event_order/event_order.html', {"user":user_obj, 'event_order': event_new})
+                        email.send()
+
                         return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": serilzer.data})
 
 
@@ -196,8 +201,20 @@ class BookEventAPI(MyAPIView):
                         }
 
                         Transactionlog.objects.create(**event_transaction_data)
-
                         serilzer = EventOrderSerializer(event_new)
+
+                        # Email for event 
+
+                        email = Emails(subject="Event booking Transaction Receipt", recipient_list=request.user.email, )
+                        email.set_html_message('event_order/event_order.html', {"user":user_obj, 'event_order': event_new})
+                        email.send()
+
+                        # Email for subscription 
+
+                        email = Emails(subject="New Subscription Transaction Receipt", recipient_list=request.user.email, )
+                        email.set_html_message('subscription/subscription.html', {"user":user_obj, 'subscription_order':subscription_new})
+                        email.send()
+
                         return Response({"status": "OK", "message": "Subscription & event registration process completed successfully", "data": serilzer.data})
 
                 except stripeErr.error.CardError as e:
@@ -242,6 +259,7 @@ class BookEventAPI(MyAPIView):
                         "used_credit" : event.credit_required,
                         "charge_id":transaction['id'],
                         "order_status": "success",
+                        "transaction_type": "direct_purchase",
 
                     }
 
@@ -265,6 +283,10 @@ class BookEventAPI(MyAPIView):
                     Transactionlog.objects.create(**transaction_data)
 
                     serializer = EventOrderSerializer(event_new)
+
+                    email = Emails(subject="Event booking Transaction Receipt", recipient_list=request.user.email, )
+                    email.set_html_message('event_order/event_order.html', {"user":user_obj, 'event_order': event_new})
+                    email.send()
 
                     return Response({"status": "OK", "message": "Event registration process completed successfully", "data": serializer.data})
                 
