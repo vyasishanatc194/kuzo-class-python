@@ -13,7 +13,7 @@ from .login import (
 
 from .profile import ProfileDetailsView, ProfileUpdateView
 
-from .subscribe_plan import SubscriptionPlanListAPIView, SubscriptionPlanPurchaseAPI, BookEventAPI
+from .subscribe_plan import SubscriptionPlanListAPIView, BookEventAPI, CancelSubscriptionAPI, ChangeCurrentSubscriptionAPI
 
 from .offer import InfluencerOfferAPIView, InfluencerOfferCreateAPI
 

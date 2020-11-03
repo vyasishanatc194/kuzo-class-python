@@ -25,7 +25,7 @@ from .import credit
 
 from .import faq
 
-from  core.api.views import BookEventAPI
+from  core.api.views import BookEventAPI, CancelSubscriptionAPI, ChangeCurrentSubscriptionAPI
 
 from .import event
 
@@ -52,6 +52,8 @@ urlpatterns = [
     path("credit/", include(credit)),
     path("faq/", include(faq)),
     path('book-event/', BookEventAPI.as_view(), name='book-event'),    
+    path('cancel-subscription/', CancelSubscriptionAPI.as_view(), name='cancel-subscription'),  
+    path('change-subscription/', ChangeCurrentSubscriptionAPI.as_view(), name='change-subscription'),    
     path("event/", include(event)),
     path("event-class/", include(event_class)),
     path("event-agenda/", include(event_agenda)),

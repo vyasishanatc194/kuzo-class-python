@@ -96,7 +96,11 @@ class CardCreateAPI(MyAPIView):
 
                     Card.objects.filter(user__id=user_obj.id).update(stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
                     return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
-
+               
+                else:
+                    Card.objects.create(user=user_obj, stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
+                    return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
+            
             else:
                 Card.objects.create(user=user_obj, stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
                 return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})

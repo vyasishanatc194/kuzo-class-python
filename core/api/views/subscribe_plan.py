@@ -39,104 +39,6 @@ class SubscriptionPlanListAPIView(MyAPIView):
 
 
 
-class SubscriptionPlanPurchaseAPI(MyAPIView):
-
-    """API View to create Card"""
-
-    permission_classes = (IsAuthenticated,)
-    serializer_class = CardSerializer
-
-    def post(self, request, format=None):
-
-        """POST method to create the data"""
-
-        if request.user.is_authenticated:
-
-            nextmonth = datetime.datetime.today() + relativedelta.relativedelta(months=1)
-
-
-            stripeErr.api_key = "sk_test_M59oeSkIQEUMGT9MEXaFgTzX00Wy4c7Ptb"
-
-            stripe = MyStripe()
-
-            user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
-
-            subscription = SubscriptionPlan.objects.filter(id=request.data['subscription']).first()
-
-            """ Stripe call for subscription """
-
-            try:
-
-                subscribe_new_plan = stripe.subscribePlan(request.user.customer_id, subscription.stripe_plan_id, payment_method.id)
-                
-                if subscribe_new_plan:
-
-                    subscripton_data = {
-                            "user":request.user,
-                            "subscription": subscription,
-                            "amount": request.data['amount'],
-                            "charge_id": subscribe_new_plan['id'],
-                            "ordre_status":"success",
-                            "plan_status":"active",
-                            "stripe_subscription_id":subscribe_new_plan['id'],
-                            "expire_date": nextmonth,   
-                    }
-
-                    transaction_data = {
-
-                        "user": request.user,
-                        "transaction_type" : 'subscription',
-                        "amount" : request.data['amount'],
-                        "credit": subscription.number_of_credit,
-                        "types": "credit",
-                        "transaction_status": "success" ,   
-                        "transaction_id":subscribe_new_plan['id'] ,       
-
-                    }
-            
-                    user_plan.credit =  float(user_plan.credit) + float(subscription.number_of_credit)
-                    user_plan.subscription = subscription
-                    user_plan.save()
-
-                    subscription_order = SubscriptionOrder.objects.filter(user__id=request.user.id, plan_status='active').first()
-                    
-                    """ Cancel old plan """
-
-                    stripe.CancelSubscriptionPlan(subscription_order.stripe_subscription_id)
-                    subscription_order.plan_status = 'cancel'
-                    subscription_order.save()
-
-                    SubscriptionOrder.objects.create(**subscripton_data)
-                    Transactionlog.objects.create(**transaction_data)
-
-                   
-
-                    return Response({"status": "OK", "message": "Changed plan successfully", "data": []})
-
-
-            except stripeErr.error.CardError as e:
-                body = e.json_body
-                err  = body.get('error', {})
-
-                return Response({"status": "FAIL", "message": err['message'], "data": []})
-
-            except stripeErr.error.AuthenticationError as e:
-
-                body = e.json_body
-                err  = body.get('error', {})
-                return Response({"status": "FAIL", "message": err['message'], "data": []})
-
-    
-            except stripeErr.error.InvalidRequestError  as e:
-                body = e.json_body
-                err  = body.get('error', {})
-                return Response({"status": "FAIL", "message": err['message'], "data": []})
-
-            except Exception as e:
-
-                return Response({"status": "FAIL", "message": str(e), "data": []})
-
-
 class BookEventAPI(MyAPIView):
 
     """API View to create Card"""
@@ -257,6 +159,7 @@ class BookEventAPI(MyAPIView):
 
                         user_plan.credit =  int(user_plan.credit) + int(subscription.number_of_credit) - int(event.credit_required)
                         user_plan.subscription = subscription
+                        user_plan.stripe_subscription_id = subscribe_new_plan['id']
                         user_plan.save()
 
                         event.remianing_spots = int(event.remianing_spots) + 1
@@ -384,3 +287,162 @@ class BookEventAPI(MyAPIView):
                 except Exception as e:
 
                     return Response({"status": "FAIL", "message": str(e), "data": []})
+
+
+
+class CancelSubscriptionAPI(MyAPIView):
+
+    """API View to create Card"""
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CardSerializer
+
+    def post(self, request, format=None):
+
+        """POST method to create the data"""
+
+        if request.user.is_authenticated:
+
+            try:
+                stripe = MyStripe()
+                user_obj = User.objects.filter(id=request.user.id).first()
+                user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
+                
+                subscription_order = SubscriptionOrder.objects.filter(user__id=user_obj.id, stripe_subscription_id=user_plan.stripe_subscription_id, plan_status='active')
+                
+                for cancel in subscription_order:
+                    sub_object = subscription_cancel_order = SubscriptionOrder.objects.filter(id=cancel.id).first()
+                    sub_object.plan_status='cancel'
+                    sub_object.save()
+
+                stripe = MyStripe() 
+                subscription_stripe = stripe.CancelSubscriptionPlan(user_plan.stripe_subscription_id)  
+                user_plan.subscription = None
+                user_plan.stripe_subscription_id=''
+                user_plan.save()
+                return Response({"status": "OK", "message": "Subscription cancelled ", "data":[]})
+
+            except stripeErr.error.CardError as e:
+
+                body = e.json_body
+                err  = body.get('error', {})
+
+                return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+            except stripeErr.error.AuthenticationError as e:
+
+                body = e.json_body
+                err  = body.get('error', {})
+                return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+    
+            except stripeErr.error.InvalidRequestError  as e:
+                body = e.json_body
+                err  = body.get('error', {})
+                return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+            except Exception as e:
+
+                return Response({"status": "FAIL", "message": str(e), "data": []})
+
+
+class ChangeCurrentSubscriptionAPI(MyAPIView):
+
+    """API View to create Card"""
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CardSerializer
+
+    def post(self, request, format=None):
+
+        """POST method to create the data"""
+
+        if request.user.is_authenticated:
+
+            try:
+                stripe = MyStripe()
+                nextmonth = datetime.datetime.today() + relativedelta.relativedelta(months=1)
+                user_obj = User.objects.filter(id=request.user.id).first()
+                user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
+                subscription = SubscriptionPlan.objects.filter(id=request.data['subscription']).first()
+                card = Card.objects.filter(user__id=request.user.id).first()
+
+                if not request.user.customer_id:
+                    new_stripe_customer = stripe.createCustomer(request.user)
+                    user_obj.customer_id = new_stripe_customer['id']
+                    user_obj.save()
+
+                if not card:
+                    return Response({"status": "OK", "message": "Please update billing details", "data":[]})
+                    
+                subscribe_new_plan = stripe.subscribePlan(user_obj.customer_id, subscription.stripe_plan_id, card.stripe_card_id)
+                
+                if subscribe_new_plan['status']=='active':
+
+                    if user_plan.subscription:
+                        subscription_order = SubscriptionOrder.objects.filter(user__id=user_obj.id, stripe_subscription_id=user_plan.stripe_subscription_id, plan_status='active')
+                        subscription_stripe = stripe.CancelSubscriptionPlan(user_plan.stripe_subscription_id)  
+                        for cancel in subscription_order:
+                            sub_object = subscription_cancel_order = SubscriptionOrder.objects.filter(id=cancel.id).first()
+                            sub_object.plan_status='cancel'
+                            sub_object.save()
+
+
+                    subscripton_data = {
+                            "user":request.user,
+                            "subscription": subscription,
+                            "amount": subscription.price,
+                            "charge_id": subscribe_new_plan['id'],
+                            "ordre_status":"success",
+                            "plan_status":"active",
+                            "stripe_subscription_id":subscribe_new_plan['id'],
+                            "expire_date": nextmonth,   
+                    }
+
+                    user_plan.credit =  int(user_plan.credit) + int(subscription.number_of_credit)
+                    user_plan.subscription = subscription
+                    user_plan.stripe_subscription_id = subscribe_new_plan['id']
+                    user_plan.save()
+
+                    subscription_new = SubscriptionOrder.objects.create(**subscripton_data)
+
+                    transaction_data = {
+
+                        "user": request.user,
+                        "transaction_type" : 'subscription',
+                        "amount" : subscription.price,
+                        "credit": subscription.number_of_credit,
+                        "types": "credit",
+                        "transaction_status": "success" ,   
+                        "transaction_id": subscription_new.id ,       
+
+                    }
+                    Transactionlog.objects.create(**transaction_data)
+
+                    serializer = SubscriptionOrderSerializer(subscription_new)
+                
+                    return Response({"status": "OK", "message": "Old subscription has been cancelled & new subscription started now", "data":serializer.data})
+
+            
+            except stripeErr.error.CardError as e:
+
+                body = e.json_body
+                err  = body.get('error', {})
+
+                return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+            except stripeErr.error.AuthenticationError as e:
+
+                body = e.json_body
+                err  = body.get('error', {})
+                return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+    
+            except stripeErr.error.InvalidRequestError  as e:
+                body = e.json_body
+                err  = body.get('error', {})
+                return Response({"status": "FAIL", "message": err['message'], "data": []})
+
+            except Exception as e:
+
+                return Response({"status": "FAIL", "message": str(e), "data": []})            

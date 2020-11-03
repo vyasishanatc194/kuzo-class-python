@@ -23,6 +23,7 @@ class UserProfile(models.Model):
     follower = models.PositiveIntegerField(default=0, blank=True, null=True, verbose_name="Followers")
     is_popular = models.BooleanField(default=False, blank=True, null=True, verbose_name="Popular") 
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name="Created at")
+    stripe_subscription_id = models.CharField(max_length=222, blank=True, null=True)
 
 
     class Meta:

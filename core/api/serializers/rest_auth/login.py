@@ -203,6 +203,7 @@ class ProfileDetailsSerializer(serializers.ModelSerializer):
             'credit',
             'follower',
             'is_popular',
+            'stripe_subscription_id',
         )
 
 
@@ -257,7 +258,6 @@ class PasswordResetSerializer(serializers.Serializer):
 
         opts.update(self.get_email_options())
 
-        print(opts,"okkkkkkkkkkkk")
         self.reset_form.save(**opts)
 
 
