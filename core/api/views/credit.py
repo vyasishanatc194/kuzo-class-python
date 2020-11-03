@@ -11,6 +11,7 @@ from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
 import stripe as stripeErr
 from core.api.serializers import CreditSerializer, TransactionlogSerializer, CreditOrderSerializer
+from core.utils import Emails
 
 
 # .................................................................................
@@ -99,6 +100,11 @@ class CreditPurchaseAPI(MyAPIView):
                 user_plan.credit = int(user_plan.credit) + int(credit_obj.number_of_credit)
                 user_plan.save()
                 serilizer = CreditOrderSerializer(new_credit)
+
+                email = Emails(subject="Purchased credit Transaction Receipt", recipient_list=request.user.email, )
+                email.set_html_message('credit_order/credit_order.html', {"user":user_obj, 'credit_order':new_credit})
+                email.send()
+                
 
                 return Response({"status": "OK", "message": "Successfully purchased credit", "data": serilizer.data})
                     
