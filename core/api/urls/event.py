@@ -11,7 +11,7 @@ from core.api.views.event import (
 urlpatterns = [
 
     path("", EventAPIView.as_view(), name="event-list"),
-    path("create/", EventCreateAPI.as_view(), name="card-create"),
+    path("create/", EventCreateAPI.as_view(), name="event-create"),
     path('update/<int:pk>', EventUpdateAPI.as_view(), name='event-update"'), 
     path('delete/<int:pk>', EventDeleteAPI.as_view(), name='event-delete"'), 
 ]

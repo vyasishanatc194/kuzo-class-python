@@ -12,11 +12,24 @@ except ImportError:
 
 from rest_framework import serializers
 
+from allauth.account.signals import email_confirmed
+from django.dispatch import receiver
+from allauth.account.utils import send_email_confirmation
 
 # -----------------------------------------------------------------------------
 # Register serializer
 # -----------------------------------------------------------------------------
 
+from allauth.account.admin import EmailAddress
+
+@receiver(email_confirmed)
+def email_confirmed_(request, email_address, **kwargs):
+    user = email_address.user
+    user.email_verified = True
+
+    user.save()
+
+from core.models import User
 
 class RegisterSerializer(serializers.Serializer):
     
@@ -32,6 +45,13 @@ class RegisterSerializer(serializers.Serializer):
 
     def validate_email(self, email):
         email = get_adapter().clean_email(email)
+
+        user=User.objects.filter(email=email).first()
+        user_obj =EmailAddress.objects.filter(user=user, verified=False).exists()
+
+        if user_obj:
+            user.delete()
+        
         if allauth_settings.UNIQUE_EMAIL:
             if email and email_address_exists(email):
                 msg = _("A user is already registered with this e-mail address.")

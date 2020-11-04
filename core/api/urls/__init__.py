@@ -33,6 +33,8 @@ from .import event_class
 
 from .import event_agenda
 
+from .import event_qa
+
 
 urlpatterns = [
 
@@ -57,6 +59,7 @@ urlpatterns = [
     path("event/", include(event)),
     path("event-class/", include(event_class)),
     path("event-agenda/", include(event_agenda)),
+    path("event-qa/", include(event_qa)),
 
 ]
 

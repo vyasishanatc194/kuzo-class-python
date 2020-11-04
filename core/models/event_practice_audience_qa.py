@@ -15,7 +15,7 @@ class EventPracticeAudienceQA(models.Model):
 
    
     event = models.ForeignKey( 'core.event', on_delete=models.CASCADE, related_name="evnt_qa", null=True, blank=True)
-    question = models.CharField(max_length=222, blank=True, null=True, verbose_name="Question"), 
+    question = models.CharField(max_length=222, blank=True, null=True, verbose_name="Question")
     answer =  models.TextField(blank=True, null=True, verbose_name="Answer")
 
     class Meta:

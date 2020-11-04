@@ -54,7 +54,8 @@ class EventCreateAPI(MyAPIView):
         """POST method to offer the data"""
 
         if request.user.is_authenticated:
-
+            request.data._mutable = True
+            request.data['user']=request.user.id
             serializer = self.serializer_class(data=request.data,  context={"request": request})
             if serializer.is_valid():
                 serializer.save()

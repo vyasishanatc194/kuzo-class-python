@@ -29,3 +29,5 @@ from .event import EventSerializer
 from .event_class import EventClassSerializer
 
 from .event_agenda import EventAgendaSerializer
+
+from .event_qa import EventPracticeAudienceQASerializer
