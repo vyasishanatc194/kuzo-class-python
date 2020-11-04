@@ -256,7 +256,7 @@ class BookEventAPI(MyAPIView):
 
                         "user": request.user,
                         "event" : event,
-                        "used_credit" : event.credit_required,
+                        "used_credit" : 0,
                         "charge_id":transaction['id'],
                         "order_status": "success",
                         "transaction_type": "direct_purchase",
