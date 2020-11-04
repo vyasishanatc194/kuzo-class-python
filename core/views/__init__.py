@@ -57,3 +57,7 @@ from .credit import (
 )
 
 from .credit_order import CreditOrderListView, CreditOrderAjaxPagination
+
+from .contact_us import ContactUsListView, ContactUsAjaxPagination
+
+from .subscription_order import SubscriptionOrderListView, SubscriptionOrderAjaxPagination

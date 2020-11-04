@@ -27,7 +27,7 @@ from core.models import SubscriptionPlan
 
 
 # -----------------------------------------------------------------------------
-# Users
+# SubscriptionPlan
 # -----------------------------------------------------------------------------
 
 
@@ -37,10 +37,9 @@ class SubscriptionPlanListView(MyListView):
     View for SubscriptionPlan listing
     """
 
-    # paginate_by = 25
-    ordering = ["id"]
+    paginate_by = 25
     model = SubscriptionPlan
-    queryset = model.objects.all().order_by('id')
+    queryset = model.objects.all().order_by('price')
     template_name = "core/subscriptionplan/list.html"
     permission_required = ("core.view_subscription_plan",)
 
@@ -115,9 +114,8 @@ class SubscriptionPlanAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLogi
         # If a search term, filter the query
         if self.search:
             return qs.filter(
-                Q(username__icontains=self.search)
-                | Q(first_name__icontains=self.search)
-                | Q(last_name__icontains=self.search)
+                Q(title__icontains=self.search)
+                | Q(price__icontains=self.search)
                 # | Q(state__icontains=self.search)
                 # | Q(year__icontains=self.search)
             )

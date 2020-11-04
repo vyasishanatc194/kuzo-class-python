@@ -103,6 +103,25 @@
             </li>
             {% endif %}
 
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'faq/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:contactus-list' %}"> 
+                    <i class="fa fa-envelope fa-fw fa-2x"></i>
+                    <span class="nav-label">Contact Us</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'faq/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:subscriptionorder-list' %}"> 
+                    <i class="fa fa-envelope fa-fw fa-2x"></i>
+                    <span class="nav-label">Subscription order</span>
+                </a>
+            </li>
+            {% endif %}
+
+
         </ul>
 
     </div>

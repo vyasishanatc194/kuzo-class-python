@@ -255,9 +255,9 @@ var userroles = {
     },
     //------------------------------------------------------------------------
 
-    channel: {
+    subscriptionorder: {
         index: function () {
-            $('#channel-table').DataTable({
+            $('#subscriptionorder-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -278,9 +278,9 @@ var userroles = {
 
     },
     //-------------------------------------------------------------------------
-    podcast: {
+    contactu3s: {
         index: function () {
-            $('#podcast-table').DataTable({
+            $('#contac3tus-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -303,9 +303,9 @@ var userroles = {
 
     //------------------------------------------------------------------------
     
-    live_streaming: {
+    contactus: {
         index: function () {
-            $('#livestreaming-table').DataTable({
+            $('#contactus-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
