@@ -38,7 +38,7 @@ urlpatterns += [
     # Password reset
     path(
         "password/reset/",
-        auth_views.PasswordResetView.as_view(),
+        auth_views.PasswordResetView.as_view(html_email_template_name='registration/password_reset_email.html'),
         name="auth_password_reset",
     ),
     re_path(
