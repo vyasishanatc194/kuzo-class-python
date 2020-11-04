@@ -29,6 +29,12 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    
+    path(
+        "auth_password/reset/done/",
+        auth_views.PasswordResetDoneView.as_view(),
+        name="password_reset_done",
+    ),
    
     
     # Your stuff: custom urls includes go here

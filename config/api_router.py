@@ -40,7 +40,7 @@ urlpatterns = [
         name='social_account_disconnect'
     ),
 
-    path("swagger/", get_swagger_view(title="Inrelay API")),
+    path("swagger/", get_swagger_view(title="Kuzo API")),
 
     
     
