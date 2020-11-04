@@ -66,23 +66,56 @@
             </li>
             {% endif %}
 
-            {% if perms.users or request.user.is_staff %}
-            <li {% if 'subscriptionplan/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'core:subscriptionplan-list' %}"> 
+            
+            <li {% if 'Subscription/' in request.path %}class="active" {% endif %}> 
+                <a href="">
                     <i class="fa fa-tasks fa-fw fa-2x"></i>
-                    <span class="nav-label">Subscriptions Plan</span>
+                    <span class="nav-label">Subscription</span>
+                    <span class="fa arrow"></span>
                 </a>
-            </li>
-            {% endif %}
+                <ul class="nav nav-second-level">
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'plan' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:subscriptionplan-list' %}">Subscription plan	</a>
+                    </li>
+                    {% endif %}
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'order/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:subscriptionorder-list' %}">Subscription order	</a>
+                    </li>
+                    {% endif %}
 
-            {% if perms.users or request.user.is_staff %}
-            <li {% if 'credit/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'core:credit-list' %}"> 
-                    <i class="fa fa-credit-card fa-fw fa-2x"></i>
-                    <span class="nav-label">Credit</span>
-                </a>
+        
+                </ul>
             </li>
-            {% endif %}
+
+
+
+            
+            <li {% if 'Credit/' in request.path %}class="active" {% endif %}> 
+                <a href="">
+                    <i class="fab fa-first-order fa-fw fa-2x"></i>
+                    <span class="nav-label">Subscription</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'plan' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:credit-list' %}">Credit plan</a>
+                    </li>
+                    {% endif %}
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'order/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:credit-order-list' %}">Credit order</a>
+                    </li>
+                    {% endif %}
+
+        
+                </ul>
+            </li>
+
+
+           
 
 
             {% if perms.users or request.user.is_staff %}
@@ -94,14 +127,7 @@
             </li>
             {% endif %}
 
-            {% if perms.users or request.user.is_staff %}
-            <li {% if 'faq/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'core:credit-order-list' %}"> 
-                    <i class="fab fa-first-order fa-fw fa-2x"></i>
-                    <span class="nav-label">Credit Order</span>
-                </a>
-            </li>
-            {% endif %}
+          
 
             {% if perms.users or request.user.is_staff %}
             <li {% if 'faq/' in request.path %}class="active" {% endif %}>
@@ -112,14 +138,9 @@
             </li>
             {% endif %}
 
-            {% if perms.users or request.user.is_staff %}
-            <li {% if 'faq/' in request.path %}class="active" {% endif %}>
-                <a href="{% url 'core:subscriptionorder-list' %}"> 
-                    <i class="fa fa-envelope fa-fw fa-2x"></i>
-                    <span class="nav-label">Subscription order</span>
-                </a>
-            </li>
-            {% endif %}
+           
+
+
 
 
         </ul>
