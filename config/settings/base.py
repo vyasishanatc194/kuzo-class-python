@@ -553,7 +553,7 @@ API_KEY = env("stripe_api_key")
 
 #django-cors
 CORS_ALLOWED_ORIGINS = [
-    "http://3.6.9.168:3000/",
+    "http://44.225.113.133:8000",
     "http://localhost:3005/",
     "http://127.0.0.1:3005/",
 ]
