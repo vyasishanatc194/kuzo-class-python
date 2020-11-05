@@ -22,3 +22,7 @@ from .credit import CreditListAPIView, CreditPurchaseAPI
 from .faq import FaqListAPIView
 
 from .event import EventCreateAPI
+
+from .banner import BannerListAPIView
+
+from .popular_influencer import InfluencerListAPIView

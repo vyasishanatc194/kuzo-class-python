@@ -31,3 +31,7 @@ from .event_class import EventClassSerializer
 from .event_agenda import EventAgendaSerializer
 
 from .event_qa import EventPracticeAudienceQASerializer
+
+from .banner import BannerSerializer
+
+from .influencer import InfluencerListSerializer
