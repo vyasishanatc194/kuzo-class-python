@@ -5,7 +5,7 @@ from rest_framework import generics
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from core.models import Event
-from core.api.serializers import EventSerializer
+from core.api.serializers import EventSerializer, EventListSerializer
 from core.api.apiviews import MyAPIView
 
 # .................................................................................
@@ -20,7 +20,7 @@ class EventAPIView(MyAPIView):
     """
 
     permission_classes = (IsAuthenticated,)
-    serializer_class = EventSerializer
+    serializer_class = EventListSerializer
 
     def get(self, request, format=None):
 

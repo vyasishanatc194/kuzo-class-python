@@ -331,6 +331,9 @@ class CancelSubscriptionAPI(MyAPIView):
                 stripe = MyStripe()
                 user_obj = User.objects.filter(id=request.user.id).first()
                 user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
+
+                if not user_plan.subscription:
+                    return Response({"status": "OK", "message": "No subscription plan active now.", "data":[]})
                 
                 subscription_order = SubscriptionOrder.objects.filter(user__id=user_obj.id, stripe_subscription_id=user_plan.stripe_subscription_id, plan_status='active')
                 

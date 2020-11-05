@@ -24,7 +24,7 @@ from .credit_order import CreditOrderSerializer
 
 from .faq import FaqSerializer
 
-from .event import EventSerializer
+from .event import EventSerializer, EventListSerializer
 
 from .event_class import EventClassSerializer
 
