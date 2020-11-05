@@ -31,7 +31,7 @@ class CreditListAPIView(MyAPIView):
     def get(self, request, format=None):    
 
         try:
-            credit = Credit.objects.all()
+            credit = Credit.objects.all().order_by('price')
             serializer = self.serializer_class(credit, many=True, context={"request": request})
             return Response({"status": "OK", "message": "Successfully fetched credit list", "data": serializer.data})
 

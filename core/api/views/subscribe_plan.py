@@ -32,7 +32,7 @@ class SubscriptionPlanListAPIView(MyAPIView):
     def get(self, request, format=None):    
 
         try:
-            plan = SubscriptionPlan.objects.all()
+            plan = SubscriptionPlan.objects.all().order_by('price')
             serializer = self.serializer_class(plan, many=True, context={"request": request})
             return Response({"status": "OK", "message": "Successfully fetched subscription plan list", "data": serializer.data})
 
@@ -397,6 +397,10 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                 user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
                 subscription = SubscriptionPlan.objects.filter(id=request.data['subscription']).first()
                 card = Card.objects.filter(user__id=request.user.id).first()
+
+                if not user_plan.subscription:
+                    return Response({"status": "OK", "message": "No subscription plan active now.", "data":[]})
+              
 
                 if not request.user.customer_id:
                     new_stripe_customer = stripe.createCustomer(request.user)
