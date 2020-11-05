@@ -16,11 +16,13 @@ from core.utils import Emails
 
 class AccountAdapter(DefaultAccountAdapter):
 
+
     def send_confirmation_mail(self, request, emailconfirmation, signup):
 
         current_site = get_current_site(request)
-        activate_url = self.get_email_confirmation_url(request, emailconfirmation)
-        print(activate_url,"okkkkkkkkkkk")
+        activate_url = settings.FRONTEND_URL+"/verify-link/{0}".format(emailconfirmation.key)
+
+
         ctx = {
             "user": emailconfirmation.email_address.user,
             "activate_url": activate_url,
@@ -33,8 +35,6 @@ class AccountAdapter(DefaultAccountAdapter):
         email.set_html_message('welcome/user.html',ctx)
         email.send()
         return 
-
-
 
 
     def is_open_for_signup(self, request: HttpRequest):

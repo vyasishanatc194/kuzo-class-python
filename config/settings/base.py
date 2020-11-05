@@ -267,29 +267,29 @@ X_FRAME_OPTIONS = "DENY"
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 
-# EMAIL_BACKEND = env(
-#     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-# )
+EMAIL_BACKEND = env(
+    "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+)
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
-# EMAIL_TIMEOUT = 5
+EMAIL_TIMEOUT = 5
 
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = "webmaster.citrusbug@gmail.com"
-# EMAIL_HOST_PASSWORD = "mdgutpvqfeglinbh"
-# EMAIL_USE_TLS = True
-# # EMAIL_USE_SSL
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "webmaster.citrusbug@gmail.com"
+EMAIL_HOST_PASSWORD = "mdgutpvqfeglinbh"
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL
 
 
-EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
+# EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
 
-ANYMAIL = {
-    'SENDGRID_API_KEY': env('DJANGO_SENDGRID_API_KEY'),
+# ANYMAIL = {
+#     'SENDGRID_API_KEY': env('DJANGO_SENDGRID_API_KEY'),
 
-}
+# }
 
-DEFAULT_FROM_EMAIL="webmaster.citrusbug@gmail.com"
+# DEFAULT_FROM_EMAIL="webmaster.citrusbug@gmail.com"
 
 
 
@@ -565,6 +565,7 @@ CURRENCY = "usd"
 
 
 API_KEY = env("stripe_api_key")
+FRONTEND_URL = env("FRONTEND_URL")
 
 #django-cors
 CORS_ALLOWED_ORIGINS = [

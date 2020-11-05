@@ -15,12 +15,15 @@ from rest_framework import serializers
 from allauth.account.signals import email_confirmed
 from django.dispatch import receiver
 from allauth.account.utils import send_email_confirmation
+from allauth.account.admin import EmailAddress
+from core.models import User
 
 # -----------------------------------------------------------------------------
 # Register serializer
 # -----------------------------------------------------------------------------
 
-from allauth.account.admin import EmailAddress
+
+
 
 @receiver(email_confirmed)
 def email_confirmed_(request, email_address, **kwargs):
@@ -29,7 +32,6 @@ def email_confirmed_(request, email_address, **kwargs):
 
     user.save()
 
-from core.models import User
 
 class RegisterSerializer(serializers.Serializer):
     

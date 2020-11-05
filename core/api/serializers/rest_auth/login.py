@@ -23,12 +23,12 @@ from sorl.thumbnail import get_thumbnail
 from django.contrib.sites.models import Site
 
 from core.api.serializers.subscription_plan import SubscriptionPlanSerializer
+from django.contrib.auth.models import Group
 
 
 
 # Get the UserModel
 UserModel = get_user_model()
-from django.contrib.auth.models import Group
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False, allow_blank=True)
