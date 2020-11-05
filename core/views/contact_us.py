@@ -72,8 +72,7 @@ class ContactUsAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequir
         if self.search:
             return qs.filter(
                 Q(email__icontains=self.search)
-                | Q(first_name__icontains=self.search)
-                | Q(last_name__icontains=self.search)
+             
               
             )
         return qs
@@ -84,10 +83,7 @@ class ContactUsAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequir
         for o in qs:
             data.append(
                 {
-                    "username": o.username,
-                    "first_name": o.first_name,
-                    "last_name": o.last_name,
-                    "is_superuser": self._get_is_superuser(o),
+              
                     # "modified": o.modified.strftime("%b. %d, %Y, %I:%M %p"),
                     "actions": self._get_actions(o),
                 }
