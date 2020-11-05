@@ -17,7 +17,6 @@ class SubscriptionPlanForm(forms.ModelForm):
             "price",
             "number_of_credit",
             "description",
-            'stripe_plan_id',
             ]
 
        

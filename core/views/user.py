@@ -53,7 +53,7 @@ class UserListView(MyListView):
     """
 
     paginate_by = 10
-    ordering = ["-created_at"]
+    ordering = ["created_at"]
     model = User
     queryset = model.objects.exclude(username="admin")
     template_name = "core/adminuser/user_list.html"
@@ -130,7 +130,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
     """
 
     model = User
-    queryset = User.objects.all().order_by("last_name")
+    queryset = User.objects.all()
 
     def _get_is_superuser(self, obj):
         """
@@ -156,7 +156,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
         # If a search term, filter the query
         if self.search:
             return qs.filter(
-                Q(username__icontains=self.search)
+                Q(name__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
                 # | Q(state__icontains=self.search)
@@ -170,11 +170,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
         for o in qs:
             data.append(
                 {
-                    "username": o.username,
-                    "first_name": o.first_name,
-                    "last_name": o.last_name,
-                    "is_superuser": self._get_is_superuser(o),
-                    # "modified": o.modified.strftime("%b. %d, %Y, %I:%M %p"),
+                    "name": o.name,
                     "actions": self._get_actions(o),
                 }
             )

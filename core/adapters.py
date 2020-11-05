@@ -20,6 +20,7 @@ class AccountAdapter(DefaultAccountAdapter):
 
         current_site = get_current_site(request)
         activate_url = self.get_email_confirmation_url(request, emailconfirmation)
+        print(activate_url,"okkkkkkkkkkk")
         ctx = {
             "user": emailconfirmation.email_address.user,
             "activate_url": activate_url,

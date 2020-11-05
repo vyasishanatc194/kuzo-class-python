@@ -83,6 +83,10 @@ class MyStripe():
     def deleteProduct(self, product_id):
         return stripe.Product.delete(str(product_id),)
 
+    def modifyProduct(self,product_id, name):
+
+        return stripe.Product.modify(product_id, name=name)    
+
     def subscribePlan(self, customerId, plan_id,payment_method):
 
         return stripe.Subscription.create(customer=customerId, default_payment_method=payment_method, items=[{'price':plan_id}], )

@@ -35,6 +35,7 @@
                     </tr>
                 </tfoot>
                 <tbody>
+
                     {% for o in object_list %}
                     <tr>
 
@@ -66,7 +67,7 @@
 <script>
     var pagination_url = "{% url opts|admin_urlname:'list-ajax' %}";
     $(function () {
-        userroles.subscriptionplan.index();
+        userroles.subscriptionplans.index();
     });
 </script>
 {% endblock %}

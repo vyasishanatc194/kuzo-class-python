@@ -40,7 +40,7 @@ class OfferListView(MyListView):
     paginate_by = 10
     ordering = ["id"]
     model = Offer
-    queryset = model.objects.all()
+    queryset = model.objects.all().order_by('-created_at')
     template_name = "core/offer/list.html"
     permission_required = ("core.view_offer",)
 
@@ -115,7 +115,7 @@ class OfferAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVi
         # If a search term, filter the query
         if self.search:
             return qs.filter(
-                Q(username__icontains=self.search)
+                Q(title__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
               
@@ -128,11 +128,8 @@ class OfferAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVi
         for o in qs:
             data.append(
                 {
-                    "username": o.username,
-                    "first_name": o.first_name,
-                    "last_name": o.last_name,
-                    "is_superuser": self._get_is_superuser(o),
-                    # "modified": o.modified.strftime("%b. %d, %Y, %I:%M %p"),
+                    "created_at": o.created_at,
+                
                     "actions": self._get_actions(o),
                 }
             )

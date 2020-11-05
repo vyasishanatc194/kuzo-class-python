@@ -15,6 +15,7 @@ class Banner(models.Model):
     title = CharField(_("Title"), max_length=255,null=True, blank=True, unique=True)
     description = models.TextField(blank=True, null=True, verbose_name="Description")
     image = models.FileField(upload_to='image', blank=True, null=True, verbose_name="image")
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
 
    
     class Meta:
