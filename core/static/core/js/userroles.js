@@ -291,9 +291,9 @@ var userroles = {
     },
 
     //-------------------------------------------------------------------------
-    planfeature: {
+    category: {
         index: function () {
-            $('#planfeature-table').DataTable({
+            $('#category-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{

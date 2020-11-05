@@ -26,3 +26,5 @@ from .event import EventCreateAPI
 from .banner import BannerListAPIView
 
 from .popular_influencer import InfluencerListAPIView
+
+from .contact_us import ContactUsCreateAPI

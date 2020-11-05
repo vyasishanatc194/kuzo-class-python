@@ -10,3 +10,5 @@ from .faq import FaqForm
 
 from .credit import CreditForm
 
+from .influencer_category import CategoryForm
+

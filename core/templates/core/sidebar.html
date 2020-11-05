@@ -46,12 +46,20 @@
             </li>
             {% endif %}
 
-           
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'category/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:category-list' %}"> 
+                    <i class="fa fa-cubes fa-fw fa-2x"></i>
+                    <span class="nav-label">Influencer category</span>
+                </a>
+            </li>
+            {% endif %}
+
 
             {% if perms.users or request.user.is_staff %}
             <li {% if 'offer/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'core:offer-list' %}"> 
-                    <i class="fa fa-gift  fa-fw fa-2x"></i>
+                    <i class="fa fa-gift fa-fw fa-2x"></i>
                     <span class="nav-label">Offer</span>
                 </a>
             </li>

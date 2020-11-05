@@ -12,40 +12,74 @@ from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
-from core.models import ContactUs
+from ..forms import CategoryForm
+from core.models import Category
 
 
 
 # -----------------------------------------------------------------------------
-# ContactUs module
+# Category module
 # -----------------------------------------------------------------------------
 
 
-class ContactUsListView(MyListView):
+class CategoryListView(MyListView):
 
     """
     View for Offer listing
     """
 
-    # paginate_by = 25
-    ordering = ["-created_at"]
-    model = ContactUs
-    queryset = model.objects.all().order_by('-created_at')
-    template_name = "core/contact-us/list.html"
-    permission_required = ("core.view_ContactUs",)
+    ordering = ["id"]
+    model = Category
+    queryset = model.objects.all()
+    template_name = "core/influencer-category/list.html"
+    permission_required = ("core.view_category",)
 
 
 
+class CategoryCreateView(MyNewFormsetCreateView):
 
-class ContactUsAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+    """
+    View to create Category
+    """
+
+    model = Category
+    form_class = CategoryForm
+    template_name = "core/influencer-category/form.html"
+    permission_required = ("core.add_category",)
+
+   
+
+class CategoryUpdateView(MyNewFormsetUpdateView):
+
+    """View to update Category """
+
+    model = Category
+    form_class = CategoryForm
+    template_name = "core/influencer-category/form.html"
+    permission_required = ("core.change_category",)
+
+
+
+class CategoryDeleteView(MyDeleteView):
+
+    """
+    View to delete Category Plan
+    """
+
+    model = Category
+    template_name = "core/confirm_delete.html"
+    permission_required = ("core.delete_category",)
+
+
+class CategoryAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
 
     """
     Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view.
     """
 
-    model = ContactUs
-    queryset = ContactUs.objects.all().order_by("id")
+    model = Category
+    queryset = Category.objects.all().order_by("id")
 
     def _get_is_superuser(self, obj):
         """
@@ -71,8 +105,9 @@ class ContactUsAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequir
         # If a search term, filter the query
         if self.search:
             return qs.filter(
-                Q(email__icontains=self.search)
-             
+                Q(username__icontains=self.search)
+                | Q(first_name__icontains=self.search)
+                | Q(last_name__icontains=self.search)
               
             )
         return qs
@@ -83,7 +118,10 @@ class ContactUsAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequir
         for o in qs:
             data.append(
                 {
-              
+                    "username": o.username,
+                    "first_name": o.first_name,
+                    "last_name": o.last_name,
+                    "is_superuser": self._get_is_superuser(o),
                     # "modified": o.modified.strftime("%b. %d, %Y, %I:%M %p"),
                     "actions": self._get_actions(o),
                 }

@@ -72,4 +72,14 @@ urlpatterns += [
     path("subscriptionorder/", views.SubscriptionOrderListView.as_view(), name="subscriptionorder-list"),
     path("ajax-subscriptionorder", views.SubscriptionOrderAjaxPagination.as_view(), name="subscriptionorder-list-ajax"),
 
+
+    path("category/", views.CategoryListView.as_view(), name="category-list"),
+    path("category/create/", views.CategoryCreateView.as_view(), name="category-create"),
+    path("category/<int:pk>/update/", views.CategoryUpdateView.as_view(), name="category-update"),
+    path("category/<int:pk>/delete/", views.CategoryDeleteView.as_view(), name="category-delete"),
+    path("ajax-category", views.CategoryAjaxPagination.as_view(), name="category-list-ajax"),
+
+
 ]
+
+

@@ -15,6 +15,15 @@ from core.api.views import (
 
 ) 
 
+from  core.api.views import (
+    BookEventAPI,
+    CancelSubscriptionAPI,
+    ChangeCurrentSubscriptionAPI,
+    BannerListAPIView,
+    InfluencerListAPIView,
+)
+
+
 from . import billing_details
 
 from .import subscribe_plan
@@ -25,14 +34,6 @@ from .import credit
 
 from .import faq
 
-from  core.api.views import (
-    BookEventAPI,
-    CancelSubscriptionAPI,
-    ChangeCurrentSubscriptionAPI,
-    BannerListAPIView,
-    InfluencerListAPIView,
-)
-
 from .import event
 
 from .import event_class
@@ -40,6 +41,8 @@ from .import event_class
 from .import event_agenda
 
 from .import event_qa
+
+from .import contact_us
 
 
 urlpatterns = [
@@ -68,6 +71,7 @@ urlpatterns = [
     path("event-qa/", include(event_qa)),
     path('banner-list/', BannerListAPIView.as_view(), name='banner-list'),    
     path('popular-influencer-list/', InfluencerListAPIView.as_view(), name='popular-influencer-list'),    
+    path("contact-us/", include(contact_us)),
 
 
 ]

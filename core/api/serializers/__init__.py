@@ -35,3 +35,5 @@ from .event_qa import EventPracticeAudienceQASerializer
 from .banner import BannerSerializer
 
 from .influencer import InfluencerListSerializer
+
+from .contact_us import ContactUsSerializer
