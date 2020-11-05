@@ -7,7 +7,7 @@ from core.api.pagination import CustomPagination
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from core.models import Card, User, InfluencerOffer
-from core.api.serializers import InfluencerOfferSerializer
+from core.api.serializers import InfluencerOfferSerializer, InfluencerOfferListSerializer
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
 
@@ -23,7 +23,7 @@ class InfluencerOfferAPIView(MyAPIView):
     """
 
     permission_classes = (IsAuthenticated,)
-    serializer_class = InfluencerOfferSerializer
+    serializer_class = InfluencerOfferListSerializer
 
     def get(self, request, format=None):
 
@@ -36,7 +36,7 @@ class InfluencerOfferAPIView(MyAPIView):
             try:
                 offer = InfluencerOffer.objects.filter(user_id=request.user.id)
 
-                serializer = InfluencerOfferSerializer(offer, many=True, context={"request": request})
+                serializer = InfluencerOfferListSerializer(offer, many=True, context={"request": request})
                 return Response({"status": "OK", "message": "Successfully fetched offer list", "data": serializer.data})
 
             except Card.DoesNotExist:

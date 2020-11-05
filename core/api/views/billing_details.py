@@ -98,11 +98,10 @@ class CardCreateAPI(MyAPIView):
                             stripeErr.Subscription.modify(subscription_obj.stripe_subscription_id , default_payment_method=payment_method.id,)
 
                         card_order = Card.objects.filter(user__id=user_obj.id).update(stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
-                        
+                        check_card = Card.objects.filter(user__id=request.user.id).first()
                         email = Emails(subject="New Billing Details Updated", recipient_list=request.user.email, )
                         email.set_html_message('billing_details/billing_details.html', {"user":user_obj, 'card_order': check_card })
                         email.send()
-                        print("hhh")
                         return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
                 
                     else:
@@ -117,7 +116,8 @@ class CardCreateAPI(MyAPIView):
                     
                     if check_card:
                         card_order = Card.objects.filter(user__id=user_obj.id).update(stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
-                    
+                        check_card = Card.objects.filter(user__id=request.user.id).first()
+
                         email = Emails(subject="New Billing Details Updated", recipient_list=request.user.email, )
                         email.set_html_message('billing_details/billing_details.html', {"user":user_obj, 'card_order': check_card })
                         email.send()
@@ -151,10 +151,7 @@ class CardCreateAPI(MyAPIView):
 
             except Exception as e:
 
-                return Response({"status": "FAIL", "message": str(e), "data": []})
-
-       
-       
+                return Response({"status": "FAIL", "message": str(e), "data": []})       
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
 

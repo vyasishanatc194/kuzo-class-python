@@ -14,7 +14,7 @@ from .transaction_log import TransactionlogSerializer
 
 from .subscription_order import SubscriptionOrderSerializer
 
-from .offer import InfluencerOfferSerializer
+from .offer import InfluencerOfferSerializer, InfluencerOfferListSerializer
 
 from .credit import CreditSerializer
 
