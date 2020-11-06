@@ -12,3 +12,5 @@ from .credit import CreditForm
 
 from .influencer_category import CategoryForm
 
+from .profile import UserProfileForm
+

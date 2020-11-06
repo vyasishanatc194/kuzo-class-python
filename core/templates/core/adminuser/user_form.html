@@ -100,6 +100,47 @@
         </div>
         <!-- /ibox -->
 
+
+        {% for formset in inlines %}
+
+
+        <div class="ibox float-e-margins">
+
+            {% include "core/partials/ibox_title.html" with ibox_title="Influencer Profile" icon_class="fas fa-user" only %}
+
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div  class="form-group row">
+                            <table class="col-sm-12">
+                                {{ formset.management_form|crispy }}
+                                {% for form in formset.forms %}
+                                <tr class="user_profile_get" id="user_profile_get">
+                                    {% for field in form.visible_fields %}
+                                    <td>
+                                        {# Include the hidden fields in the form #}
+                                        {% if forloop.first %}
+                                        {% for hidden in form.hidden_fields %}
+                                        {{ hidden }}
+                                        {% endfor %}
+                                        {% endif %}
+                                        {{ field.errors.as_ul }}
+
+                                        {{ field|as_crispy_field }}
+
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+
         {% include "core/partials/form_footer.html" %}
 
     </form>
@@ -116,4 +157,14 @@
         userroles.users.details();
     });
 </script>
+
+<script src="{% static 'core/js/jquery.formset.js' %}"></script>
+
+
+<script>
+
+
+    $("#id_user_profile-10-DELETE").hide();
+</script>
+
 {% endblock %}

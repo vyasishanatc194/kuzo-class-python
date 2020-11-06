@@ -7,6 +7,8 @@ from core.views.generic import (
     MyLoginRequiredView,
     MyUpdateView,
     MyView,
+    MyNewFormsetCreateView,
+    MyNewFormsetUpdateView,
 )
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AdminPasswordChangeForm
@@ -19,9 +21,9 @@ from django.utils.text import Truncator
 from django.views.generic import TemplateView
 from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import MyUserChangeForm, MyUserCreationForm
+from ..forms import MyUserChangeForm, MyUserCreationForm, UserProfileForm
 
-from core.models import User 
+from core.models import User, UserProfile
 
 import csv
 
@@ -64,12 +66,39 @@ class UserListView(MyListView):
         return self.model.objects.exclude(username="admin").exclude(username=self.request.user)
 
 
-class UserCreateView(MyCreateView):
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
+
+
+class UserProfileInline(InlineFormSetFactory):
+
+    """Inline view to show UserProfileUpdateInline within the Parent View"""
+
+    model = UserProfile
+    form_class = UserProfileForm
+    factory_kwargs = {'extra': 1, 'max_num': None, 'can_order': False, 'can_delete': True}
+
+
+
+
+class UserProfileUpdateInline(InlineFormSetFactory):
+
+    """Inline view to show UserProfileUpdateInline within the Parent View"""
+
+    model = UserProfile
+    form_class = UserProfileForm
+    factory_kwargs = {'extra': 1, 'max_num': 1, 'can_order': False, 'can_delete': True}
+
+
+
+
+class UserCreateView(MyNewFormsetCreateView):
     """
     View to create User
     """
 
     model = User
+    inlines = [UserProfileInline,]
+
     form_class = MyUserCreationForm
     template_name = "core/adminuser/user_form.html"
     permission_required = ("core.add_user",)
@@ -80,12 +109,13 @@ class UserCreateView(MyCreateView):
         return kwargs
 
 
-class UserUpdateView(MyUpdateView):
+class UserUpdateView(MyNewFormsetUpdateView):
     """
     View to update User
     """
 
     model = User
+    inlines = [UserProfileUpdateInline,]
     form_class = MyUserChangeForm
     template_name = "core/adminuser/user_form.html"
     permission_required = ("core.change_user",)
