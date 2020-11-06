@@ -7,14 +7,18 @@ from core.api.pagination import CustomPagination
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from core.models import Card, User, SubscriptionPlan, UserProfile, SubscriptionOrder, Transactionlog, Event, EventOrder
-from core.api.serializers import CardSerializer, EventOrderSerializer, SubscriptionPlanSerializer, TransactionlogSerializer, SubscriptionOrderSerializer
+from core.api.serializers import CardSerializer, UserDetailsSerializer,UserProfileSerializer,  EventOrderListSerializer, EventOrderSerializer, SubscriptionPlanSerializer, TransactionlogSerializer, SubscriptionOrderSerializer
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
 import stripe as stripeErr
 import datetime
 from dateutil import relativedelta
 from core.utils import Emails
+from core.utils import Emails, send_sendgrid_email
+from django.conf import settings
 
+
+# .................................
 # .................................................................................
 # Subscription Plan API
 # .................................................................................
@@ -62,6 +66,7 @@ class BookEventAPI(MyAPIView):
             user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
             subscription = SubscriptionPlan.objects.filter(id=request.data['subscription']).first()
             event = Event.objects.filter(id=request.data['event']).first()
+            user_serilizer=UserDetailsSerializer(user_obj)
 
             check_participant = EventOrder.objects.filter(user__id=request.user.id, event__id=event.id).exists()
 
@@ -117,11 +122,12 @@ class BookEventAPI(MyAPIView):
                         Transactionlog.objects.create(**transaction_data)
                         user_plan.credit =  int(user_plan.credit)  - int(event.credit_required)
                         user_plan.save()
-                        serilzer = EventOrderSerializer(event_new)
 
-                        email = Emails(subject="Event booking Transaction Receipt", recipient_list=request.user.email, )
-                        email.set_html_message('event_order/event_order.html', {"user":user_obj, 'event_order': event_new})
-                        email.send()
+                        serilzer = EventOrderListSerializer(event_new)
+
+                        context={"user":user_serilizer.data, 'event_order':serilzer.data}
+                        send_sendgrid_email(context,"Event booking Transaction Receipt",request.user.email, settings.EVENT_ORDER_TEMPLATE_ID)
+
 
                         return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": serilzer.data})
 
@@ -201,20 +207,19 @@ class BookEventAPI(MyAPIView):
                         }
 
                         Transactionlog.objects.create(**event_transaction_data)
-                        serilzer = EventOrderSerializer(event_new)
+                        serilzer = EventOrderListSerializer(event_new)
 
                         # Email for event 
+                        context={"user":user_serilizer.data, 'event_order':serilzer.data}
+                        send_sendgrid_email(context,"Event booking Transaction Receipt",request.user.email, settings.EVENT_ORDER_TEMPLATE_ID)
 
-                        email = Emails(subject="Event booking Transaction Receipt", recipient_list=request.user.email, )
-                        email.set_html_message('event_order/event_order.html', {"user":user_obj, 'event_order': event_new})
-                        email.send()
-
+                     
                         # Email for subscription 
 
-                        email = Emails(subject="New Subscription Transaction Receipt", recipient_list=request.user.email, )
-                        email.set_html_message('subscription/subscription.html', {"user":user_obj, 'subscription_order':subscription_new})
-                        email.send()
-
+                        subscriptin_serializer = SubscriptionOrderSerializer(subscription_new)
+                        context={"user":user_serilizer.data, 'subscription_order':subscriptin_serializer.data}
+                        send_sendgrid_email(context,"Event booking Transaction Receipt",request.user.email, settings.SUBSCRIPTION_ORDER_TEMPLATE_ID)
+                        
                         return Response({"status": "OK", "message": "Subscription & event registration process completed successfully", "data": serilzer.data})
 
                 except stripeErr.error.CardError as e:
@@ -282,11 +287,10 @@ class BookEventAPI(MyAPIView):
                     event.save()
                     Transactionlog.objects.create(**transaction_data)
 
-                    serializer = EventOrderSerializer(event_new)
+                    serializer = EventOrderListSerializer(event_new)
 
-                    email = Emails(subject="Event booking Transaction Receipt", recipient_list=request.user.email, )
-                    email.set_html_message('event_order/event_order.html', {"user":user_obj, 'event_order': event_new})
-                    email.send()
+                    context={"user":user_serilizer.data, 'event_order':serializer.data}
+                    send_sendgrid_email(context,"Event booking Transaction Receipt",request.user.email, settings.DIRECT_EVENT_BOOKING)
 
                     return Response({"status": "OK", "message": "Event registration process completed successfully", "data": serializer.data})
                 
@@ -331,6 +335,8 @@ class CancelSubscriptionAPI(MyAPIView):
                 stripe = MyStripe()
                 user_obj = User.objects.filter(id=request.user.id).first()
                 user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
+                user_serilizer=UserDetailsSerializer(user_obj)
+                user_plan_serializer=UserProfileSerializer(user_plan)
 
                 if not user_plan.subscription:
                     return Response({"status": "OK", "message": "No subscription plan active now.", "data":[]})
@@ -342,9 +348,9 @@ class CancelSubscriptionAPI(MyAPIView):
                     sub_object.plan_status='cancel'
                     sub_object.save()
 
-                email = Emails(subject="Cancel Subscription Plan Receipt", recipient_list=request.user.email, )
-                email.set_html_message('subscription/cancel_subscription.html', {"user":user_obj, 'user_plan':user_plan})
-                email.send()    
+                context={"user":user_serilizer.data, 'user_plan':user_plan_serializer.data}
+                send_sendgrid_email(context,"Cancel subscription plan details",request.user.email, settings.CANCEL_SUBSCRIPTION_ORDER_TEMPLATE_ID)
+                        
                 
                 stripe = MyStripe() 
                 subscription_stripe = stripe.CancelSubscriptionPlan(user_plan.stripe_subscription_id)  
@@ -397,6 +403,8 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                 user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
                 subscription = SubscriptionPlan.objects.filter(id=request.data['subscription']).first()
                 card = Card.objects.filter(user__id=request.user.id).first()
+                user_serilizer=UserDetailsSerializer(user_obj)
+                user_plan_serializer=UserProfileSerializer(user_plan)
 
                 if not user_plan.subscription:
                     return Response({"status": "OK", "message": "No subscription plan active now.", "data":[]})
@@ -423,9 +431,9 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                             sub_object.plan_status='cancel'
                             sub_object.save()
 
-                        email = Emails(subject="Cancel Subscription Plan Receipt", recipient_list=request.user.email, )
-                        email.set_html_message('subscription/cancel_subscription.html', {"user":user_obj, 'user_plan':user_plan})
-                        email.send()    
+                        context={"user":user_serilizer.data, 'user_plan':user_plan_serializer.data}
+                        send_sendgrid_email(context,"cancel subscription plan details",request.user.email, settings.CANCEL_SUBSCRIPTION_ORDER_TEMPLATE_ID)
+                        
 
 
                     subscripton_data = {
@@ -461,9 +469,10 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
 
                     serializer = SubscriptionOrderSerializer(subscription_new)
 
-                    email = Emails(subject="New Subscription Transaction Receipt", recipient_list=request.user.email, )
-                    email.set_html_message('subscription/subscription.html', {"user":user_obj, 'subscription_order':subscription_new})
-                    email.send()
+                    subscriptin_serializer = SubscriptionOrderSerializer(subscription_new)
+                    context={"user":user_serilizer.data, 'subscription_order':subscriptin_serializer.data}
+                    send_sendgrid_email(context,"New Subscription Transaction Receipt",request.user.email, settings.SUBSCRIPTION_ORDER_TEMPLATE_ID)
+                        
                 
                     return Response({"status": "OK", "message": "Old subscription has been cancelled & new subscription started now", "data":serializer.data})
 

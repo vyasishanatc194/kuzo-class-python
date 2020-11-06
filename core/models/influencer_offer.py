@@ -23,4 +23,4 @@ class InfluencerOffer(models.Model):
 
 
     def __str__(self):
-        return "{0}".format(self.offer.title)
+        return "{0}".format(self.user.name)

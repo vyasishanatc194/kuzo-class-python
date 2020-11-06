@@ -18,7 +18,7 @@ from .offer import InfluencerOfferSerializer, InfluencerOfferListSerializer
 
 from .credit import CreditSerializer
 
-from .event_order import EventOrderSerializer
+from .event_order import EventOrderSerializer, EventOrderListSerializer
 
 from .credit_order import CreditOrderSerializer, CreditOrderListSerializer
 
@@ -37,3 +37,5 @@ from .banner import BannerSerializer
 from .influencer import InfluencerListSerializer
 
 from .contact_us import ContactUsSerializer
+
+from .user_profile import UserProfileSerializer
