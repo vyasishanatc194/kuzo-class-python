@@ -7,12 +7,13 @@ from core.api.pagination import CustomPagination
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from core.models import Card, User, SubscriptionOrder, UserProfile
-from core.api.serializers import CardSerializer
+from core.api.serializers import CardSerializer, UserDetailsSerializer
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
 import stripe as stripeErr
 from core.utils import Emails
-
+from core.utils import Emails, send_sendgrid_email
+from django.conf import settings
 # .................................................................................
 # Credit/Debit Card API
 # .................................................................................
@@ -66,8 +67,8 @@ class CardCreateAPI(MyAPIView):
                 """ Create Customer """
 
                 user_obj =User.objects.get(id=request.user.id)
-
                 user_plan = UserProfile.objects.filter(user__id=user_obj.id).first()
+                user_serilizer = UserDetailsSerializer(user_obj)
 
                 if not request.user.customer_id:
 
@@ -99,16 +100,20 @@ class CardCreateAPI(MyAPIView):
 
                         card_order = Card.objects.filter(user__id=user_obj.id).update(stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
                         check_card = Card.objects.filter(user__id=request.user.id).first()
-                        email = Emails(subject="New Billing Details Updated", recipient_list=request.user.email, )
-                        email.set_html_message('billing_details/billing_details.html', {"user":user_obj, 'card_order': check_card })
-                        email.send()
-                        return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
+                        
+                        srializer=CardSerializer(check_card)
+                        context={"user":user_serilizer.data, 'card_order':srializer.data}
+                        send_sendgrid_email(context,"Purchased credit Transaction Receipt",request.user.email, settings.BILLING_DETAILS_TEMPLATE_ID)
+                
+                        return Response({"status": "OK", "message": "Successfully Updated billing details", "data": srializer.data})
                 
                     else:
                         card_order = Card.objects.create(user=user_obj, stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
-                        email = Emails(subject="New Billing Details Updated", recipient_list=request.user.email, )
-                        email.set_html_message('billing_details/billing_details.html', {"user":user_obj, 'card_order': card_order })
-                        email.send()
+
+                        srializer=CardSerializer(card_order)
+                        context={"user":user_serilizer.data, 'card_order':srializer.data}
+                        send_sendgrid_email(context,"Purchased credit Transaction Receipt",request.user.email, settings.BILLING_DETAILS_TEMPLATE_ID)
+
                         return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
                 
                 else:
@@ -116,20 +121,22 @@ class CardCreateAPI(MyAPIView):
                     
                     if check_card:
                         card_order = Card.objects.filter(user__id=user_obj.id).update(stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
+                       
                         check_card = Card.objects.filter(user__id=request.user.id).first()
+                        srializer=CardSerializer(check_card)
+                        context={"user":user_serilizer.data, 'card_order':srializer.data}
+                        send_sendgrid_email(context,"Purchased credit Transaction Receipt",request.user.email, settings.BILLING_DETAILS_TEMPLATE_ID)
 
-                        email = Emails(subject="New Billing Details Updated", recipient_list=request.user.email, )
-                        email.set_html_message('billing_details/billing_details.html', {"user":user_obj, 'card_order': check_card })
-                        email.send()
+                        return Response({"status": "OK", "message": "Successfully Updated billing details", "data": srializer.data})
 
+                       
                     else:
-                    
                         card_order = Card.objects.create(user=user_obj, stripe_card_id=payment_method.id, last4=payment_method['card']['last4'], card_expiration_date='{0}/{1}'.format(payment_method['card']['exp_month'], payment_method['card']['exp_year']))
-                        email = Emails(subject="New Billing Details Updated", recipient_list=request.user.email, )
-                        email.set_html_message('billing_details/billing_details.html', {"user":user_obj, 'card_order': card_order })
-                        email.send()
+                        srializer=CardSerializer(card_order)
+                        context={"user":user_serilizer.data, 'card_order':srializer.data}
+                        send_sendgrid_email(context,"Purchased credit Transaction Receipt",request.user.email, settings.BILLING_DETAILS_TEMPLATE_ID)
 
-                    return Response({"status": "OK", "message": "Successfully Updated billing details", "data": []})
+                        return Response({"status": "OK", "message": "Successfully Updated billing details", "data": srializer.data})
        
             except stripeErr.error.CardError as e:
                 body = e.json_body

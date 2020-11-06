@@ -22,6 +22,7 @@ class CardSerializer(serializers.ModelSerializer):
             "stripe_card_id",
             "last4",
             "card_expiration_date",
+            'created_at',
         
         )
 
