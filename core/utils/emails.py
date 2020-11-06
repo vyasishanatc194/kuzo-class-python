@@ -15,7 +15,7 @@ class Emails:
         self.__dict__.update(kwargs)
          
         if self.from_email == "":
-            self.from_email = 'from@example.com'
+            self.from_email = 'fauzan.citrusbug@gmail.com'
 
         if type(self.recipient_list) != list:
             self.recipient_list = [self.recipient_list]
