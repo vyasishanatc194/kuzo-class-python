@@ -20,7 +20,7 @@ from .credit import CreditSerializer
 
 from .event_order import EventOrderSerializer
 
-from .credit_order import CreditOrderSerializer
+from .credit_order import CreditOrderSerializer, CreditOrderListSerializer
 
 from .faq import FaqSerializer
 

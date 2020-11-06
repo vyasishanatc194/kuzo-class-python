@@ -11,7 +11,7 @@ from rest_framework import status
 from core.utils import CustomValidation, validate_password
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from core.utils import Emails
+from core.utils import Emails, send_sendgrid_email
 
 
 class AccountAdapter(DefaultAccountAdapter):
@@ -24,16 +24,16 @@ class AccountAdapter(DefaultAccountAdapter):
 
 
         ctx = {
-            "user": emailconfirmation.email_address.user,
-            "activate_url": activate_url,
-            "current_site": current_site,
-            "key": emailconfirmation.key,
+            "user": str(emailconfirmation.email_address.user),
+            "activate_url": str(activate_url),
             "subject":"Welcome !!!",
         }
 
-        email = Emails(subject="Welcome !!!", recipient_list=emailconfirmation.email_address.email, )
-        email.set_html_message('welcome/user.html',ctx)
-        email.send()
+        # email = Emails(subject="Welcome !!!", recipient_list=emailconfirmation.email_address.email, )
+        # email.set_html_message('welcome/user.html',ctx)
+        # email.send()
+
+        send_sendgrid_email(ctx, "Welcome !!!", emailconfirmation.email_address.email, settings.EMAIL_VERIFICATION_TEMPLATE_ID)
         return 
 
 

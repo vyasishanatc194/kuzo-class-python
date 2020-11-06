@@ -10,8 +10,10 @@ from core.models import Card, User,CreditOrder, UserProfile, Transactionlog, Cre
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe, create_card_object
 import stripe as stripeErr
-from core.api.serializers import CreditSerializer, TransactionlogSerializer, CreditOrderSerializer
+from core.api.serializers import CreditSerializer, CreditOrderListSerializer, TransactionlogSerializer, CreditOrderSerializer, UserDetailsSerializer
 from core.utils import Emails
+from core.utils import Emails, send_sendgrid_email
+from django.conf import settings
 
 
 # .................................................................................
@@ -37,8 +39,6 @@ class CreditListAPIView(MyAPIView):
 
         except:
             return Response({"status": "FAIL", "message": "Credit plan not found", "data": []})
-
-
 
 
 class CreditPurchaseAPI(MyAPIView):
@@ -99,13 +99,17 @@ class CreditPurchaseAPI(MyAPIView):
 
                 user_plan.credit = int(user_plan.credit) + int(credit_obj.number_of_credit)
                 user_plan.save()
-                serilizer = CreditOrderSerializer(new_credit)
+                serilizer = CreditOrderListSerializer(new_credit)
 
-                email = Emails(subject="Purchased credit Transaction Receipt", recipient_list=request.user.email, )
-                email.set_html_message('credit_order/credit_order.html', {"user":user_obj, 'credit_order':new_credit})
-                email.send()
+                # email = Emails(subject="Purchased credit Transaction Receipt", recipient_list=request.user.email, )
+                # email.set_html_message('credit_order/credit_order.html', {"user":user_obj, 'credit_order':new_credit})
+                # email.send()
+
+                user_serializer = UserDetailsSerializer(user_obj)
+                context={"user":user_serializer.data, 'credit_order':serilizer.data}
+
+                send_sendgrid_email(context,"Purchased credit Transaction Receipt",request.user.email, settings.CREDIT_ORDER_TEMPLATE_ID)
                 
-
                 return Response({"status": "OK", "message": "Successfully purchased credit", "data": serilizer.data})
                     
             except stripeErr.error.CardError as e:

@@ -21,6 +21,8 @@ from django.conf import settings
 import functools
 from rest_framework import status
 
+from .sendgrid_email import send_sendgrid_email
+
 
 
 def import_callable(path_or_callable):

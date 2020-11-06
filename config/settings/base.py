@@ -263,7 +263,7 @@ SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = "DENY"
 
-# EMAIL
+# Sendgrid EMAIL
 
 
 EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
@@ -273,11 +273,19 @@ ANYMAIL = {
 
 }
 
-
-
 DEFAULT_FROM_EMAIL = env(
     "DJANGO_DEFAULT_FROM_EMAIL", default=env("DJANGO_DEFAULT_EAMIL")
 )
+
+SENDGRID_API_KEY=env('DJANGO_SENDGRID_API_KEY')
+SENDGRID_FROM_EMAIL=env('DJANGO_DEFAULT_EAMIL')
+
+
+# Sendgrid emial template id
+
+EMAIL_VERIFICATION_TEMPLATE_ID = env('EMAIL_VERIFICATION_TEMPLATE_ID')
+PASSWORD_RESET_TEMPLATE_ID = env('PASSWORD_RESET_TEMPLATE_ID')
+CREDIT_ORDER_TEMPLATE_ID = env('CREDIT_ORDER_TEMPLATE_ID')
 
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
