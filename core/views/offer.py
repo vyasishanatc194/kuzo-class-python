@@ -38,7 +38,7 @@ class OfferListView(MyListView):
     """
 
     paginate_by = 10
-    ordering = ["id"]
+    ordering = ["-created_at"]
     model = Offer
     queryset = model.objects.all().order_by('-created_at')
     template_name = "core/offer/list.html"

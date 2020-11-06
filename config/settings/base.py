@@ -264,22 +264,6 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "DENY"
 
 # EMAIL
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-
-# EMAIL_BACKEND = env(
-#     "DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-# )
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
-# EMAIL_TIMEOUT = 5
-
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = "webmaster.citrusbug@gmail.com"
-# EMAIL_HOST_PASSWORD = "mdgutpvqfeglinbh"
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL
 
 
 EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
@@ -289,13 +273,13 @@ ANYMAIL = {
 
 }
 
-DEFAULT_FROM_EMAIL="webmaster.citrusbug@gmail.com"
-
 
 
 DEFAULT_FROM_EMAIL = env(
-    "DJANGO_DEFAULT_FROM_EMAIL", default="kuzo-class-python <noreply@example.com>"
+    "DJANGO_DEFAULT_FROM_EMAIL", default=env("DJANGO_DEFAULT_EAMIL")
 )
+
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix

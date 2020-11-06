@@ -30,7 +30,7 @@ class CreditListView(MyListView):
 
     # paginate_by = 25
     model = Credit
-    queryset = model.objects.order_by('-price')
+    queryset = model.objects.order_by('price')
     template_name = "core/credit/list.html"
     permission_required = ("core.view_credit",)
 

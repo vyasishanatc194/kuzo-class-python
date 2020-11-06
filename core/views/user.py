@@ -29,6 +29,7 @@ import csv
 
 from core.models import User
 from django.shortcuts import render, redirect, reverse, get_object_or_404
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
 
 
 
@@ -55,7 +56,7 @@ class UserListView(MyListView):
     """
 
     paginate_by = 10
-    ordering = ["created_at"]
+    ordering = ["-created_at"]
     model = User
     queryset = model.objects.exclude(username="admin")
     template_name = "core/adminuser/user_list.html"
@@ -64,9 +65,6 @@ class UserListView(MyListView):
     def get_queryset(self):
         
         return self.model.objects.exclude(username="admin").exclude(username=self.request.user)
-
-
-from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
 
 
 class UserProfileInline(InlineFormSetFactory):
@@ -160,7 +158,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
     """
 
     model = User
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('-created_at')
 
     def _get_is_superuser(self, obj):
         """
@@ -187,10 +185,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
         if self.search:
             return qs.filter(
                 Q(name__icontains=self.search)
-                | Q(first_name__icontains=self.search)
-                | Q(last_name__icontains=self.search)
-                # | Q(state__icontains=self.search)
-                # | Q(year__icontains=self.search)
+        
             )
         return qs
 
@@ -201,6 +196,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
             data.append(
                 {
                     "name": o.name,
+                    "created_at":o.created_at,
                     "actions": self._get_actions(o),
                 }
             )

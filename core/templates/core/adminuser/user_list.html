@@ -45,6 +45,7 @@
                     </tfoot>
                     <tbody>
 
+                        
                         {% for o in object_list %}
                         <tr>
                             <td>{{ o.name }}</td>
@@ -55,6 +56,8 @@
                             <td class="row-actions">
                                 {% include "core/partials/list_row_actions.html" %}
                             </td>
+                            <td></td>
+
                         </tr>
                         {% endfor %}
                     </tbody>
