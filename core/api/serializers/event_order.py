@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import EventOrder
+from core.models import EventOrder, UserProfile
 from .event import EventListSerializer
 
 # -----------------------------------------------------------------------------
@@ -31,6 +31,7 @@ class EventOrderSerializer(serializers.ModelSerializer):
 
 class EventOrderListSerializer(serializers.ModelSerializer):
     event=EventListSerializer()
+    influencer_category = serializers.SerializerMethodField('get_influencer_category')
     
     """
     Serializes the EventOrder data into JSON
@@ -46,6 +47,13 @@ class EventOrderListSerializer(serializers.ModelSerializer):
             "created_at", 
             "charge_id", 
             'order_status',
+            'influencer_category'
 
         )
 
+    def get_influencer_category(self, event):
+        user=UserProfile.objects.filter(user__id=event.user.id).first()
+        if user.influencer:
+            return user.influencer.name
+        else:
+            return ''    

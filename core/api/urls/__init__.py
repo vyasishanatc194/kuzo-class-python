@@ -44,6 +44,8 @@ from .import event_qa
 
 from .import contact_us
 
+from .import user_registred_event
+
 
 urlpatterns = [
 
@@ -72,6 +74,7 @@ urlpatterns = [
     path('banner-list/', BannerListAPIView.as_view(), name='banner-list'),    
     path('popular-influencer-list/', InfluencerListAPIView.as_view(), name='popular-influencer-list'),    
     path("contact-us/", include(contact_us)),
+    path("user-registered-event/", include(user_registred_event)),
 
 
 ]
