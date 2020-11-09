@@ -63,15 +63,22 @@ urlpatterns += [
     path("credit/<int:pk>/delete/", views.CreditDeleteView.as_view(), name="credit-delete"),
     path("ajax-credit", views.CreditAjaxPagination.as_view(), name="credit-list-ajax"),
 
+    # credit order
+
     path("credit-order/", views.CreditOrderListView.as_view(), name="credit-order-list"),
     path("ajax-credit", views.CreditOrderAjaxPagination.as_view(), name="creditorder-list-ajax"),
     
+    # contact us
+
     path("contactus/", views.ContactUsListView.as_view(), name="contactus-list"),
     path("ajax-contactus", views.ContactUsAjaxPagination.as_view(), name="contactus-list-ajax"),
+
+    # subscription order
 
     path("subscriptionorder/", views.SubscriptionOrderListView.as_view(), name="subscriptionorder-list"),
     path("ajax-subscriptionorder", views.SubscriptionOrderAjaxPagination.as_view(), name="subscriptionorder-list-ajax"),
 
+    # influencer category
 
     path("category/", views.CategoryListView.as_view(), name="category-list"),
     path("category/create/", views.CategoryCreateView.as_view(), name="category-create"),
@@ -80,6 +87,18 @@ urlpatterns += [
     path("ajax-category", views.CategoryAjaxPagination.as_view(), name="category-list-ajax"),
 
 
+    # event
+
+    path("event/", views.EventListView.as_view(), name="event-list"),
+    path("event/create/", views.EventCreateView.as_view(), name="event-create"),
+    path("event/<int:pk>/update/", views.EventUpdateView.as_view(), name="event-update"),
+    path("event/<int:pk>/delete/", views.EventDeleteView.as_view(), name="event-delete"),
+    path("ajax-event", views.EventAjaxPagination.as_view(), name="event-list-ajax"),
+
+    # event order
+
+    path("eventorder/", views.EventOrderListView.as_view(), name="eventorder-list"),
+    path("ajax-eventorder", views.EventOrderAjaxPagination.as_view(), name="eventorder-list-ajax"),
+
+
 ]
-
-

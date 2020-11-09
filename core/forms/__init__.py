@@ -14,3 +14,5 @@ from .influencer_category import CategoryForm
 
 from .profile import UserProfileForm
 
+from .event import EventForm
+

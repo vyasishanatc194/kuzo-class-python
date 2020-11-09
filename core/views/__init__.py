@@ -78,3 +78,16 @@ from .influencer_category import (
     CategoryListView,
     CategoryAjaxPagination,
 )
+
+from .event import (
+    EventListView,
+    EventCreateView,
+    EventUpdateView,
+    EventDeleteView,
+    EventAjaxPagination,
+)
+
+from .event_order import (
+    EventOrderListView,
+    EventOrderAjaxPagination,
+)
