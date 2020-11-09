@@ -438,10 +438,10 @@ var userroles = {
 
     // ----------------------------------------------------------------
 
-    flashdealorders: {
+    agendas: {
 
         index: function () {
-            $('#flashdealorder-table').DataTable({
+            $('#agenda-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -464,9 +464,9 @@ var userroles = {
 
     //---------------------------------------------------------------------
 
-    flashdealinterest: {
+    eventpracticeaudienceqa: {
         index: function () {
-            $('#flashdealinterest-table').DataTable({
+            $('#eventpracticeaudienceqa-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{

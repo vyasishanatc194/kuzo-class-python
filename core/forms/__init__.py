@@ -16,3 +16,6 @@ from .profile import UserProfileForm
 
 from .event import EventForm
 
+from .event_agenda import AgendaForm
+
+from .event_qa import EventPracticeAudienceQAForm

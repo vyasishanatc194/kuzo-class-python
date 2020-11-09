@@ -91,3 +91,19 @@ from .event_order import (
     EventOrderListView,
     EventOrderAjaxPagination,
 )
+
+from .event_agenda import (
+    AgendaCreateView,
+    AgendaListView,
+    AgendaUpdateView,
+    AgendaDeleteView,
+    AgendaAjaxPagination,
+)
+
+from .event_qa import (
+    EventPracticeAudienceQAListView,
+    EventPracticeAudienceQACreateView,
+    EventPracticeAudienceQAUpdateView,
+    EventPracticeAudienceQADeleteView,
+    EventPracticeAudienceQAAjaxPagination
+)

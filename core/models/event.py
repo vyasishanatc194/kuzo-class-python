@@ -41,4 +41,4 @@ class Event(models.Model):
 
 
     def __str__(self):
-        return "{0}".format(self.event_types)
+        return "{0}".format(self.event_class.name)

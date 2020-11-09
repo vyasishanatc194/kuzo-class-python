@@ -19,8 +19,8 @@ class EventPracticeAudienceQA(models.Model):
     answer =  models.TextField(blank=True, null=True, verbose_name="Answer")
 
     class Meta:
-        verbose_name = "Event Practice Audience QA"
-        verbose_name_plural = "Event Practice Audience QA"
+        verbose_name = "Practice Audience Q.A."
+        verbose_name_plural = "Practice Audience Q.A."
 
     def __str__(self):
         return "{0}".format(self.question)

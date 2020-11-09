@@ -100,5 +100,26 @@ urlpatterns += [
     path("eventorder/", views.EventOrderListView.as_view(), name="eventorder-list"),
     path("ajax-eventorder", views.EventOrderAjaxPagination.as_view(), name="eventorder-list-ajax"),
 
+   # event agenda
+
+    path("agenda/", views.AgendaListView.as_view(), name="agenda-list"),
+    path("agenda/create/", views.AgendaCreateView.as_view(), name="agenda-create"),
+    path("agenda/<int:pk>/update/", views.AgendaUpdateView.as_view(), name="agenda-update"),
+    path("agenda/<int:pk>/delete/", views.AgendaDeleteView.as_view(), name="agenda-delete"),
+    path("ajax-agenda", views.AgendaAjaxPagination.as_view(), name="agenda-list-ajax"),
+
+
+    # event agenda
+
+    path("eventpracticeaudienceqa/", views.EventPracticeAudienceQAListView.as_view(), name="eventpracticeaudienceqa-list"),
+    path("eventpracticeaudienceqa/create/", views.EventPracticeAudienceQACreateView.as_view(), name="eventpracticeaudienceqa-create"),
+    path("eventpracticeaudienceqa/<int:pk>/update/", views.EventPracticeAudienceQAUpdateView.as_view(), name="eventpracticeaudienceqa-update"),
+    path("agenda/<int:pk>/delete/", views.EventPracticeAudienceQADeleteView.as_view(), name="eventpracticeaudienceqa-delete"),
+    path("ajax-eventpracticeaudienceqa", views.EventPracticeAudienceQAAjaxPagination.as_view(), name="eventpracticeaudienceqa-list-ajax"),
+
 
 ]
+
+
+
+

@@ -97,7 +97,40 @@
                 </ul>
             </li>
 
+            <li {% if 'event/' in request.path %}class="active" {% endif %}> 
+                <a href="">
+                    <i class="fa fa-calendar fa-fw fa-2x"></i>
+                    <span class="nav-label">Event</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'event' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:event-list' %}">Event</a>
+                    </li>
+                    {% endif %}
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'order/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:eventorder-list' %}">Event Order</a>
+                    </li>
+                    {% endif %}
 
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'agenda/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:agenda-list' %}">Event agenda</a>
+                    </li>
+                    {% endif %}
+
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'eventpracticeaudienceqa/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:eventpracticeaudienceqa-list' %}">Event practice audience Q.A</a>
+                    </li>
+                    {% endif %}
+
+
+        
+                </ul>
+            </li>
 
             
             <li {% if 'Credit/' in request.path %}class="active" {% endif %}> 
@@ -123,27 +156,7 @@
             </li>
 
 
-            <li {% if 'event/' in request.path %}class="active" {% endif %}> 
-                <a href="">
-                    <i class="fa fa-calendar fa-fw fa-2x"></i>
-                    <span class="nav-label">Event</span>
-                    <span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level">
-                    {% if perms.users or request.user.is_staff %}
-                    <li {% if 'event' in request.path %}class="active" {% endif %}>
-                        <a href="{% url 'core:event-list' %}">Event</a>
-                    </li>
-                    {% endif %}
-                    {% if perms.users or request.user.is_staff %}
-                    <li {% if 'order/' in request.path %}class="active" {% endif %}>
-                        <a href="{% url 'core:eventorder-list' %}">Event Order</a>
-                    </li>
-                    {% endif %}
-
-        
-                </ul>
-            </li>
+           
 
 
             {% if perms.users or request.user.is_staff %}
