@@ -137,7 +137,7 @@
                     {% endif %}
                     {% if perms.users or request.user.is_staff %}
                     <li {% if 'order/' in request.path %}class="active" {% endif %}>
-                        <a href="#">Event Order</a>
+                        <a href="{% url 'core:eventorder-list' %}">Event Order</a>
                     </li>
                     {% endif %}
 

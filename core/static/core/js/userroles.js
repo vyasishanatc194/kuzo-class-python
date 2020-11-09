@@ -406,112 +406,16 @@ var userroles = {
 
     // ----------------------------------------------------------------------
 
-    event_registration: {
-
-        index: function () {
-            $('#eventregistration-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    // --------------------------------------------------------------------
-
-    productorders: {
-
-        index: function () {
-            $('#productorder-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
+   
 
     //---------------------------------------------------------------------
 
-    eventorders: {
-
-        index: function () {
-            $('#eventorder-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
-    //---------------------------------------------------------------------
-
-    chatsettings: {
-        index: function () {
-            $('#chatsettings-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
-
+   
     // ----------------------------------------------------------------
 
-    payment_request: {
+    eventorder: {
         index: function () {
-            $('#paymentrequest-table').DataTable({
+            $('#eventorder-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{

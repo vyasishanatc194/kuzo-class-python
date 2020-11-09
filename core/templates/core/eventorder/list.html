@@ -8,7 +8,7 @@
 {% block page_content %}
 {% csrf_token %}
 
-{% include "core/includes/list_header_card.html" with title="Create a new credit order" subtitle="Create a new credit order." show_button=True %}
+{% include "core/includes/list_header_card.html" with title="Create a new event order" subtitle="Create a new event order." show_button=True %}
 
 <div class="ibox float-e-margins">
 
@@ -19,7 +19,7 @@
                 <thead>
                     <tr>
                         <th>User</th>
-                        <th>Credit</th>
+                        <th>Event</th>
                         <th>Amount</th>
                         <th>Created at</th>
                         <th>Charge id</th>
@@ -31,8 +31,8 @@
                 <tfoot>
                     <tr>
                        <th>User</th>
-                        <th>Credit</th>
-                        <th>Amount</th>
+                       <th>Event</th>
+                       <th>Amount</th>
                         <th>Created at</th>
                         <th>Charge id</th>
                         <th>Order status</th>
@@ -44,8 +44,8 @@
                     <tr>
 
                         <td>{{ o.user.name }}</td>
-                        <td>{{o.credit }}</td>
-                        <td>{{o.amount }}</td>
+                        <td>{{o.event }}</td>
+                        <td>{{o.event.price }}</td>
                         <td>{{o.created_at }}</td>
                         <td>{{o.charge_id }}</td>
                         <td>{{o.order_status }}</td>
@@ -73,7 +73,7 @@
 <script>
     var pagination_url = "{% url opts|admin_urlname:'list-ajax' %}";
     $(function () {
-        userroles.creditorder.index();
+        userroles.eventorder.index();
     });
 </script>
 {% endblock %}

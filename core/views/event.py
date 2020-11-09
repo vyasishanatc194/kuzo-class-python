@@ -31,7 +31,7 @@ class EventListView(MyListView):
     # paginate_by = 25
     ordering = ["id"]
     model = Event
-    queryset = model.objects.all()
+    queryset = model.objects.all().order_by('-event_date_time')
     template_name = "core/event/list.html"
     permission_required = ("core.view_event",)
 
