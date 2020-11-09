@@ -42,6 +42,34 @@ class EventAPIView(MyAPIView):
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
 
 
+# Home Page Event List 
+
+class HomePageEventListAPIView(MyAPIView):
+    
+    """
+    API View for event listing
+    """
+
+    permission_classes = (AllowAny,)
+    serializer_class = EventListSerializer
+
+    def get(self, request, format=None):
+
+        """GET method for retrieving the data"""
+        search=request.GET['q']
+        if search=='is_featured':
+            event = Event.objects.filter(is_featured=True).order_by('event_date_time')
+        elif search=='price':
+            event = Event.objects.all().order_by("price")
+        elif search=='upcoming':
+            event = Event.objects.all().order_by('event_date_time')
+    
+        serializer = self.serializer_class(event, many=True, context={"request": request})
+        return Response({"status": "OK", "message": "Successfully fetched event list", "data": serializer.data})
+
+    
+
+
 class EventCreateAPI(MyAPIView):
 
     """API View to create offer"""
