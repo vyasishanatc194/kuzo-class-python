@@ -406,8 +406,8 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                 user_serilizer=UserDetailsSerializer(user_obj)
                 user_plan_serializer=UserProfileSerializer(user_plan)
 
-                if not user_plan.subscription:
-                    return Response({"status": "OK", "message": "No subscription plan active now.", "data":[]})
+                # if not user_plan.subscription:
+                #     return Response({"status": "OK", "message": "No subscription plan active now.", "data":[]})
               
 
                 if not request.user.customer_id:
