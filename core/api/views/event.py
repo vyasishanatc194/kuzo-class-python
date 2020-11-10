@@ -45,6 +45,29 @@ class EventAPIView(MyAPIView):
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
 
 
+
+class EventDetailsAPIView(MyAPIView):
+    
+    """
+    API View for event listing
+    """
+
+    permission_classes = (AllowAny,)
+    serializer_class = EventListSerializer
+
+    def get(self, request, pk,  format=None):
+
+        """GET method for retrieving the data"""
+
+        try:
+            event = Event.objects.get(id=pk)
+            serializer = self.serializer_class(event, context={"request": request})
+            return Response({"status": "OK", "message": "Successfully fetched event details", "data": serializer.data})
+
+        except Event.DoesNotExist:
+            return Response({"status": "FAIL", "message": "Event details not found", "data": []})
+
+
 # Home Page Event List 
 
 class HomePageEventListAPIView(MyAPIView):

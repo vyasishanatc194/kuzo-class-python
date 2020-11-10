@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from core.models import Event
+from core.models import Event, Agenda
 from .event_class import EventClassSerializer
 from core.api.serializers import UserUpdateDetailsSerializer
+from core.api.serializers.agenda import AgendaSerializer
 
 import datetime, pytz
 
@@ -43,6 +44,8 @@ class EventListSerializer(serializers.ModelSerializer):
     user = UserUpdateDetailsSerializer()
     remaining_spots = serializers.SerializerMethodField('get_remaining_spots')
     timezone = serializers.SerializerMethodField('get_timezone')
+    agenda = serializers.SerializerMethodField('get_agenda')
+
 
     
     """
@@ -68,6 +71,7 @@ class EventListSerializer(serializers.ModelSerializer):
             "created_at",
             "remaining_spots",
             "timezone",
+            "agenda",
 
         
         )
@@ -82,3 +86,13 @@ class EventListSerializer(serializers.ModelSerializer):
             timezone_code = datetime.datetime.now(tz=pytz.timezone(event.time_zone))
             data=timezone_code.strftime("%Z")
             return data
+
+
+    
+    def get_agenda(self, user_object):
+
+        request = self.context.get('request')
+        event = Agenda.objects.filter(event__id=user_object.id)
+        serializers = AgendaSerializer(event, many=True, context={"request": request})
+        return serializers.data
+        

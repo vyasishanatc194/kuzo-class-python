@@ -4,7 +4,8 @@ from core.api.views.event import (
     EventCreateAPI,
     EventUpdateAPI,
     EventDeleteAPI,
-    HomePageEventListAPIView
+    HomePageEventListAPIView,
+    EventDetailsAPIView,
 
 
 )
@@ -16,5 +17,6 @@ urlpatterns = [
     path('update/<int:pk>', EventUpdateAPI.as_view(), name='event-update"'), 
     path('delete/<int:pk>', EventDeleteAPI.as_view(), name='event-delete"'), 
     path("home-page/", HomePageEventListAPIView.as_view(), name="event-list"),
+    path('details/<int:pk>', EventDetailsAPIView.as_view(), name='event-details"'), 
     
 ]

@@ -45,3 +45,5 @@ from .timezone import TimezoneSerializer
 from .influncer_category import CategorySerializer
 
 from .influencer_details import InfluencerDetailsListSerializer
+
+from .agenda import AgendaSerializer
