@@ -21,6 +21,7 @@ from  core.api.views import (
     ChangeCurrentSubscriptionAPI,
     BannerListAPIView,
     InfluencerListAPIView,
+    InfluencerDetailsListAPIView,
 )
 
 
@@ -78,6 +79,9 @@ urlpatterns = [
     path("contact-us/", include(contact_us)),
     path("user-registered-event/", include(user_registred_event)),
     path("timezone-list/", include(timezone)),
+
+    path('influencer-details/<int:pk>', InfluencerDetailsListAPIView.as_view(), name='influencer-details'),    
+
 
 
 ]

@@ -7,6 +7,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from core.models import Event
 from core.api.serializers import EventSerializer, EventListSerializer
 from core.api.apiviews import MyAPIView
+from django.utils import timezone
+
+now = timezone.now()
 
 # .................................................................................
 # Event API
@@ -58,11 +61,11 @@ class HomePageEventListAPIView(MyAPIView):
         """GET method for retrieving the data"""
         search=request.GET['q']
         if search=='is_featured':
-            event = Event.objects.filter(is_featured=True).order_by('event_date_time')
+            event = Event.objects.filter(is_featured=True, event_date_time__gte=now).order_by('event_date_time')
         elif search=='price':
-            event = Event.objects.all().order_by("price")
+            event = Event.objects.filter(event_date_time__gte=now).order_by("price")
         elif search=='upcoming':
-            event = Event.objects.all().order_by('event_date_time')
+            event = Event.objects.filter(event_date_time__gte=now).order_by('event_date_time')
     
         serializer = self.serializer_class(event, many=True, context={"request": request})
         return Response({"status": "OK", "message": "Successfully fetched event list", "data": serializer.data})

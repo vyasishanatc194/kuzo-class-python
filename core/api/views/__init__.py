@@ -30,3 +30,5 @@ from .popular_influencer import InfluencerListAPIView
 from .contact_us import ContactUsCreateAPI
 
 from .user_registred_event import UserEventRegisteredAPIView
+
+from .influencer_details import InfluencerDetailsListAPIView

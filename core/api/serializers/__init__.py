@@ -41,3 +41,7 @@ from .contact_us import ContactUsSerializer
 from .user_profile import UserProfileSerializer
 
 from .timezone import TimezoneSerializer
+
+from .influncer_category import CategorySerializer
+
+from .influencer_details import InfluencerDetailsListSerializer
