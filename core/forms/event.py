@@ -29,6 +29,15 @@ class EventForm(forms.ModelForm):
 
         super (EventForm,self ).__init__(*args,**kwargs) 
         self.fields['user'].queryset = User.objects.exclude(username="admin")
+        self.fields['user'].required = True
+        self.fields['event_types'].required = True
+        self.fields['event_class'].required = True
+        self.fields['price'].required = True
+        self.fields['number_of_participants'].required = True
+        self.fields['credit_required'].required = True
+
+
+ 
      
 
     class Meta():

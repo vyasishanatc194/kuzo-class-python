@@ -15,3 +15,10 @@ class CategoryForm(forms.ModelForm):
         fields = [
             "name",
             ]
+
+    def __init__(self, *args, **kwargs):
+
+        super(CategoryForm, self).__init__(*args, **kwargs)
+
+        self.fields['name'].required = True
+ 
