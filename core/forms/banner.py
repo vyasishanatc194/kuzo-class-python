@@ -17,3 +17,13 @@ class BannerForm(forms.ModelForm):
             "image",
             "description",
             ]
+
+    def __init__(self, *args, **kwargs):
+
+        super(BannerForm, self).__init__(*args, **kwargs)
+
+        self.fields['title'].required = True
+        self.fields['image'].required = True
+        self.fields['description'].required = True
+
+

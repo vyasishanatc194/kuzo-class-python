@@ -17,3 +17,11 @@ class EventPracticeAudienceQAForm(forms.ModelForm):
             "answer",
             ]
 
+
+    def __init__(self, *args, **kwargs):
+
+        super(EventPracticeAudienceQAForm, self).__init__(*args, **kwargs)
+
+        self.fields['event'].required = True
+        self.fields['question'].required = True
+        self.fields['answer'].required = True

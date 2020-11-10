@@ -83,12 +83,12 @@
                 </a>
                 <ul class="nav nav-second-level">
                     {% if perms.users or request.user.is_staff %}
-                    <li {% if 'plan' in request.path %}class="active" {% endif %}>
+                    <li {% if 'subscription-plan/' in request.path %}class="active" {% endif %}>
                         <a href="{% url 'core:subscriptionplan-list' %}">Subscription plan	</a>
                     </li>
                     {% endif %}
                     {% if perms.users or request.user.is_staff %}
-                    <li {% if 'order/' in request.path %}class="active" {% endif %}>
+                    <li {% if 'subscriptionorder/' in request.path %}class="active" {% endif %}>
                         <a href="{% url 'core:subscriptionorder-list' %}">Subscription order	</a>
                     </li>
                     {% endif %}
@@ -104,13 +104,18 @@
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
+
                     {% if perms.users or request.user.is_staff %}
-                    <li {% if 'event' in request.path %}class="active" {% endif %}>
+
+                    <li {% if 'event/' in request.path %}class="active" {% endif %}>
                         <a href="{% url 'core:event-list' %}">Event</a>
                     </li>
+
                     {% endif %}
+
                     {% if perms.users or request.user.is_staff %}
-                    <li {% if 'order/' in request.path %}class="active" {% endif %}>
+
+                    <li {% if 'eventorder/' in request.path %}class="active" {% endif %}>
                         <a href="{% url 'core:eventorder-list' %}">Event Order</a>
                     </li>
                     {% endif %}
@@ -140,13 +145,15 @@
                     <span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level">
+
                     {% if perms.users or request.user.is_staff %}
-                    <li {% if 'plan' in request.path %}class="active" {% endif %}>
+                    <li {% if 'credit/' in request.path %}class="active" {% endif %}>
                         <a href="{% url 'core:credit-list' %}">Credit plan</a>
                     </li>
                     {% endif %}
+
                     {% if perms.users or request.user.is_staff %}
-                    <li {% if 'order/' in request.path %}class="active" {% endif %}>
+                    <li {% if 'credit-order/' in request.path %}class="active" {% endif %}>
                         <a href="{% url 'core:credit-order-list' %}">Credit order</a>
                     </li>
                     {% endif %}

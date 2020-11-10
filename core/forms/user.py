@@ -38,6 +38,7 @@ class MyUserCreationForm(UserCreationForm):
         # self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
         self.user = user
+        self.fields['name'].required = True
 
 
     def save(self, commit=True):

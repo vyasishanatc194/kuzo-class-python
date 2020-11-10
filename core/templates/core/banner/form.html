@@ -23,17 +23,19 @@
                     {{ form.title|as_crispy_field }}
                 </div>
 
+                
                 <div class="col-sm-6">
-                    {% input_trix form.description %}
-
+                    {{ form.image|as_crispy_field }}
                 </div>
+
+             
             </div>
 
             <div class="row">
                
-
                 <div class="col-sm-6">
-                    {{ form.image|as_crispy_field }}
+                    {% input_trix form.description %}
+
                 </div>
             </div>
 

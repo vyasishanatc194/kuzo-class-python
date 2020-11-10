@@ -17,3 +17,9 @@ class AgendaForm(forms.ModelForm):
             "description",
             ]
 
+    def __init__(self, *args, **kwargs):
+
+        super(AgendaForm, self).__init__(*args, **kwargs)
+
+        self.fields['event'].required = True
+        self.fields['title'].required = True

@@ -16,4 +16,15 @@ class CreditForm(forms.ModelForm):
             "price",
             "number_of_credit",
             ]
+
+        required = [
+            "price",
+            "number_of_credit",
+            ]   
   
+    def __init__(self, *args, **kwargs):
+
+        super(CreditForm, self).__init__(*args, **kwargs)
+        
+        self.fields['price'].required = True
+        self.fields['number_of_credit'].required = True
