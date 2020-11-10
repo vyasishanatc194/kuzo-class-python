@@ -39,3 +39,5 @@ from .influencer import InfluencerListSerializer
 from .contact_us import ContactUsSerializer
 
 from .user_profile import UserProfileSerializer
+
+from .timezone import TimezoneSerializer
