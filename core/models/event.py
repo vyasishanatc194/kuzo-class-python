@@ -29,7 +29,7 @@ class Event(models.Model):
     number_of_participants = models.IntegerField(default=0, null=True, blank=True, verbose_name="Number of participants")
     remianing_spots = models.IntegerField(default=0, null=True, blank=True, verbose_name="Remianing spots")
     credit_required = models.IntegerField(default=0, null=True, blank=True, verbose_name="Credit required")
-    session_lenght = models.IntegerField(default=0, null=True, blank=True, verbose_name="Session lenght")
+    session_lenght = models.IntegerField(default=0, null=True, blank=True, verbose_name="Session length")
     is_featured = models.BooleanField(default=False, verbose_name="Is featured") 
     is_popular = models.BooleanField(default=False, verbose_name="Is popular") 
     time_zone = models.CharField(max_length=222, blank=True, null=True, verbose_name="Event timezone")

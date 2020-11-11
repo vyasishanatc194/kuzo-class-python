@@ -19,7 +19,7 @@ class BannerForm(forms.ModelForm):
             ]
 
         labels  = {
-                "image": "Image Size: 50px x 50px"
+                "image": "Image Size: 730px x 623px"
          }
 
 

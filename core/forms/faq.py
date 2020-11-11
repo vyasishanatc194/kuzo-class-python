@@ -17,3 +17,12 @@ class FaqForm(forms.ModelForm):
             "answer",
             ]
 
+
+    def __init__(self, *args, **kwargs):
+
+        super(FaqForm, self).__init__(*args, **kwargs)
+
+        self.fields['faq_types'].required = True
+        self.fields['question'].required = True
+        self.fields['answer'].required = True
+
