@@ -75,7 +75,7 @@
             {% endif %}
 
             
-            <li {% if 'Subscription/' in request.path %}class="active" {% endif %}> 
+            <li {% if 'subscription-plan/' in request.path %}class="active" {% elif 'subscriptionorder/' in request.path %}class="active"  {% endif %}> 
                 <a href="">
                     <i class="fa fa-tasks fa-fw fa-2x"></i>
                     <span class="nav-label">Subscription</span>
@@ -97,7 +97,7 @@
                 </ul>
             </li>
 
-            <li {% if 'event/' in request.path %}class="active" {% endif %}> 
+            <li {% if 'event/' in request.path %} class="active" {% elif 'eventorder/' in request.path %} class="active"  {% elif 'agenda/' in request.path %} class="active"   {% elif 'eventpracticeaudienceqa/' in request.path %} class="active" {% endif %}> 
                 <a href="">
                     <i class="fa fa-calendar fa-fw fa-2x"></i>
                     <span class="nav-label">Event</span>
@@ -138,7 +138,7 @@
             </li>
 
             
-            <li {% if 'Credit/' in request.path %}class="active" {% endif %}> 
+            <li {% if 'credit/' in request.path %}class="active"  {% elif 'credit-order/' in request.path %}class="active"{% endif %}> 
                 <a href="">
                     <i class="fab fa-first-order fa-fw fa-2x"></i>
                     <span class="nav-label">Credit</span>
