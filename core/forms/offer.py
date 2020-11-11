@@ -18,6 +18,10 @@ class OfferForm(forms.ModelForm):
             "description",
             ]
 
+        labels  = {
+                "icon": "Icon Size: 50px x 50px"
+         }
+
  
             
     def __init__(self, *args, **kwargs):

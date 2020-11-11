@@ -29,6 +29,8 @@
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
+                            <th>Influencer</th>
+
                           
                             <th>Active</th>
                             <th></th>
@@ -38,7 +40,8 @@
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
-                          
+                            <th>Influencer</th>
+
                             <th>Active</th>
                             <th></th>
                         </tr>
@@ -50,6 +53,8 @@
                         <tr>
                             <td>{{ o.name }}</td>
                             <td>{{ o.email }}</td>
+                            <td>{% show_check o.is_influencer %}
+
                        
                             <td>{% show_check o.is_active %}
                             </td>

@@ -27,10 +27,8 @@ class EventOrderListView(MyListView):
     View for Offer listing
     """
 
-    # paginate_by = 25
-    ordering = ["id"]
     model = EventOrder
-    queryset = model.objects.all()
+    queryset = model.objects.all().order_by("-created_at")
     template_name = "core/eventorder/list.html"
     permission_required = ("core.view_eventorder",)
 

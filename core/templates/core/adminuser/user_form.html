@@ -74,37 +74,14 @@
         </div>
         <!-- /ibox -->
 
-        <div class="ibox float-e-margins">
-
-            {% include "core/partials/ibox_title.html" with ibox_title="Permissions" icon_class="fas fa-key" only %}
-
-            <div class="ibox-content">
-
-                <div class="row">
-                    <div class="col-sm-4">
-                        {% input_icheck form.is_active %}
-                    </div>
-                 
-                </div>
-
-{#                <hr/>#}
-{##}
-
-                <hr/>
-
-              
-
-            </div>
-            <!-- /ibox-content -->
-
-        </div>
+      
         <!-- /ibox -->
 
 
         {% for formset in inlines %}
 
 
-        <div class="ibox float-e-margins">
+        <div class="ibox float-e-margins" id="influncer_data">
 
             {% include "core/partials/ibox_title.html" with ibox_title="Influencer Profile" icon_class="fas fa-user" only %}
 
@@ -141,6 +118,38 @@
 
         {% endfor %}
 
+
+
+
+
+
+
+
+        <div class="ibox float-e-margins">
+
+            {% include "core/partials/ibox_title.html" with ibox_title="Permissions" icon_class="fas fa-key" only %}
+
+            <div class="ibox-content">
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        {% input_icheck form.is_active %}
+                    </div>
+                 
+                </div>
+
+{#                <hr/>#}
+{##}
+
+                <hr/>
+
+              
+
+            </div>
+            <!-- /ibox-content -->
+
+        </div>
+
         {% include "core/partials/form_footer.html" %}
 
     </form>
@@ -165,6 +174,42 @@
 
 
     $("#div_id_user_profile-0-DELETE").hide();
+
+
+
+    $("#id_is_influencer").click(function () {
+
+        var get =$("#id_is_influencer").val();
+
+        if (get === "true"){
+            $("#influncer_data").show();
+        }
+        else {
+            $("#influncer_data").hide();
+
+        }
+    
+    });
+
+
+
+        var get =$("#id_is_influencer").val();
+
+if (get === "true"){
+    $("#influncer_data").show();
+}
+else {
+    $("#influncer_data").hide();
+
+}
+
+
+
+
+
 </script>
+
+
+
 
 {% endblock %}

@@ -30,7 +30,7 @@ class SubscriptionOrderListView(MyListView):
     # paginate_by = 25
     ordering = ["-created_at"]
     model = SubscriptionOrder
-    queryset = model.objects.all()
+    queryset = model.objects.all().order_by("-created_at")
     template_name = "core/subscription-order/list.html"
     permission_required = ("core.view_subscription-order",)
 

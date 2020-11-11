@@ -37,8 +37,8 @@ class SubscriptionOrder(models.Model):
 
 
     class Meta:
-        verbose_name = "Subscription Order"
-        verbose_name_plural = "Subscription Orders"
+        verbose_name = "User Subscriptions"
+        verbose_name_plural = "User Subscriptions"
 
 
     def __str__(self):

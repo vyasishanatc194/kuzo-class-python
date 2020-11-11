@@ -18,12 +18,6 @@ class BannerForm(forms.ModelForm):
             "description",
             ]
 
-        labels  = {
-                "image": "Image Size: 50px x 50px"
-         }
-
-
-
     def __init__(self, *args, **kwargs):
 
         super(BannerForm, self).__init__(*args, **kwargs)

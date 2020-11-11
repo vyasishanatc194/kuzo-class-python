@@ -60,7 +60,7 @@
             <li {% if 'offer/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'core:offer-list' %}"> 
                     <i class="fa fa-gift fa-fw fa-2x"></i>
-                    <span class="nav-label">Offer</span>
+                    <span class="nav-label">Influencer Offer</span>
                 </a>
             </li>
             {% endif %}
@@ -89,7 +89,7 @@
                     {% endif %}
                     {% if perms.users or request.user.is_staff %}
                     <li {% if 'subscriptionorder/' in request.path %}class="active" {% endif %}>
-                        <a href="{% url 'core:subscriptionorder-list' %}">Subscription order	</a>
+                        <a href="{% url 'core:subscriptionorder-list' %}">User Subscriptions </a>
                     </li>
                     {% endif %}
 
