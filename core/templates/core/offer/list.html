@@ -37,11 +37,9 @@
                     <tr>
 
 
-                        {% if o.icon %}
 
-                        <td><img src="{{o.icon.url}}" width="85px" height="65px"></td>
+                        <td><img src="{{o.icon.url}}" width="85px" height="65px"> <div style="display:none;">{{o.id}}</div></td>
 
-                        {% endif %}
                         
                         <td>{{ o.title }}</td>
                       
