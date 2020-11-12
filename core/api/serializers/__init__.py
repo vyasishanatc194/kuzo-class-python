@@ -47,3 +47,5 @@ from .influncer_category import CategorySerializer
 from .influencer_details import InfluencerDetailsListSerializer
 
 from .agenda import AgendaSerializer
+
+from .influencer_category import InfluencerCategorySerializer

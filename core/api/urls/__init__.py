@@ -49,6 +49,8 @@ from .import user_registred_event
 
 from .import timezone
 
+from .import influencer_category
+
 
 urlpatterns = [
 
@@ -79,10 +81,8 @@ urlpatterns = [
     path("contact-us/", include(contact_us)),
     path("user-registered-event/", include(user_registred_event)),
     path("timezone-list/", include(timezone)),
-
+    path("influencer-category-list/", include(influencer_category)),
     path('influencer-details/<int:pk>', InfluencerDetailsListAPIView.as_view(), name='influencer-details'),    
-
-
 
 ]
 

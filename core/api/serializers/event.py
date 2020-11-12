@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from core.models import Event, Agenda
+from core.models import Event, Agenda, UserProfile
 from .event_class import EventClassSerializer
 from core.api.serializers import UserUpdateDetailsSerializer
 from core.api.serializers.agenda import AgendaSerializer
@@ -43,7 +43,7 @@ class EventListSerializer(serializers.ModelSerializer):
     event_class = EventClassSerializer()
     user = UserUpdateDetailsSerializer()
     remaining_spots = serializers.SerializerMethodField('get_remaining_spots')
-    timezone = serializers.SerializerMethodField('get_timezone')
+    influencer_category = serializers.SerializerMethodField('get_influencer_category')
     agenda = serializers.SerializerMethodField('get_agenda')
 
 
@@ -70,8 +70,9 @@ class EventListSerializer(serializers.ModelSerializer):
             "is_popular",
             "created_at",
             "remaining_spots",
-            "timezone",
+            "time_zone",
             "agenda",
+            "influencer_category",
 
         
         )
@@ -81,12 +82,13 @@ class EventListSerializer(serializers.ModelSerializer):
         return remaining_spots
 
 
-    def get_timezone(self, event):
-        if event.time_zone:
-            timezone_code = datetime.datetime.now(tz=pytz.timezone(event.time_zone))
-            data=timezone_code.strftime("%Z")
-            return data
+    def get_influencer_category(self, event):
 
+        user=UserProfile.objects.filter(user__id=event.user.id).first()
+        if user.influencer:
+            return user.influencer.name
+        else:
+            return ''    
 
     
     def get_agenda(self, user_object):

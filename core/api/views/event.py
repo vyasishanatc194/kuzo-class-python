@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework import generics
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from core.models import Event
+from core.models import Event, UserProfile
 from core.api.serializers import EventSerializer, EventListSerializer
 from core.api.apiviews import MyAPIView
 from django.utils import timezone
@@ -94,6 +94,34 @@ class HomePageEventListAPIView(MyAPIView):
         return Response({"status": "OK", "message": "Successfully fetched event list", "data": serializer.data})
 
     
+
+class UserHomePageEventListAPIView(MyAPIView):
+    
+    """
+    API View for event listing
+    """
+
+    permission_classes = (AllowAny,)
+    serializer_class = EventListSerializer
+
+    def get(self, request, format=None):
+
+        """GET method for retrieving the data"""
+
+        event_result=[]
+        search=request.GET['q']
+        if search=='all':
+            event = Event.objects.filter(event_date_time__gte=now).order_by('event_date_time')
+            return Response({"status": "OK", "message": "Successfully fetched event list", "data": a})
+
+        else:
+            get_user = UserProfile.objects.filter(influencer__name=search)
+            for k in get_user:
+                event = Event.objects.filter(user__id=k.user.id, event_date_time__gte=now).order_by('event_date_time')
+                serializer = self.serializer_class(event, many=True, context={"request": request})
+                for k in serializer.data:
+                    event_result.append(k)
+            return Response({"status": "OK", "message": "Successfully fetched event list", "data": event_result})
 
 
 class EventCreateAPI(MyAPIView):
