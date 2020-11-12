@@ -22,7 +22,8 @@ from django.views.generic import TemplateView
 from django_datatables_too.mixins import DataTableMixin
 
 from ..forms import SubscriptionPlanForm
-from core.models import SubscriptionPlan
+from core.models import SubscriptionPlan, SubscriptionOrder
+from django.shortcuts import redirect
 
 
 
@@ -67,6 +68,7 @@ class SubscriptionPlanUpdateView(MyNewFormsetUpdateView):
     permission_required = ("core.change_subscription_plan",)
 
 
+from django.contrib import messages
 
 class SubscriptionPlanDeleteView(MyDeleteView):
 
@@ -77,6 +79,20 @@ class SubscriptionPlanDeleteView(MyDeleteView):
     model = SubscriptionPlan
     template_name = "core/confirm_delete.html"
     permission_required = ("core.delete_subscription_plan",)
+
+
+    def delete(self, request, *args, **kwargs):
+        
+        exist = SubscriptionOrder.objects.filter(subscription__id=kwargs['pk']).exists()
+        if exist:
+            messages.error(self.request,"You can not delete this plan because some user is already subscribed this plan")
+            return redirect("/customadmin/subscription-plan/")
+
+        else:
+
+            super().delete(request, *args, **kwargs)
+            messages.success(self.request,"Deleted plan succesfully")
+            return redirect("/customadmin/subscription-plan/")
 
 
 class SubscriptionPlanAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
