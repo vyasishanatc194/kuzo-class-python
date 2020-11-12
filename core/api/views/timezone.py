@@ -8,8 +8,9 @@ from core.models import Banner
 from core.api.apiviews import MyAPIView
 from core.api.serializers import TimezoneSerializer
 
-import pytz 
 from pytz import timezone
+import datetime, pytz
+
 # .................................................................................
 # banner Plan API
 # .................................................................................
@@ -26,8 +27,15 @@ class TimezoneListAPIView(MyAPIView):
 
     def get(self, request, format=None):    
         get_imezone = pytz.common_timezones
+        a=[]
+        for k in get_imezone:
+            
+            timezone_code = datetime.datetime.now(tz=pytz.timezone(k))
+            data=timezone_code.strftime("%Z")
+            if not any(i==data for i in a) and data.isalpha():
+                a.append(data)
 
-        return Response({"status": "OK", "message": "Successfully fetched timezone list", "data": get_imezone})
+        return Response({"status": "OK", "message": "Successfully fetched timezone list", "data": a})
 
 
     

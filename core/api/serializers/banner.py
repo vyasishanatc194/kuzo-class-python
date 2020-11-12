@@ -18,6 +18,7 @@ class BannerSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "title",
+            "image",
             "description",
             "created_at",
         )
