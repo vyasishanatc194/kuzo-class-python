@@ -46,24 +46,79 @@
             </li>
             {% endif %}
 
-            {% if perms.users or request.user.is_staff %}
+            <!-- {% if perms.users or request.user.is_staff %}
             <li {% if 'category/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'core:category-list' %}"> 
                     <i class="fa fa-cubes fa-fw fa-2x"></i>
                     <span class="nav-label" style="font-weight: 500;">Influencer category</span>
                 </a>
             </li>
-            {% endif %}
+            {% endif %} -->
 
 
-            {% if perms.users or request.user.is_staff %}
+            <!-- {% if perms.users or request.user.is_staff %}
             <li {% if 'offer/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'core:offer-list' %}"> 
                     <i class="fa fa-gift fa-fw fa-2x"></i>
-                    <span class="nav-label">Influencer Offer</span>
+                    <span class="nav-label">Offer</span>
                 </a>
             </li>
+
             {% endif %}
+
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'influenceroffer/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:influenceroffer-list' %}"> 
+                    <i class="fa fa-gift fa-fw fa-2x"></i>
+                    <span class="nav-label">Influencer Offer</span>
+                </a>
+            </li> -->
+
+            
+            <!-- {% endif %} -->
+
+
+            <li {% if 'category/' in request.path %}class="active" {% elif 'offer/' in request.path %}class="active"  {% elif 'influenceroffer/' in request.path %}class="active" {% endif %}> 
+                <a href="">
+                    <i class="fa fa-gift fa-fw fa-2x"></i>
+                    <span class="nav-label">Influencer</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level">
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'category/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:category-list' %}">Category</a>
+                    </li>
+                    {% endif %}
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'offer/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:offer-list' %}"> Offer</a>
+                    </li>
+                    {% endif %}
+
+                    {% if perms.users or request.user.is_staff %}
+
+                    <li {% if 'influenceroffer/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:influenceroffer-list' %}">Influencer Offer</a>
+                    </li>
+                    {% endif %}
+
+        
+                </ul>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             {% if perms.users or request.user.is_staff %}
             <li {% if 'banner/' in request.path %}class="active" {% endif %}>
@@ -75,7 +130,7 @@
             {% endif %}
 
             
-            <li {% if 'subscription-plan/' in request.path %}class="active" {% elif 'subscriptionorder/' in request.path %}class="active"  {% endif %}> 
+            <li {% if 'subscription-plan/' in request.path %} class="active" {% elif 'subscriptionorder/' in request.path %} class="active"  {% endif %}> 
                 <a href="">
                     <i class="fa fa-tasks fa-fw fa-2x"></i>
                     <span class="nav-label">Subscription</span>
@@ -96,6 +151,9 @@
         
                 </ul>
             </li>
+
+
+
 
             <li {% if 'event/' in request.path %} class="active" {% elif 'eventorder/' in request.path %} class="active"  {% elif 'agenda/' in request.path %} class="active"   {% elif 'eventpracticeaudienceqa/' in request.path %} class="active" {% endif %}> 
                 <a href="">

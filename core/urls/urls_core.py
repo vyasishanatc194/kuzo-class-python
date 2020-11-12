@@ -118,8 +118,15 @@ urlpatterns += [
     path("ajax-eventpracticeaudienceqa", views.EventPracticeAudienceQAAjaxPagination.as_view(), name="eventpracticeaudienceqa-list-ajax"),
 
 
+    # influenceroffer
+
+    path("influenceroffer/", views.InfluencerOfferListView.as_view(), name="influenceroffer-list"),
+    path("influenceroffer/create/", views.InfluencerOfferCreateView.as_view(), name="influenceroffer-create"),
+    path("influenceroffer/<int:pk>/update/", views.InfluencerOfferUpdateView.as_view(), name="influenceroffer-update"),
+    path("influenceroffer/<int:pk>/delete/", views.InfluencerOfferDeleteView.as_view(), name="influenceroffer-delete"),
+    path("ajax-influenceroffer", views.InfluencerOfferAjaxPagination.as_view(), name="influenceroffer-list-ajax"),
+
+
 ]
-
-
 
 
