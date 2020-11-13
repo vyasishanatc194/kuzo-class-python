@@ -1,8 +1,9 @@
 from core.models import SubscriptionOrder, UserProfile
-from .stripe import MyStripe
+from core.utils import MyStripe
+from . celery_app import *
 
-
-def my_scheduled_job():
+@app.task
+def Update_credit():
 
     check_active_plan = SubscriptionOrder.objects.filter(plan_status="active")
 

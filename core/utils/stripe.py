@@ -104,4 +104,7 @@ class MyStripe():
         return stripe.PaymentMethod.attach(payment_method_id, customer=customer_id)
 
 
+    def RetrieveSubscription(self, sub_id):
+
+        return stripe.Subscription.retrieve(sub_id)
       
