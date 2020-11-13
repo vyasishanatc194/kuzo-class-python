@@ -21,6 +21,8 @@ from django.utils.translation import gettext, gettext_lazy as _
 from core.utils import Emails, send_sendgrid_email
 from django.conf import settings
 
+import datetime
+
 from rest_framework import serializers
 
 UserModel = get_user_model()
@@ -68,7 +70,12 @@ class PasswordResetForm(forms.Form):
         """
        
         serializer=UserDetailsSerializer(context['user'])
-        context['user']=serializer.data
+        current_date = str(datetime.datetime.now())
+        date_time_obj =datetime.datetime.strptime(current_date, '%Y-%m-%d %H:%M:%S.%f')
+
+        context['user']= serializer.data
+        context['date']= date_time_obj.strftime("%d %B, %Y")
+        context['time']= date_time_obj.strftime("%H:%M %p")
 
         send_sendgrid_email(context,"Reset Password",to_email, settings.PASSWORD_RESET_TEMPLATE_ID)
 
