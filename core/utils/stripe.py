@@ -107,4 +107,9 @@ class MyStripe():
     def RetrieveSubscription(self, sub_id):
 
         return stripe.Subscription.retrieve(sub_id)
-      
+
+    def InvoiceStatus(self, invoice_id):
+        return stripe.Invoice.retrieve(invoice_id)
+
+
+#  stripe.Customer.modify("cus_INpRNROozma8dW", invoice_settings={"default_payment_method":"pm_1Hn3mdHn8nuO8gnZNWddfPhV"})
