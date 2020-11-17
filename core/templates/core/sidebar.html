@@ -201,6 +201,15 @@
 
 
            
+            {% if perms.users or request.user.is_staff %}
+            <li {% if 'transactionlog/' in request.path %}class="active" {% endif %}>
+                <a href="{% url 'core:transactionlog-list' %}"> 
+                    <i class="fa fa-history fa-fw fa-2x"></i>
+                    <span class="nav-label">Transaction log</span>
+                </a>
+            </li>
+            {% endif %}
+
 
 
             {% if perms.users or request.user.is_staff %}
@@ -224,7 +233,6 @@
             {% endif %}
 
            
-
 
 
 

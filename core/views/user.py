@@ -23,11 +23,8 @@ from django_datatables_too.mixins import DataTableMixin
 
 from ..forms import MyUserChangeForm, MyUserCreationForm, UserProfileForm
 
-from core.models import User, UserProfile
+from core.models import User, UserProfile, SubscriptionOrder, EventOrder
 
-import csv
-
-from core.models import User
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
 
@@ -39,10 +36,21 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
     
     def get(self, request):
-      
+
+        get_total_user = User.objects.all().count()
+        recent_users = User.objects.order_by('-created_at')[:5]
+        influencer_users = User.objects.filter(is_influencer=True).count()
+        get_active_plan = SubscriptionOrder.objects.filter(plan_status='active').count()
+        get_event = EventOrder.objects.filter(order_status='success').count()
+
         self.context = {
-          
+            "user_count":get_total_user,
+            "recent_users":recent_users,
+            "influencer_users":influencer_users,
+            "get_active_plan":get_active_plan,
+            "get_event":get_event,
         }
+      
         return render(request, self.template_name, self.context)
 
 # -----------------------------------------------------------------------------

@@ -101,10 +101,6 @@ class CreditPurchaseAPI(MyAPIView):
                 user_plan.save()
                 serilizer = CreditOrderListSerializer(new_credit)
 
-                # email = Emails(subject="Purchased credit Transaction Receipt", recipient_list=request.user.email, )
-                # email.set_html_message('credit_order/credit_order.html', {"user":user_obj, 'credit_order':new_credit})
-                # email.send()
-
                 user_serializer = UserDetailsSerializer(user_obj)
                 context={"user":user_serializer.data, 'credit_order':serilizer.data}
 

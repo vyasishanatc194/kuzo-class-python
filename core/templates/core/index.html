@@ -28,7 +28,7 @@
           <div class="ibox-tools">
             <span class="label label-success float-right">Monthly</span>
           </div>
-          <h5>Users</h5>
+          <h5>All Registered  Users</h5>
         </div>
         <div class="ibox-content">
           <h3 class="no-margins">{{ user_count }}</h3>
@@ -46,7 +46,7 @@
           <h5>Influencer Users</h5>
         </div>
         <div class="ibox-content">
-          <h3 class="no-margins">{{ get_total_invited_user }}</h3>
+          <h3 class="no-margins">{{ influencer_users }}</h3>
           <div class="stat-percent font-bold text-info">20% <i class="fa fa-arrow-up"></i></div>
           <small>Newly registered</small>
         </div>
@@ -58,10 +58,10 @@
           <div class="ibox-tools">
             <span class="label label-primary float-right">Today</span>
           </div>
-          <h5>Subscription Plan</h5>
+          <h5>Active subscription</h5>
         </div>
         <div class="ibox-content">
-          <h3 class="no-margins">{{ get_total_plan }}</h3>
+          <h3 class="no-margins">{{ get_active_plan }}</h3>
           <div class="stat-percent font-bold text-navy">44% <i class="fa fa-thumbs-up"></i></div>
           <small>Recently created</small>
         </div>
@@ -73,10 +73,10 @@
           <div class="ibox-tools">
             <span class="label label-danger float-right">Low value</span>
           </div>
-          <h5>Event</h5>
+          <h5>Registered Event</h5>
         </div>
         <div class="ibox-content">
-          <h3 class="no-margins">{{ get_total_order }}</h3>
+          <h3 class="no-margins">{{ get_event }}</h3>
           <div class="stat-percent font-bold text-danger">38% <i class="fa fa-angle-down"></i></div>
           <small>Newly registered</small>
         </div>
@@ -110,7 +110,7 @@
           <div class="col-lg-3">
             <ul class="stat-list">
               <li>
-                <h2 class="no-margins">{{ user_count }}</h2>
+                <h2 class="no-margins"></h2>
                 <small>Recent Users</small>
                 <div class="stat-percent">48% <i class="fa fa-arrow-up text-navy"></i></div>
                 <div class="progress progress-mini">

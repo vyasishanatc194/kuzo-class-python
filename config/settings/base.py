@@ -579,20 +579,6 @@ CRONJOBS = [
     ('*/1 * * * *', 'core.utils.crontab.my_scheduled_job')
 ]
 
-# CRONJOBS = [
-#     ('*/1 * * * *', 'coupon.cron.my_scheduled_job')
-# ]
-
-
-
-# CRONTAB_EXECUTABLE='C:/Users/Fauzan/Project/kuzo-class-python/venv/Lib/site-packages/django_crontab/crontab.py'
-
-# CRONTAB_DJANGO_PROJECT_NAME='Kuzo'
-# CRONTAB_DJANGO_MANAGE_PATH='C:/Users/Fauzan/Project/kuzo-class-python/manage.py'
-# CRONTAB_PYTHON_EXECUTABLE='C:/Users/Fauzan/Project/kuzo-class-python/venv/Scripts/pythonw.exe'
-
-
-
 
 
 

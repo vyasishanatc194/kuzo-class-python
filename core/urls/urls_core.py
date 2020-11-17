@@ -126,7 +126,10 @@ urlpatterns += [
     path("influenceroffer/<int:pk>/delete/", views.InfluencerOfferDeleteView.as_view(), name="influenceroffer-delete"),
     path("ajax-influenceroffer", views.InfluencerOfferAjaxPagination.as_view(), name="influenceroffer-list-ajax"),
 
+    # transactionlog
+    
+    path("transactionlog/", views.TransactionlogListView.as_view(), name="transactionlog-list"),
+    path("ajax-transactionlog", views.TransactionlogAjaxPagination.as_view(), name="transactionlog-list-ajax"),
 
 ]
-
 
