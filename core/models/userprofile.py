@@ -20,7 +20,7 @@ class UserProfile(models.Model):
     video = models.FileField(upload_to='video', blank=True, null=True, verbose_name="Video")
     about = models.TextField(blank=True, null=True, verbose_name="About")
     credit = models.PositiveIntegerField(default=0, blank=True, null=True, verbose_name="Credit")
-    follower = models.PositiveIntegerField(default=0, blank=True, null=True, verbose_name="Followers")
+    follower = models.CharField(default=0, blank=True, null=True, verbose_name="Followers", max_length=222)
     is_popular = models.BooleanField(default=False, blank=True, null=True, verbose_name="Popular") 
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name="Created at")
     stripe_subscription_id = models.CharField(max_length=222, blank=True, null=True)

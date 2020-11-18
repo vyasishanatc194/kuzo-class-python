@@ -86,7 +86,7 @@ class HomePageEventListAPIView(MyAPIView):
         if search=='is_featured':
             event = Event.objects.filter(is_featured=True, event_date_time__gte=now).order_by('event_date_time')
         elif search=='price':
-            event = Event.objects.filter(event_date_time__gte=now).order_by("price")
+            event = Event.objects.filter(event_date_time__gte=now).order_by("credit_required")
         elif search=='upcoming':
             event = Event.objects.filter(event_date_time__gte=now).order_by('event_date_time')
     
