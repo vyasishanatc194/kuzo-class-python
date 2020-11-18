@@ -1,19 +1,15 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
-from core.api.pagination import CustomPagination
-
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
+import stripe as stripeErr
+from django.conf import settings
 
 from core.models import Card, User, SubscriptionOrder, UserProfile
 from core.api.serializers import CardSerializer, UserDetailsSerializer
+
 from core.api.apiviews import MyAPIView
-from core.utils import MyStripe, create_card_object
-import stripe as stripeErr
-from core.utils import Emails
-from core.utils import Emails, send_sendgrid_email
-from django.conf import settings
+from core.utils import MyStripe
+from core.utils import send_sendgrid_email
+
 # .................................................................................
 # Credit/Debit Card API
 # .................................................................................
@@ -73,7 +69,7 @@ class CardCreateAPI(MyAPIView):
                 if not request.user.customer_id:
 
                     new_stripe_customer = stripe.createCustomer(request.user)
-                    
+            
                     user_obj.customer_id = new_stripe_customer['id']
                     user_obj.save()
 

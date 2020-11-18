@@ -12,7 +12,6 @@ from rest_auth.utils import jwt_encode
 from allauth.account.utils import complete_signup
 from core.models import User, UserProfile
 from core.utils import modify_api_response
-from core.utils import Emails
 
 
 class MyRegisterView(RegisterView):

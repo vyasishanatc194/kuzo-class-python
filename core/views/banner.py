@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
+from django.template.loader import get_template
+from django_datatables_too.mixins import DataTableMixin
+
 from core.mixins import HasPermissionsMixin
 from core.views.generic import (
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
     MyNewFormsetUpdateView,
     MyNewFormsetCreateView,
 )
-from django.db.models import Q
-from django.template.loader import get_template
-from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import BannerForm
 from core.models import Banner
-
+from ..forms import BannerForm
 
 
 # -----------------------------------------------------------------------------
@@ -48,7 +47,6 @@ class BannerCreateView(MyNewFormsetCreateView):
     template_name = "core/banner/form.html"
     permission_required = ("core.add_banner",)
 
-   
 
 class BannerUpdateView(MyNewFormsetUpdateView):
 
