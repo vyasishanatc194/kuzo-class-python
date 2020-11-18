@@ -124,3 +124,11 @@ from .transaction_log import (
     TransactionlogListView,
     TransactionlogAjaxPagination,
 )
+
+from .event_class import (
+    EventClassListView,
+    EventClassCreateView,
+    EventClassUpdateView,
+    EventClassDeleteView,
+    EventClassAjaxPagination,
+)

@@ -21,3 +21,5 @@ from .event_agenda import AgendaForm
 from .event_qa import EventPracticeAudienceQAForm
 
 from .influencer_event_offer import InfluencerOfferForm
+
+from .event_class import EventClassForm

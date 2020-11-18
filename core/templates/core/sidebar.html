@@ -97,7 +97,7 @@
                     {% endif %}
                 </ul>
             </li>
-            <li {% if 'event/' in request.path %} class="active" {% elif 'eventorder/' in request.path %} class="active"
+            <li {% if 'event/' in request.path %} class="active"  {% elif 'eventclass/' in request.path %} class="active" {% elif 'eventorder/' in request.path %} class="active"
                 {% elif 'agenda/' in request.path %} class="active"
                 {% elif 'eventpracticeaudienceqa/' in request.path %} class="active" {% endif %}>
                 <a href="">
@@ -111,6 +111,14 @@
                         <a href="{% url 'core:event-list' %}">Event</a>
                     </li>
                     {% endif %}
+
+                    {% if perms.users or request.user.is_staff %}
+                    <li {% if 'eventclass/' in request.path %}class="active" {% endif %}>
+                        <a href="{% url 'core:eventclass-list' %}">Event class</a>
+                    </li>
+                    {% endif %}
+
+
                     {% if perms.users or request.user.is_staff %}
                     <li {% if 'eventorder/' in request.path %}class="active" {% endif %}>
                         <a href="{% url 'core:eventorder-list' %}">Event Order</a>

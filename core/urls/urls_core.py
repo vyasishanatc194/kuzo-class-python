@@ -131,5 +131,14 @@ urlpatterns += [
     path("transactionlog/", views.TransactionlogListView.as_view(), name="transactionlog-list"),
     path("ajax-transactionlog", views.TransactionlogAjaxPagination.as_view(), name="transactionlog-list-ajax"),
 
+    # eventclass
+
+    path("eventclass/", views.EventClassListView.as_view(), name="eventclass-list"),
+    path("eventclass/create/", views.EventClassCreateView.as_view(), name="eventclass-create"),
+    path("eventclass/<int:pk>/update/", views.EventClassUpdateView.as_view(), name="eventclass-update"),
+    path("eventclass/<int:pk>/delete/", views.EventClassDeleteView.as_view(), name="eventclass-delete"),
+    path("ajax-eventclass", views.EventClassAjaxPagination.as_view(), name="eventclass-list-ajax"),
+
+
 ]
 

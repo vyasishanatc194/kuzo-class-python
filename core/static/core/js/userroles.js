@@ -489,9 +489,9 @@ var userroles = {
 
     // -------------------------------------------------------------------
 
-    flashdeals: {
+    eventclass: {
         index: function () {
-            $('#flashdeal-table').DataTable({
+            $('#eventclass-table').DataTable({
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
