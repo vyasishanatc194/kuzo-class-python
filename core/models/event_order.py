@@ -39,4 +39,4 @@ class EventOrder(models.Model):
         verbose_name_plural = "Event Order"
 
     def __str__(self):
-        return "{0}".format(self.used_credit)
+        return "{0}".format(self.event.event_class.name)
