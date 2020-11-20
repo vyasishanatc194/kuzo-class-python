@@ -25,14 +25,9 @@ class InfluencerDetailsListAPIView(MyAPIView):
 
     def get(self, request, pk, format=None):  
         try:
-            user_obj = Event.objects.filter(id=pk).first()
-            influencer = UserProfile.objects.filter(user__id=user_obj.user.id)
+            influencer = UserProfile.objects.filter(user__id=pk)
             serializer = self.serializer_class(influencer, many=True, context={"request": request})
-
-            new_serializer_data = list(serializer.data)
-            new_serializer_data.append({'current_event_id': pk})
-
-            return Response({"status": "OK", "message": "Successfully fetched influencer details ", "data": new_serializer_data})
+            return Response({"status": "OK", "message": "Successfully fetched influencer details ", "data": serializer.data})
 
 
         except Event.DoesNotExist:
