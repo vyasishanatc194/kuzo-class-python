@@ -46,12 +46,15 @@ def modify_api_response(response):
     # Modify the response data
     modified_data = {}
     modified_data["code"] = response.status_code
+    
     # modified_data["status"] = get_status(response.status_code)
 
     if response.data.get("errors"):
         modified_data["status"] = "FAIL"
         modified_data["message"] = response.data.get("errors")[0].get("detail")
         modified_data["data"] = []
+        response.status_code=200
+
         # modified_data["errors"] = response.data.get("errors")
 
     else:
