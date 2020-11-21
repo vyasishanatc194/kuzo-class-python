@@ -24,10 +24,8 @@ from ..forms import EventClassForm
 class EventClassListView(MyListView):
 
     """
-    View for Offer listing
+    View for Event Class listing
     """
-
-    # paginate_by = 25
     ordering = ["id"]
     model = EventClass
     queryset = model.objects.all()
@@ -39,7 +37,7 @@ class EventClassListView(MyListView):
 class EventClassCreateView(MyNewFormsetCreateView):
 
     """
-    View to create EventClass
+    View to create Event Class
     """
 
     model = EventClass
@@ -50,7 +48,7 @@ class EventClassCreateView(MyNewFormsetCreateView):
 
 class EventClassUpdateView(MyNewFormsetUpdateView):
 
-    """View to update EventClass """
+    """View to update Event Class """
 
     model = EventClass
     form_class = EventClassForm
@@ -62,7 +60,7 @@ class EventClassUpdateView(MyNewFormsetUpdateView):
 class EventClassDeleteView(MyDeleteView):
 
     """
-    View to delete EventClass Plan
+    View to delete Event Class Plan
     """
 
     model = EventClass

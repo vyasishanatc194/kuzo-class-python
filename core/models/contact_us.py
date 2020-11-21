@@ -1,7 +1,7 @@
 from django.db import models
 
 # ----------------------------------------------------------------------
-# ContactUs Model
+# Contact Us Model
 # ----------------------------------------------------------------------
 
 
@@ -9,9 +9,15 @@ class ContactUs(models.Model):
 
     """This model stores the data into Event table in db"""
 
-    email = models.CharField(max_length=222, blank=True, null=True, verbose_name="Email")
-    description =  models.TextField(blank=True, null=True, verbose_name="Description")
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
+    email = models.CharField(
+        max_length=222, blank=True, null=True, verbose_name="Email"
+    )
+    description = models.TextField(blank=True, null=True, verbose_name="Description")
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         verbose_name = "Contact us"

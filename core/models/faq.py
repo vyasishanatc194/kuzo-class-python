@@ -7,18 +7,24 @@ from django.db import models
 
 class Faq(models.Model):
 
-    """This model stores the data into Event table in db"""
+    """This model stores the data into Faq table in db"""
 
     FAQ_TYPES = [
-        ('general_faq','General_Faq'),
-        ('event_faq','Event_Faq'),
-        ('guideline_faq','Guideline_Faq'),
-
+        ("general_faq", "General_Faq"),
+        ("event_faq", "Event_Faq"),
+        ("guideline_faq", "Guideline_Faq"),
     ]
-
-    faq_types = models.CharField(max_length=222, blank=True, null=True, verbose_name="Faq Types", choices=FAQ_TYPES)
-    question = models.CharField(max_length=222, blank=True, null=True, verbose_name="Question")
-    answer =  models.TextField(blank=True, null=True, verbose_name="Answer")
+    faq_types = models.CharField(
+        max_length=222,
+        blank=True,
+        null=True,
+        verbose_name="Faq Types",
+        choices=FAQ_TYPES,
+    )
+    question = models.CharField(
+        max_length=222, blank=True, null=True, verbose_name="Question"
+    )
+    answer = models.TextField(blank=True, null=True, verbose_name="Answer")
 
     class Meta:
         verbose_name = "Faq"

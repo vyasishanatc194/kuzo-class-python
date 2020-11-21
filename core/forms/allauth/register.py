@@ -1,9 +1,7 @@
 
 from allauth.account.forms import SignupForm
-from django import forms
-from django.utils.translation import gettext, gettext_lazy as _, pgettext
+from core.models.users import User
 
-from core.models import User
 
 class MyCustomSignupForm(SignupForm):
     """Custom registration form"""

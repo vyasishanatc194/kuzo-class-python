@@ -4,8 +4,6 @@ from .rest_auth import LoginSerializer, TokenSerializer, JwtSerializer, UserDeta
 
 from .rest_auth import RegisterSerializer
 
-from .charge import ChargeSerializer
-
 from .subscription_plan import SubscriptionPlanSerializer
 
 from .biiling_details import CardSerializer

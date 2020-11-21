@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
-from core.mixins import HasPermissionsMixin
-from core.views.generic import (
-    MyDeleteView,
-    MyListView,
-    MyLoginRequiredView,
-    MyUpdateView,
-    MyNewFormsetUpdateView,
-    MyNewFormsetCreateView,
-)
 from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
+from core.mixins import HasPermissionsMixin
+from core.views.generic import (
+    MyListView,
+    MyLoginRequiredView,
+)
+
 from core.models import EventOrder
-
-
 
 # -----------------------------------------------------------------------------
 # EventOrder module
@@ -33,9 +28,9 @@ class EventOrderListView(MyListView):
     permission_required = ("core.view_eventorder",)
 
 
-
-
-class EventOrderAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class EventOrderAjaxPagination(
+    DataTableMixin, HasPermissionsMixin, MyLoginRequiredView
+):
 
     """
     Built this before realizing there is
@@ -72,7 +67,6 @@ class EventOrderAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequi
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

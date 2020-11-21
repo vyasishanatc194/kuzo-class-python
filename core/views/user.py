@@ -1,61 +1,52 @@
 # -*- coding: utf-8 -*-
+from django.contrib.auth.forms import AdminPasswordChangeForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.template.loader import get_template
+from django.views.generic import TemplateView
+from django_datatables_too.mixins import DataTableMixin
+from django.shortcuts import render
+from extra_views import InlineFormSetFactory
 from core.mixins import HasPermissionsMixin
+
 from core.views.generic import (
-    MyCreateView,
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
     MyUpdateView,
-    MyView,
     MyNewFormsetCreateView,
     MyNewFormsetUpdateView,
 )
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AdminPasswordChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import Group
-from django.db.models import Q
-from django.http import JsonResponse, HttpResponse
-from django.template.loader import get_template
-from django.utils.text import Truncator
-from django.views.generic import TemplateView
-from django_datatables_too.mixins import DataTableMixin
-
-from ..forms import MyUserChangeForm, MyUserCreationForm, UserProfileForm
 
 from core.models import User, UserProfile, SubscriptionOrder, EventOrder
+from ..forms import MyUserChangeForm, MyUserCreationForm, UserProfileForm
 
-from django.shortcuts import render, redirect, reverse, get_object_or_404
-from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSetFactory
-
-
-
-
-class IndexView(LoginRequiredMixin, TemplateView): 
-    template_name = "core/index.html"
-
-    
-    def get(self, request):
-
-        get_total_user = User.objects.all().count()
-        recent_users = User.objects.order_by('-created_at')[:5]
-        influencer_users = User.objects.filter(is_influencer=True).count()
-        get_active_plan = SubscriptionOrder.objects.filter(plan_status='active').count()
-        get_event = EventOrder.objects.filter(order_status='success').count()
-
-        self.context = {
-            "user_count":get_total_user,
-            "recent_users":recent_users,
-            "influencer_users":influencer_users,
-            "get_active_plan":get_active_plan,
-            "get_event":get_event,
-        }
-      
-        return render(request, self.template_name, self.context)
 
 # -----------------------------------------------------------------------------
 # Users
 # -----------------------------------------------------------------------------
+
+
+class IndexView(LoginRequiredMixin, TemplateView):
+    template_name = "core/index.html"
+
+    def get(self, request):
+
+        get_total_user = User.objects.all().count()
+        recent_users = User.objects.order_by("-created_at")[:5]
+        influencer_users = User.objects.filter(is_influencer=True).count()
+        get_active_plan = SubscriptionOrder.objects.filter(plan_status="active").count()
+        get_event = EventOrder.objects.filter(order_status="success").count()
+
+        self.context = {
+            "user_count": get_total_user,
+            "recent_users": recent_users,
+            "influencer_users": influencer_users,
+            "get_active_plan": get_active_plan,
+            "get_event": get_event,
+        }
+
+        return render(request, self.template_name, self.context)
 
 
 class UserListView(MyListView):
@@ -71,8 +62,10 @@ class UserListView(MyListView):
     permission_required = ("core.view_user",)
 
     def get_queryset(self):
-        
-        return self.model.objects.exclude(username="admin").exclude(username=self.request.user)
+
+        return self.model.objects.exclude(username="admin").exclude(
+            username=self.request.user
+        )
 
 
 class UserProfileInline(InlineFormSetFactory):
@@ -81,9 +74,12 @@ class UserProfileInline(InlineFormSetFactory):
 
     model = UserProfile
     form_class = UserProfileForm
-    factory_kwargs = {'extra': 1, 'max_num': None, 'can_order': False, 'can_delete': True}
-
-
+    factory_kwargs = {
+        "extra": 1,
+        "max_num": None,
+        "can_order": False,
+        "can_delete": True,
+    }
 
 
 class UserProfileUpdateInline(InlineFormSetFactory):
@@ -92,9 +88,7 @@ class UserProfileUpdateInline(InlineFormSetFactory):
 
     model = UserProfile
     form_class = UserProfileForm
-    factory_kwargs = {'extra': 1, 'max_num': 1, 'can_order': False, 'can_delete': True}
-
-
+    factory_kwargs = {"extra": 1, "max_num": 1, "can_order": False, "can_delete": True}
 
 
 class UserCreateView(MyNewFormsetCreateView):
@@ -103,7 +97,9 @@ class UserCreateView(MyNewFormsetCreateView):
     """
 
     model = User
-    inlines = [UserProfileInline,]
+    inlines = [
+        UserProfileInline,
+    ]
 
     form_class = MyUserCreationForm
     template_name = "core/adminuser/user_form.html"
@@ -111,7 +107,7 @@ class UserCreateView(MyNewFormsetCreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user 
+        kwargs["user"] = self.request.user
         return kwargs
 
 
@@ -121,7 +117,9 @@ class UserUpdateView(MyNewFormsetUpdateView):
     """
 
     model = User
-    inlines = [UserProfileUpdateInline,]
+    inlines = [
+        UserProfileUpdateInline,
+    ]
     form_class = MyUserChangeForm
     template_name = "core/adminuser/user_form.html"
     permission_required = ("core.change_user",)
@@ -146,7 +144,7 @@ class UserPasswordView(MyUpdateView):
     """
     View to change User Password
     """
-    
+
     model = User
     form_class = AdminPasswordChangeForm
     template_name = "core/adminuser/password_change_form.html"
@@ -166,7 +164,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
     """
 
     model = User
-    queryset = User.objects.all().order_by('-created_at')
+    queryset = User.objects.all().order_by("-created_at")
 
     def _get_is_superuser(self, obj):
         """
@@ -191,10 +189,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
         """
         # If a search term, filter the query
         if self.search:
-            return qs.filter(
-                Q(name__icontains=self.search)
-        
-            )
+            return qs.filter(Q(name__icontains=self.search))
         return qs
 
     def prepare_results(self, qs):
@@ -204,7 +199,7 @@ class UserAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVie
             data.append(
                 {
                     "name": o.name,
-                    "created_at":o.created_at,
+                    "created_at": o.created_at,
                     "actions": self._get_actions(o),
                 }
             )

@@ -1,22 +1,35 @@
 from django.db.models import CharField
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
-from django.urls import reverse
-
 
 # ----------------------------------------------------------------------
 # Event Script
 # ----------------------------------------------------------------------
 
-
 class EventScript(models.Model):
 
     """This model stores the data into Event Script table in db"""
 
-   
-    event = models.ForeignKey( 'core.event', on_delete=models.CASCADE, related_name="evnt_script", null=True, blank=True)
-    title = CharField(_("Title"), max_length=255,null=True, blank=True, unique=True, verbose_name="Title")
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
+    event = models.ForeignKey(
+        "core.event",
+        on_delete=models.CASCADE,
+        related_name="evnt_script",
+        null=True,
+        blank=True,
+    )
+    title = CharField(
+        _("Title"),
+        max_length=255,
+        null=True,
+        blank=True,
+        unique=True,
+        verbose_name="Title",
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         verbose_name = "Event Script"

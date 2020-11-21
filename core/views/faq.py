@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
+from django.template.loader import get_template
+from django_datatables_too.mixins import DataTableMixin
 from core.mixins import HasPermissionsMixin
 from core.views.generic import (
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
     MyNewFormsetUpdateView,
     MyNewFormsetCreateView,
 )
-from django.db.models import Q
-from django.template.loader import get_template
-from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import FaqForm
 from core.models import Faq
-
-
+from ..forms import FaqForm
 
 # -----------------------------------------------------------------------------
 # Faq module
@@ -36,7 +33,6 @@ class FaqListView(MyListView):
     permission_required = ("core.view_faq",)
 
 
-
 class FaqCreateView(MyNewFormsetCreateView):
 
     """
@@ -48,7 +44,6 @@ class FaqCreateView(MyNewFormsetCreateView):
     template_name = "core/faq/form.html"
     permission_required = ("core.add_faq",)
 
-   
 
 class FaqUpdateView(MyNewFormsetUpdateView):
 
@@ -60,11 +55,10 @@ class FaqUpdateView(MyNewFormsetUpdateView):
     permission_required = ("core.change_faq",)
 
 
-
 class FaqDeleteView(MyDeleteView):
 
     """
-    View to delete Faq 
+    View to delete Faq
     """
 
     model = Faq
@@ -109,12 +103,11 @@ class FaqAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 
     def prepare_results(self, qs):
-        
+
         # Create row data for datatables
         data = []
         for o in qs:

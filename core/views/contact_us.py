@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
-from core.mixins import HasPermissionsMixin
-from core.views.generic import (
-    MyDeleteView,
-    MyListView,
-    MyLoginRequiredView,
-    MyUpdateView,
-    MyNewFormsetUpdateView,
-    MyNewFormsetCreateView,
-)
 from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
+from core.mixins import HasPermissionsMixin
+
+from core.views.generic import (
+    MyListView,
+    MyLoginRequiredView,
+)
 
 from core.models import ContactUs
-
-
 
 # -----------------------------------------------------------------------------
 # ContactUs module
 # -----------------------------------------------------------------------------
-
 
 class ContactUsListView(MyListView):
 
@@ -27,14 +21,11 @@ class ContactUsListView(MyListView):
     View for Offer listing
     """
 
-    # paginate_by = 25
     ordering = ["-created_at"]
     model = ContactUs
-    queryset = model.objects.all().order_by('-created_at')
+    queryset = model.objects.all().order_by("-created_at")
     template_name = "core/contact-us/list.html"
     permission_required = ("core.view_ContactUs",)
-
-
 
 
 class ContactUsAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
@@ -70,11 +61,7 @@ class ContactUsAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequir
         """
         # If a search term, filter the query
         if self.search:
-            return qs.filter(
-                Q(email__icontains=self.search)
-             
-              
-            )
+            return qs.filter(Q(email__icontains=self.search))
         return qs
 
     def prepare_results(self, qs):
@@ -83,7 +70,6 @@ class ContactUsAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequir
         for o in qs:
             data.append(
                 {
-              
                     # "modified": o.modified.strftime("%b. %d, %Y, %I:%M %p"),
                     "actions": self._get_actions(o),
                 }

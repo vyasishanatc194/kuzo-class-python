@@ -1,27 +1,24 @@
 # -*- coding: utf-8 -*-
-from core.mixins import HasPermissionsMixin
-from core.views.generic import (
-    MyDeleteView,
-    MyListView,
-    MyLoginRequiredView,
-    MyUpdateView,
-    MyNewFormsetUpdateView,
-    MyNewFormsetCreateView,
-)
 from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import EventForm
+from core.mixins import HasPermissionsMixin
+
+from core.views.generic import (
+    MyDeleteView,
+    MyListView,
+    MyLoginRequiredView,
+    MyNewFormsetUpdateView,
+    MyNewFormsetCreateView,
+)
+
 from core.models import Event
-
-
+from ..forms import EventForm
 
 # -----------------------------------------------------------------------------
 # Event module
 # -----------------------------------------------------------------------------
-
-
 class EventListView(MyListView):
 
     """
@@ -29,10 +26,9 @@ class EventListView(MyListView):
     """
 
     model = Event
-    queryset = model.objects.all().order_by('event_date_time')
+    queryset = model.objects.all().order_by("event_date_time")
     template_name = "core/event/list.html"
     permission_required = ("core.view_event",)
-
 
 
 class EventCreateView(MyNewFormsetCreateView):
@@ -46,7 +42,6 @@ class EventCreateView(MyNewFormsetCreateView):
     template_name = "core/event/form.html"
     permission_required = ("core.add_event",)
 
-   
 
 class EventUpdateView(MyNewFormsetUpdateView):
 
@@ -56,7 +51,6 @@ class EventUpdateView(MyNewFormsetUpdateView):
     form_class = EventForm
     template_name = "core/event/form.html"
     permission_required = ("core.change_event",)
-
 
 
 class EventDeleteView(MyDeleteView):
@@ -107,7 +101,6 @@ class EventAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVi
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

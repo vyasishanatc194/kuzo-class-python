@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
+from django.template.loader import get_template
+from django_datatables_too.mixins import DataTableMixin
 from core.mixins import HasPermissionsMixin
 from core.views.generic import (
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
     MyNewFormsetUpdateView,
     MyNewFormsetCreateView,
 )
-from django.db.models import Q
-from django.template.loader import get_template
-from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import InfluencerOfferForm
 from core.models import InfluencerOffer
-
-
+from ..forms import InfluencerOfferForm
 
 # -----------------------------------------------------------------------------
 # InfluencerOffer module
@@ -36,7 +33,6 @@ class InfluencerOfferListView(MyListView):
     permission_required = ("core.view_banner",)
 
 
-
 class InfluencerOfferCreateView(MyNewFormsetCreateView):
 
     """
@@ -48,7 +44,6 @@ class InfluencerOfferCreateView(MyNewFormsetCreateView):
     template_name = "core/influencer-event-offer/form.html"
     permission_required = ("core.add_banner",)
 
-   
 
 class InfluencerOfferUpdateView(MyNewFormsetUpdateView):
 
@@ -58,7 +53,6 @@ class InfluencerOfferUpdateView(MyNewFormsetUpdateView):
     form_class = InfluencerOfferForm
     template_name = "core/influencer-event-offer/form.html"
     permission_required = ("core.change_banner",)
-
 
 
 class InfluencerOfferDeleteView(MyDeleteView):
@@ -72,7 +66,9 @@ class InfluencerOfferDeleteView(MyDeleteView):
     permission_required = ("core.delete_banner",)
 
 
-class InfluencerOfferAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class InfluencerOfferAjaxPagination(
+    DataTableMixin, HasPermissionsMixin, MyLoginRequiredView
+):
 
     """
     Built this before realizing there is
@@ -109,7 +105,6 @@ class InfluencerOfferAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLogin
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

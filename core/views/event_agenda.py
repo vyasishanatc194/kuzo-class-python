@@ -1,34 +1,31 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
+from django.template.loader import get_template
+from django_datatables_too.mixins import DataTableMixin
+
 from core.mixins import HasPermissionsMixin
 from core.views.generic import (
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
     MyNewFormsetUpdateView,
     MyNewFormsetCreateView,
 )
-from django.db.models import Q
-from django.template.loader import get_template
-from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import AgendaForm
 from core.models import Agenda
-
-
+from ..forms import AgendaForm
 
 # -----------------------------------------------------------------------------
-# Agenda module
+# Event Agenda module
 # -----------------------------------------------------------------------------
 
 
 class AgendaListView(MyListView):
 
     """
-    View for Offer listing
+    View for Event Agenda listing
     """
 
-    # paginate_by = 25
     ordering = ["id"]
     model = Agenda
     queryset = model.objects.all()
@@ -36,11 +33,10 @@ class AgendaListView(MyListView):
     permission_required = ("core.view_agenda",)
 
 
-
 class AgendaCreateView(MyNewFormsetCreateView):
 
     """
-    View to create Agenda
+    View to create Event Agenda
     """
 
     model = Agenda
@@ -48,11 +44,10 @@ class AgendaCreateView(MyNewFormsetCreateView):
     template_name = "core/agenda/form.html"
     permission_required = ("core.add_agenda",)
 
-   
 
 class AgendaUpdateView(MyNewFormsetUpdateView):
 
-    """View to update Agenda """
+    """View to update Event Agenda """
 
     model = Agenda
     form_class = AgendaForm
@@ -60,11 +55,10 @@ class AgendaUpdateView(MyNewFormsetUpdateView):
     permission_required = ("core.change_Agenda",)
 
 
-
 class AgendaDeleteView(MyDeleteView):
 
     """
-    View to delete Agenda Plan
+    View to delete Event Agenda
     """
 
     model = Agenda
@@ -109,7 +103,6 @@ class AgendaAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredV
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

@@ -22,9 +22,6 @@ urlpatterns = [
  
 urlpatterns += [
  
-
-    path("test_mail", views.send_test_mail, name="send-test-mail" ),
-
     #plan
     path("subscription-plan/", views.SubscriptionPlanListView.as_view(), name="subscriptionplan-list"),
     path("subscription-plan/create/", views.SubscriptionPlanCreateView.as_view(), name="subscriptionplan-create"),

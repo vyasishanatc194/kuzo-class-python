@@ -2,7 +2,7 @@ from django import forms
 from core.models import EventPracticeAudienceQA
 
 # -----------------------------------------------------------------------------
-# EventPracticeAudienceQA
+# Event Practice Audience QA
 # -----------------------------------------------------------------------------
 
 class EventPracticeAudienceQAForm(forms.ModelForm):

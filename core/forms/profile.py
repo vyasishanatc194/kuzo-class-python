@@ -2,17 +2,13 @@ from django import forms
 from core.models import UserProfile
 
 # -----------------------------------------------------------------------------
-# Credit
+# UserProfile
 # -----------------------------------------------------------------------------
 
-
 class UserProfileForm(forms.ModelForm):
-
-    """ Custom Credit Form"""
+    
+    """ Custom UserProfile Form"""
 
     class Meta():
         model = UserProfile
-        fields = ["user","influencer", "follower", "is_popular", ]
-
-
- 
+        fields = ["user","influencer", "follower", "is_popular", "photo"]

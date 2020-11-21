@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
+from django.template.loader import get_template
+from django_datatables_too.mixins import DataTableMixin
 from core.mixins import HasPermissionsMixin
 from core.views.generic import (
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
     MyNewFormsetUpdateView,
     MyNewFormsetCreateView,
 )
-from django.db.models import Q
-from django.template.loader import get_template
-from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import CategoryForm
 from core.models import Category
-
-
+from ..forms import CategoryForm
 
 # -----------------------------------------------------------------------------
 # Category module
@@ -35,7 +32,6 @@ class CategoryListView(MyListView):
     permission_required = ("core.view_category",)
 
 
-
 class CategoryCreateView(MyNewFormsetCreateView):
 
     """
@@ -47,7 +43,6 @@ class CategoryCreateView(MyNewFormsetCreateView):
     template_name = "core/influencer-category/form.html"
     permission_required = ("core.add_category",)
 
-   
 
 class CategoryUpdateView(MyNewFormsetUpdateView):
 
@@ -57,7 +52,6 @@ class CategoryUpdateView(MyNewFormsetUpdateView):
     form_class = CategoryForm
     template_name = "core/influencer-category/form.html"
     permission_required = ("core.change_category",)
-
 
 
 class CategoryDeleteView(MyDeleteView):
@@ -108,7 +102,6 @@ class CategoryAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequire
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

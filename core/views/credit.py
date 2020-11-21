@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
+from django.template.loader import get_template
+from django_datatables_too.mixins import DataTableMixin
+
 from core.mixins import HasPermissionsMixin
 from core.views.generic import (
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
     MyNewFormsetUpdateView,
     MyNewFormsetCreateView,
 )
-from django.db.models import Q
-from django.template.loader import get_template
-from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import CreditForm
 from core.models import Credit
-
-
+from ..forms import CreditForm
 
 # -----------------------------------------------------------------------------
 # Credit module
@@ -25,15 +23,13 @@ from core.models import Credit
 class CreditListView(MyListView):
 
     """
-    View for Offer listing
+    View for Credit listing
     """
 
-    # paginate_by = 25
     model = Credit
-    queryset = model.objects.order_by('price')
+    queryset = model.objects.order_by("price")
     template_name = "core/credit/list.html"
     permission_required = ("core.view_credit",)
-
 
 
 class CreditCreateView(MyNewFormsetCreateView):
@@ -47,7 +43,6 @@ class CreditCreateView(MyNewFormsetCreateView):
     template_name = "core/credit/form.html"
     permission_required = ("core.add_credit",)
 
-   
 
 class CreditUpdateView(MyNewFormsetUpdateView):
 
@@ -59,11 +54,10 @@ class CreditUpdateView(MyNewFormsetUpdateView):
     permission_required = ("core.change_Credit",)
 
 
-
 class CreditDeleteView(MyDeleteView):
 
     """
-    View to delete Credit 
+    View to delete Credit
     """
 
     model = Credit
@@ -108,7 +102,6 @@ class CreditAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredV
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

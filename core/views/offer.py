@@ -1,30 +1,19 @@
 # -*- coding: utf-8 -*-
+from django.db.models import Q
+from django.template.loader import get_template
+from django_datatables_too.mixins import DataTableMixin
 from core.mixins import HasPermissionsMixin
+
 from core.views.generic import (
-    MyCreateView,
     MyDeleteView,
     MyListView,
     MyLoginRequiredView,
-    MyUpdateView,
-    MyView,
     MyNewFormsetUpdateView,
     MyNewFormsetCreateView,
 )
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AdminPasswordChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import Group
-from django.db.models import Q
-from django.http import JsonResponse, HttpResponse
-from django.template.loader import get_template
-from django.utils.text import Truncator
-from django.views.generic import TemplateView
-from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import OfferForm
 from core.models import Offer
-
-
+from ..forms import OfferForm
 
 # -----------------------------------------------------------------------------
 # Offer module
@@ -40,10 +29,9 @@ class OfferListView(MyListView):
     paginate_by = 10
     ordering = ["-created_at"]
     model = Offer
-    queryset = model.objects.all().order_by('-created_at')
+    queryset = model.objects.all().order_by("-created_at")
     template_name = "core/offer/list.html"
     permission_required = ("core.view_offer",)
-
 
 
 class OfferCreateView(MyNewFormsetCreateView):
@@ -57,7 +45,6 @@ class OfferCreateView(MyNewFormsetCreateView):
     template_name = "core/offer/form.html"
     permission_required = ("core.add_offer",)
 
-   
 
 class OfferUpdateView(MyNewFormsetUpdateView):
 
@@ -67,7 +54,6 @@ class OfferUpdateView(MyNewFormsetUpdateView):
     form_class = OfferForm
     template_name = "core/offer/form.html"
     permission_required = ("core.change_offer",)
-
 
 
 class OfferDeleteView(MyDeleteView):
@@ -118,7 +104,6 @@ class OfferAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVi
                 Q(title__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 
@@ -129,7 +114,6 @@ class OfferAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredVi
             data.append(
                 {
                     "created_at": o.created_at,
-                
                     "actions": self._get_actions(o),
                 }
             )

@@ -11,8 +11,6 @@ from .user import (
 )
 
 
-from .testmail import send_test_mail
-
 from .subscription_plan import (
     SubscriptionPlanListView,
     SubscriptionPlanCreateView,

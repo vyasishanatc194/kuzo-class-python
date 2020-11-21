@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-from core.mixins import HasPermissionsMixin
-from core.views.generic import (
-    MyDeleteView,
-    MyListView,
-    MyLoginRequiredView,
-    MyUpdateView,
-    MyNewFormsetUpdateView,
-    MyNewFormsetCreateView,
-)
 from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
 
-from ..forms import EventPracticeAudienceQAForm
+from core.mixins import HasPermissionsMixin
+
+from core.views.generic import (
+    MyDeleteView,
+    MyListView,
+    MyLoginRequiredView,
+    MyNewFormsetUpdateView,
+    MyNewFormsetCreateView,
+)
+
 from core.models import EventPracticeAudienceQA
-
-
+from ..forms import EventPracticeAudienceQAForm
 
 # -----------------------------------------------------------------------------
 # EventPracticeAudienceQA module
@@ -36,7 +35,6 @@ class EventPracticeAudienceQAListView(MyListView):
     permission_required = ("core.view_EventPracticeAudienceQA",)
 
 
-
 class EventPracticeAudienceQACreateView(MyNewFormsetCreateView):
 
     """
@@ -48,7 +46,6 @@ class EventPracticeAudienceQACreateView(MyNewFormsetCreateView):
     template_name = "core/event-qa/form.html"
     permission_required = ("core.add_EventPracticeAudienceQA",)
 
-   
 
 class EventPracticeAudienceQAUpdateView(MyNewFormsetUpdateView):
 
@@ -58,7 +55,6 @@ class EventPracticeAudienceQAUpdateView(MyNewFormsetUpdateView):
     form_class = EventPracticeAudienceQAForm
     template_name = "core/event-qa/form.html"
     permission_required = ("core.change_EventPracticeAudienceQA",)
-
 
 
 class EventPracticeAudienceQADeleteView(MyDeleteView):
@@ -72,7 +68,9 @@ class EventPracticeAudienceQADeleteView(MyDeleteView):
     permission_required = ("core.delete_EventPracticeAudienceQA",)
 
 
-class EventPracticeAudienceQAAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class EventPracticeAudienceQAAjaxPagination(
+    DataTableMixin, HasPermissionsMixin, MyLoginRequiredView
+):
 
     """
     Built this before realizing there is
@@ -109,7 +107,6 @@ class EventPracticeAudienceQAAjaxPagination(DataTableMixin, HasPermissionsMixin,
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

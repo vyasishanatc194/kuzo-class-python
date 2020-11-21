@@ -17,7 +17,7 @@ class Banner(models.Model):
     image = models.FileField(upload_to='image', blank=True, null=True, verbose_name="image")
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True,)
 
-   
+
     class Meta:
         verbose_name = "Banner"
         verbose_name_plural = "Banners"

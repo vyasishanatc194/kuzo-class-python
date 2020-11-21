@@ -1,28 +1,20 @@
 # -*- coding: utf-8 -*-
-from core.mixins import HasPermissionsMixin
-from core.views.generic import (
-    MyDeleteView,
-    MyListView,
-    MyLoginRequiredView,
-    MyUpdateView,
-    MyNewFormsetUpdateView,
-    MyNewFormsetCreateView,
-)
 from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
-
+from core.mixins import HasPermissionsMixin
+from core.views.generic import (
+    MyListView,
+    MyLoginRequiredView,
+)
 from core.models import Transactionlog
-
 
 
 # -----------------------------------------------------------------------------
 # Transactionlog module
 # -----------------------------------------------------------------------------
 
-
 class TransactionlogListView(MyListView):
-
     """
     View for Offer listing
     """
@@ -33,10 +25,9 @@ class TransactionlogListView(MyListView):
     permission_required = ("core.view_transactionlog",)
 
 
-
-
-class TransactionlogAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
-
+class TransactionlogAjaxPagination(
+    DataTableMixin, HasPermissionsMixin, MyLoginRequiredView
+):
     """
     Built this before realizing there is
     https://bitbucket.org/pigletto/django-datatables-view.
@@ -72,7 +63,6 @@ class TransactionlogAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginR
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

@@ -1,30 +1,25 @@
 # -*- coding: utf-8 -*-
-from core.mixins import HasPermissionsMixin
-from core.views.generic import (
-    MyDeleteView,
-    MyListView,
-    MyLoginRequiredView,
-    MyUpdateView,
-    MyNewFormsetUpdateView,
-    MyNewFormsetCreateView,
-)
 from django.db.models import Q
 from django.template.loader import get_template
 from django_datatables_too.mixins import DataTableMixin
+from core.mixins import HasPermissionsMixin
+
+from core.views.generic import (
+    MyListView,
+    MyLoginRequiredView,
+)
 
 from core.models import SubscriptionOrder
 
-
-
 # -----------------------------------------------------------------------------
-# subscription-order module
+# Subscription order module
 # -----------------------------------------------------------------------------
 
 
 class SubscriptionOrderListView(MyListView):
 
     """
-    View for Offer listing
+    View for Subscription order listing
     """
 
     # paginate_by = 25
@@ -35,9 +30,9 @@ class SubscriptionOrderListView(MyListView):
     permission_required = ("core.view_subscription-order",)
 
 
-
-
-class SubscriptionOrderAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLoginRequiredView):
+class SubscriptionOrderAjaxPagination(
+    DataTableMixin, HasPermissionsMixin, MyLoginRequiredView
+):
 
     """
     Built this before realizing there is
@@ -74,7 +69,6 @@ class SubscriptionOrderAjaxPagination(DataTableMixin, HasPermissionsMixin, MyLog
                 Q(username__icontains=self.search)
                 | Q(first_name__icontains=self.search)
                 | Q(last_name__icontains=self.search)
-              
             )
         return qs
 

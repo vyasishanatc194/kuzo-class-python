@@ -16,9 +16,6 @@ TokenModel = import_callable(getattr(settings, 'REST_AUTH_TOKEN_MODEL', DefaultT
 
 from .card_details import Card
 
-from .charge import Charge
-
-
 from .influencer_category import Category
 
 from .userprofile import UserProfile
