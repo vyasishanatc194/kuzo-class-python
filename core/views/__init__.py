@@ -1,3 +1,5 @@
+# Import your views
+
 
 from .user import (
     IndexView,
@@ -7,7 +9,6 @@ from .user import (
     UserListView,
     UserPasswordView,
     UserUpdateView,
- 
 )
 
 
@@ -19,6 +20,7 @@ from .subscription_plan import (
     SubscriptionPlanAjaxPagination,
 )
 
+
 from .offer import (
     OfferListView,
     OfferCreateView,
@@ -26,6 +28,7 @@ from .offer import (
     OfferDeleteView,
     OfferAjaxPagination,
 )
+
 
 from .banner import (
     BannerListView,
@@ -42,8 +45,8 @@ from .faq import (
     FaqUpdateView,
     FaqDeleteView,
     FaqAjaxPagination,
-    
 )
+
 
 from .credit import (
     CreditListView,
@@ -51,23 +54,23 @@ from .credit import (
     CreditUpdateView,
     CreditDeleteView,
     CreditAjaxPagination,
-  
 )
 
-from .credit_order import (
-    CreditOrderListView,
-    CreditOrderAjaxPagination
-)
+
+from .credit_order import CreditOrderListView, CreditOrderAjaxPagination
+
 
 from .contact_us import (
     ContactUsListView,
     ContactUsAjaxPagination,
 )
 
+
 from .subscription_order import (
-    SubscriptionOrderListView, 
-    SubscriptionOrderAjaxPagination
+    SubscriptionOrderListView,
+    SubscriptionOrderAjaxPagination,
 )
+
 
 from .influencer_category import (
     CategoryCreateView,
@@ -77,6 +80,7 @@ from .influencer_category import (
     CategoryAjaxPagination,
 )
 
+
 from .event import (
     EventListView,
     EventCreateView,
@@ -85,10 +89,12 @@ from .event import (
     EventAjaxPagination,
 )
 
+
 from .event_order import (
     EventOrderListView,
     EventOrderAjaxPagination,
 )
+
 
 from .event_agenda import (
     AgendaCreateView,
@@ -98,23 +104,22 @@ from .event_agenda import (
     AgendaAjaxPagination,
 )
 
+
 from .event_qa import (
     EventPracticeAudienceQAListView,
     EventPracticeAudienceQACreateView,
     EventPracticeAudienceQAUpdateView,
     EventPracticeAudienceQADeleteView,
-    EventPracticeAudienceQAAjaxPagination
+    EventPracticeAudienceQAAjaxPagination,
 )
 
 
 from .influencer_event_offer import (
-    
-  InfluencerOfferListView,
-  InfluencerOfferCreateView,
-  InfluencerOfferUpdateView,
-  InfluencerOfferDeleteView,
-  InfluencerOfferAjaxPagination,
-
+    InfluencerOfferListView,
+    InfluencerOfferCreateView,
+    InfluencerOfferUpdateView,
+    InfluencerOfferDeleteView,
+    InfluencerOfferAjaxPagination,
 )
 
 
@@ -122,6 +127,7 @@ from .transaction_log import (
     TransactionlogListView,
     TransactionlogAjaxPagination,
 )
+
 
 from .event_class import (
     EventClassListView,

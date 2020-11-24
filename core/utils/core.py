@@ -10,7 +10,7 @@ from django.utils.text import capfirst
 from django.urls.exceptions import NoReverseMatch
 from django.contrib.auth.models import Group, Permission
 from django.conf import settings
-from core.models import User
+from core.models.users import User
 # -----------------------------------------------------------------------------
 
 

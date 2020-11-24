@@ -104,7 +104,7 @@ class UserHomePageEventListAPIView(MyAPIView):
     permission_classes = (AllowAny,)
     serializer_class = EventListSerializer
 
-    def get(self, request, format=None):
+    def get(self, request):
 
         """GET method for retrieving the data"""
 
@@ -112,7 +112,8 @@ class UserHomePageEventListAPIView(MyAPIView):
         search=request.GET['q']
         if search=='all':
             event = Event.objects.filter(event_date_time__gte=now).order_by('event_date_time')
-            return Response({"status": "OK", "message": "Successfully fetched event list", "data": a})
+            serializer = self.serializer_class(event, many=True, context={"request": request})
+            return Response({"status": "OK", "message": "Successfully fetched event list", "data": serializer.data})
 
         else:
             get_user = UserProfile.objects.filter(influencer__name=search)

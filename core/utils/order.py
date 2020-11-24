@@ -1,7 +1,7 @@
-import json
-from .stripe import MyStripe
-from core.models import User
 
+import json
+from core.models .users import User
+from .stripe import MyStripe
 
 def create_charge_object(newcharge, request):
 

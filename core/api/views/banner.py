@@ -4,14 +4,12 @@ from core.models import Banner
 from core.api.apiviews import MyAPIView
 from core.api.serializers import BannerSerializer
 
-
 # .................................................................................
-# banner Plan API
+# Banner list API
 # .................................................................................
 
 
 class BannerListAPIView(MyAPIView):
-
     """
     API View for banner  listing
     """
@@ -20,6 +18,14 @@ class BannerListAPIView(MyAPIView):
     serializer_class = BannerSerializer
 
     def get(self, request):
-        banner = Banner.objects.all().order_by('-created_at')
-        serializer = self.serializer_class(banner, many=True, context={"request": request})
-        return Response({"status": "OK", "message": "Successfully fetched banner list", "data": serializer.data})
+        banner = Banner.objects.all().order_by("-created_at")
+        serializer = self.serializer_class(
+            banner, many=True, context={"request": request}
+        )
+        return Response(
+            {
+                "status": "OK",
+                "message": "Successfully fetched banner list",
+                "data": serializer.data,
+            }
+        )

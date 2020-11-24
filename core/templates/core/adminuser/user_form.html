@@ -87,9 +87,9 @@
 
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-sm-8">
+                    <div class="col-sm-10" style="margin: 15px;">
                         <div  class="form-group row">
-                            <table class="col-sm-12">
+                            <table class="col-sm-16">
                                 {{ formset.management_form|crispy }}
                                 {% for form in formset.forms %}
                                 <tr class="user_profile_get" id="user_profile_get">
@@ -103,7 +103,30 @@
                                         {% endif %}
                                         {{ field.errors.as_ul }}
 
+
+                                        {% if field.name == 'about' %}
+
+                                        {{field.label}} 
+
+                                        {% if field.value %}
+
+                                        <input id="{{ field.auto_id }}" value="{{ field.value }}" type="hidden" name="user_profile-0-about">
+
+                                        {% else %}
+                                        <input id="{{ field.auto_id }}" value="" type="hidden" name="user_profile-0-about">
+                                        {% endif %}
+
+
+                                        <trix-editor input="{{ field.auto_id }}"></trix-editor>
+    
+
+
+                                        {% else %}
+
                                         {{ field|as_crispy_field }}
+
+                                        {% endif %}
+
 
                                     </td>
                                     {% endfor %}
