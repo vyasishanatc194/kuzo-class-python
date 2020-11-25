@@ -54,7 +54,6 @@ class UserListView(MyListView):
     View for User listing
     """
 
-    paginate_by = 10
     ordering = ["-created_at"]
     model = User
     queryset = model.objects.exclude(username="admin")
@@ -65,7 +64,7 @@ class UserListView(MyListView):
 
         return self.model.objects.exclude(username="admin").exclude(
             username=self.request.user
-        )
+        ).order_by("-created_at")
 
 
 class UserProfileInline(InlineFormSetFactory):
