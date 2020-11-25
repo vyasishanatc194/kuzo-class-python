@@ -125,8 +125,11 @@ class LoginSerializer(serializers.Serializer):
                 ob.save()
         else:
             check_email = User.objects.filter(email=email).exists()
+            check_active = User.objects.filter(email=email, is_active=False).exists()
             if not check_email:
                 msg = _('Email does not exist.')
+            elif check_active:
+                msg = _('User account is disabled.')
             else:
                 msg = _('The password you entered is incorrect')
     
