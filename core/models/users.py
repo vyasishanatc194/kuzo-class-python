@@ -42,6 +42,8 @@ class User(AbstractUser):
         null=True,
     )
     user_uuid = models.UUIDField(blank=True, null=True)
+    influencer_stripe_account_id = models.CharField(max_length=222, null=True, blank=True, verbose_name='Influencer stripe id')
+    earned_money = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     class Meta:
         verbose_name = "User"

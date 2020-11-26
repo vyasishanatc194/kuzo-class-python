@@ -1,3 +1,11 @@
 {
-    "python.pythonPath": "venv\\Scripts\\python.exe"
+    "python.pythonPath": "venv\\Scripts\\python.exe",
+   
+
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+    "--disable=C0111", // missing docstring
+    "--load-plugins=pylint_django,pylint_celery",
+],
+"python.formatting.provider": "black",
 }

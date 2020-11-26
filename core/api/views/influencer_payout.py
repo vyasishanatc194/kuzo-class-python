@@ -4,6 +4,8 @@ from django.conf import settings
 from core.api.apiviews import MyAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from core.models import InfluencerTransferredMoney, EventOrder, User
+from core.api.serializers import InfluencerTransferredMoneySerializer
 
 
 stripe.api_key = settings.API_KEY
@@ -80,16 +82,66 @@ class StripeTransferMoneyCreateAPI(MyAPIView):
         """POST method to offer the data"""
 
         if request.user.is_authenticated:
-
-            request.data._mutable = True
-            stripe.Transfer.create(
-            amount=400,
-            currency="usd",
-            destination="acct_1HrLKjQmr4yatsZX",
             
+            if request.user.influencer_stripe_account_id:
+                
+                if request.user.earned_money < 1:
+                    return Response({"status": "OK", "message": "You have not enough amount to transfer", "data": []})
+
+                transaction=stripe.Transfer.create(
+                amount=int(request.user.earned_money)*100,
+                currency="usd",
+                destination= str(request.user.influencer_stripe_account_id),
+                )
+
+                User.objects.filter(id=request.user.id).update(earned_money=0)
+
+                transfer = {
+                    "user": request.user.id,
+                    "amount": int(request.user.earned_money),
+                    "status":"success",
+                    "transaction_id":transaction.id,
+                }
+
+                serializer = InfluencerTransferredMoneySerializer(data=transfer)
+                if serializer.is_valid():
+                    serializer.save()
+        
+                    return Response({"status": "OK", "message": "Successfully transfered money", "data": serializer.data})
+                else:
+                    return Response({"status": "OK", "message": "Serializer errors", "data": serializer.errors})
+
+            
+            else:
+                return Response({"status": "OK", "message": "Please create stripe account & update into kuzo account", "data": []})
+        else:
+            return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
+
+
+
+class PayoutHistoryAPIView(MyAPIView):
+
+    """
+    API View for transaction history
+    """
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = InfluencerTransferredMoneySerializer
+
+    def get(self, request):
+
+        if request.user.is_authenticated:
+
+            transaction_history = InfluencerTransferredMoney.objects.filter(user__id=request.user.id).order_by("-created_at")
+            serializer = self.serializer_class(
+                transaction_history, many=True, context={"request": request}
             )
-
-            return Response({"status": "OK", "message": "Successfully transfered money", "data": []})
-
+            return Response(
+                {
+                    "status": "OK",
+                    "message": "Successfully fetched transaction history",
+                    "data": serializer.data,
+                }
+            )
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})

@@ -51,3 +51,5 @@ from .influencer_category import InfluencerCategorySerializer
 from .influencer_earned_money import InfluencerEarnMoneySerializer
 
 from .influencer_profile import InflunecerUserProfileSerializer, InflunecerUserProfileUpdateSerializer
+
+from .influencer_transfer_money import InfluencerTransferredMoneySerializer

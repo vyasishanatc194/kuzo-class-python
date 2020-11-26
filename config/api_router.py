@@ -35,7 +35,7 @@ urlpatterns = [
         SocialAccountDisconnectView.as_view(),
         name="social_account_disconnect",
     ),
-    path("swagger/", get_swagger_view(title="Kuzo API")),
+    path("swagger/", get_swagger_view(title="Kuzo Class API")),
     path("", include(urls)),
 
 ]

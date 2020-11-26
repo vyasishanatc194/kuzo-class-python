@@ -1,6 +1,21 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from core.models import User,Category,Banner, ContactUs, UserProfile, SubscriptionOrder,SubscriptionPlan, Card ,CreditOrder, Transactionlog, Event, EventClass, EventOrder
+from core.models import (
+    User,
+    Category,
+    Banner,
+    ContactUs,
+    UserProfile,
+    SubscriptionOrder,
+    SubscriptionPlan,
+    Card,
+    CreditOrder,
+    Transactionlog,
+    Event,
+    EventClass,
+    EventOrder,
+    InfluencerTransferredMoney,
+)
 
 
 admin.site.register(User)
@@ -16,4 +31,5 @@ admin.site.register(SubscriptionPlan)
 admin.site.register(ContactUs)
 admin.site.register(Category)
 admin.site.register(Banner)
+admin.site.register(InfluencerTransferredMoney)
 
