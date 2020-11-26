@@ -37,7 +37,6 @@ class MyUserSerializer(serializers.ModelSerializer):
             "last_name",
             "name",
             "email",
-            "mobile",
            
         )
         

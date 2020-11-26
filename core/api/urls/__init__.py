@@ -37,6 +37,8 @@ from . import user_registred_event
 from . import timezone
 from . import influencer_category
 from . import influencer_earn_money
+from . import influencer_payout
+from . import influencer_profile
 
 
 urlpatterns = [
@@ -86,6 +88,9 @@ urlpatterns = [
     path("influencer-offer/", include(offer)),
     path("influencer-eran-money-list/", include(influencer_earn_money)),
     path("timezone-list/", include(timezone)),
+    path("influencer-payout/", include(influencer_payout)),
+    path("influencer-profile/", include(influencer_profile)),
+
 
     # Home page
 

@@ -10,10 +10,10 @@ var userroles = {
 
         index: function () {
             $('#user-table').DataTable({
-                pageLength: 25,
+                pageLength: 10,
                 responsive: true,
                 columnDefs: [{
-                    orderable: false,
+                    orderable: true,
                     targets: -1
                 },],
 
