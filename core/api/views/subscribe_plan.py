@@ -127,7 +127,11 @@ class BookEventAPI(MyAPIView):
 
                         context={"user":user_serilizer.data, 'event_order':serilzer.data}
                         send_sendgrid_email(context,"Event booking Transaction Receipt",request.user.email, settings.EVENT_ORDER_TEMPLATE_ID)
-
+                        
+                        obj = User.objects.filter(id=event.user.id).first()
+                        if obj:
+                            obj.earned_money = float(obj.earned_money) + float(event.price)
+                            obj.save()
 
                         return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": serilzer.data})
 
@@ -220,6 +224,11 @@ class BookEventAPI(MyAPIView):
                         context={"user":user_serilizer.data, 'subscription_order':subscriptin_serializer.data}
                         send_sendgrid_email(context,"Event booking Transaction Receipt",request.user.email, settings.SUBSCRIPTION_ORDER_TEMPLATE_ID)
                         
+                        obj = User.objects.filter(id=event.user.id).first()
+                        if obj:
+                            obj.earned_money = float(obj.earned_money) + float(event.price)
+                            obj.save()
+
                         return Response({"status": "OK", "message": "Subscription & event registration process completed successfully", "data": serilzer.data})
 
                 except stripeErr.error.CardError as e:
@@ -292,6 +301,14 @@ class BookEventAPI(MyAPIView):
                     context={"user":user_serilizer.data, 'event_order':serializer.data}
                     send_sendgrid_email(context,"Event booking Transaction Receipt",request.user.email, settings.DIRECT_EVENT_BOOKING)
 
+                    # Update
+
+                    obj = User.objects.filter(id=event.user.id).first()
+                    if obj:
+                        obj.earned_money = float(obj.earned_money) + float(event.price)
+                        obj.save()
+
+                     
                     return Response({"status": "OK", "message": "Event registration process completed successfully", "data": serializer.data})
                 
                 except stripeErr.error.CardError as e:
