@@ -10,10 +10,11 @@ var userroles = {
 
         index: function () {
             $('#user-table').DataTable({
+                order: [],
                 pageLength: 10,
                 responsive: true,
                 columnDefs: [{
-                    orderable: false,
+                    orderable: true,
                     targets: -1
                 },],
 
@@ -97,6 +98,7 @@ var userroles = {
     newoffers: {
         index: function () {
             $('#offer-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -122,6 +124,7 @@ var userroles = {
     banner: {
         index: function () {
             $('#banner-table').DataTable({
+                order: [],
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -147,6 +150,8 @@ var userroles = {
     subscriptionplans: {
         index: function () {
             $('#subscriptionplan-table').DataTable({
+                order: [],
+
                 pageLength: 10,
                 responsive: true,
                 columnDefs: [{
@@ -171,6 +176,8 @@ var userroles = {
     credit: {
         index: function () {
             $('#credit-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -195,6 +202,8 @@ var userroles = {
     faq: {
         index: function () {
             $('#faq-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -219,6 +228,8 @@ var userroles = {
     creditorder: {
         index: function () {
             $('#creditorder-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -243,6 +254,8 @@ var userroles = {
     subscriptionorder: {
         index: function () {
             $('#subscriptionorder-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -270,6 +283,8 @@ var userroles = {
     contactusTab: {
         index: function () {
             $('#contactus-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -294,6 +309,8 @@ var userroles = {
     category: {
         index: function () {
             $('#category-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -316,33 +333,14 @@ var userroles = {
 
 
     //-------------------------------------------------------------------------
-    banner: {
-        index: function () {
-            $('#banner-table').DataTable({
-                pageLength: 25,
-                responsive: true,
-                columnDefs: [{
-                    orderable: false,
-                    targets: -1
-                },]
-            });
-        },
-
-        details: function () {
-            $('.permissions-select').bootstrapDualListbox({
-                nonSelectedListLabel: 'Available user permissions',
-                selectedListLabel: 'Chosen user permissions',
-                preserveSelectionOnMove: 'moved',
-                moveOnSelect: false
-            });
-        }
-
-    },
+    
     // ------------------------------------------------------------------------
 
     planorder: {
         index: function () {
             $('#planorder-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -359,6 +357,8 @@ var userroles = {
     transactionlog: {
         index: function () {
             $('#transactionlog-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -384,6 +384,8 @@ var userroles = {
     events: {
         index: function () {
             $('#event-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -416,6 +418,8 @@ var userroles = {
     eventorder: {
         index: function () {
             $('#eventorder-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -442,6 +446,8 @@ var userroles = {
 
         index: function () {
             $('#agenda-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -467,6 +473,8 @@ var userroles = {
     eventpracticeaudienceqa: {
         index: function () {
             $('#eventpracticeaudienceqa-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -492,6 +500,8 @@ var userroles = {
     eventclass: {
         index: function () {
             $('#eventclass-table').DataTable({
+                order: [],
+
                 pageLength: 25,
                 responsive: true,
                 columnDefs: [{
@@ -511,6 +521,34 @@ var userroles = {
         }
 
     },
+
+
+    Influencertransferredmoney: {
+        index: function () {
+            $('#Influencertransferredmoney-table').DataTable({
+                order: [],
+
+                pageLength: 25,
+                responsive: true,
+                columnDefs: [{
+                    orderable: false,
+                    targets: -1
+                },]
+            });
+        },
+
+        details: function () {
+            $('.permissions-select').bootstrapDualListbox({
+                nonSelectedListLabel: 'Available user permissions',
+                selectedListLabel: 'Chosen user permissions',
+                preserveSelectionOnMove: 'moved',
+                moveOnSelect: false
+            });
+        }
+
+    },
+
+
 
     // -------------------------------------------------------------------
 

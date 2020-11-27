@@ -27,10 +27,8 @@ class BannerListView(MyListView):
     View for Offer listing
     """
 
-    # paginate_by = 25
-    ordering = ["id"]
     model = Banner
-    queryset = model.objects.all()
+    queryset = model.objects.all().order_by("-created_at")
     template_name = "core/banner/list.html"
     permission_required = ("core.view_banner",)
 
