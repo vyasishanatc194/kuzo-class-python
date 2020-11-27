@@ -23,13 +23,23 @@ class StripeAccountCreateAPI(MyAPIView):
 
         if request.user.is_authenticated:
             request.data._mutable = True
+
+
+            front_file = request.data['front']
+            back_file = request.data['back']
+
+
+            front=stripe.File.create(purpose="identity_document",file=front_file)
+            back=stripe.File.create(purpose="identity_document",file=back_file)
+
+
             email=request.user.email       
             create_acc=stripe.Account.create(
             type="custom",
             country=request.data['country'],
             business_type="individual",
 
-            business_profile = {"url": request.data['website_url']},
+            business_profile = {"url": request.data['website_url'], "mcc":"1520"},
 
             individual={
                 "dob":{"day":"01","month":"12","year":"1997",},
@@ -37,8 +47,9 @@ class StripeAccountCreateAPI(MyAPIView):
                 "last_name":request.data['last_name'],
                 "phone":request.data['phone'],
                 "email":email,
-                "ssn_last_4":request.data['ssn_last_4'],
-                "address":{"city":request.data['city'], "country":request.data['country'], "line1":request.data['address1'], "postal_code":request.data['postal_code'], "state": request.data['state']}
+                "id_number":"012345789",
+                "verification": {"document": {"front": front['id'], "back":back['id']}},
+                "address":{"line1":request.data['address1'],"line2":request.data['address1'], "city":request.data['city'], "state": request.data['state'], "postal_code":request.data['postal_code'],"country":request.data['country']}
             },
             email=email,
             capabilities={

@@ -136,3 +136,8 @@ from .event_class import (
     EventClassDeleteView,
     EventClassAjaxPagination,
 )
+
+from .influencer_transfer_money import (
+    InfluencerTransferredMoneyListView,
+    InfluencerTransferredMoneyAjaxPagination,
+)

@@ -136,6 +136,11 @@ urlpatterns += [
     path("eventclass/<int:pk>/delete/", views.EventClassDeleteView.as_view(), name="eventclass-delete"),
     path("ajax-eventclass", views.EventClassAjaxPagination.as_view(), name="eventclass-list-ajax"),
 
+    path("Influencertransferredmoney/", views.InfluencerTransferredMoneyListView.as_view(), name="Influencertransferredmoney-list"),
+    path("ajax-influencertransferredmoney", views.InfluencerTransferredMoneyAjaxPagination.as_view(), name="influencertransferredmoney-list-ajax"),
+
+
 
 ]
 
+ 
