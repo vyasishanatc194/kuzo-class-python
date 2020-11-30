@@ -23,7 +23,7 @@ class EventForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super (EventForm,self ).__init__(*args,**kwargs) 
-        self.fields['user'].queryset = User.objects.exclude(username="admin")
+        self.fields['user'].queryset = User.objects.filter(is_influencer=True).exclude(username="admin")
         self.fields['user'].required = True
         self.fields['event_types'].required = True
         self.fields['event_class'].required = True
