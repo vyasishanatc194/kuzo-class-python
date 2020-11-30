@@ -239,9 +239,9 @@ class PasswordChangeView(MyGenericAPIView):
             return Response({"status": "FAIL", "message": "Something is wrong with the password.", "data": serializer.errors})
 
 
-class ChangeCurrentPassword(APIView):
+class ChangeCurrentPassword(MyAPIView):
 
-    def put(self, request, format=None):
+    def put(self, request):
 
 
         if request.user.is_authenticated:
@@ -256,18 +256,20 @@ class ChangeCurrentPassword(APIView):
                 check_user_password = check_password(current_password, user.password)
 
                 if not check_user_password:
-                    return Response({"data":[],"status":False,"message":"The current password you entered is incorrect","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"status": "FAIL", "message": "The current password you entered is incorrect", "data": []})
 
                 if new_password1!=new_password2:
-                    return Response({"data":[],"status":False,"message":"The new password you entered does not match","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"status": "FAIL", "message": "The new password you entered does not match", "data": []})
+
 
                 user.set_password(new_password1)
                 user.save()
-                return Response({"data":{"id":user.id},"status":True,"message":"Successfully changed password.","code":status.HTTP_200_OK}, status=status.HTTP_200_OK)
+                return Response({"status": "OK", "message": "Successfully changed password.", "data": {"id":user.id}})
+
 
             except User.DoesNotExist:
-                    return Response({"data":[],"status":False,"message":"user not found","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"status": "FAIL", "message": "user not found", "data": []})
 
         else:
-            return Response({"data":[],"status":False,"message":"user not found","code":status.HTTP_400_BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": "FAIL", "message": "user not found", "data": []})
 
