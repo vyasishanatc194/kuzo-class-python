@@ -34,7 +34,7 @@ class EventAPIView(MyAPIView):
             """ use event id """
 
             try:
-                event = Event.objects.filter(user__id=request.user.id)
+                event = Event.objects.filter(user__id=request.user.id, user__is_influencer=True)
                 serializer = self.serializer_class(event, many=True, context={"request": request})
                 return Response({"status": "OK", "message": "Successfully fetched event list", "data": serializer.data})
 
@@ -84,11 +84,11 @@ class HomePageEventListAPIView(MyAPIView):
         """GET method for retrieving the data"""
         search=request.GET['q']
         if search=='is_featured':
-            event = Event.objects.filter(is_featured=True, event_date_time__gte=now).order_by('event_date_time')
+            event = Event.objects.filter(is_featured=True, event_date_time__gte=now, user__is_influencer=True).order_by('event_date_time')
         elif search=='price':
-            event = Event.objects.filter(event_date_time__gte=now).order_by("credit_required")
+            event = Event.objects.filter(event_date_time__gte=now, user__is_influencer=True).order_by("credit_required")
         elif search=='upcoming':
-            event = Event.objects.filter(event_date_time__gte=now).order_by('event_date_time')
+            event = Event.objects.filter(event_date_time__gte=now, user__is_influencer=True).order_by('event_date_time')
     
         serializer = self.serializer_class(event, many=True, context={"request": request})
         return Response({"status": "OK", "message": "Successfully fetched event list", "data": serializer.data})
@@ -111,7 +111,7 @@ class UserHomePageEventListAPIView(MyAPIView):
         event_result=[]
         search=request.GET['q']
         if search=='all':
-            event = Event.objects.filter(event_date_time__gte=now).order_by('event_date_time')
+            event = Event.objects.filter(event_date_time__gte=now, user__is_influencer=True).order_by('event_date_time')
             serializer = self.serializer_class(event, many=True, context={"request": request})
             return Response({"status": "OK", "message": "Successfully fetched event list", "data": serializer.data})
 

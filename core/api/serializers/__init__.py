@@ -6,7 +6,7 @@ from .rest_auth import RegisterSerializer
 
 from .subscription_plan import SubscriptionPlanSerializer
 
-from .biiling_details import CardSerializer
+from .biiling_details import CardSerializer, CardListSerializer
 
 from .transaction_log import TransactionlogSerializer
 

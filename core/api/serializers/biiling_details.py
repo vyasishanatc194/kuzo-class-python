@@ -26,3 +26,27 @@ class CardSerializer(serializers.ModelSerializer):
         
         )
 
+
+class CardListSerializer(serializers.ModelSerializer):
+    card_expiration_date = serializers.SerializerMethodField('get_card_expiration_date')
+    
+    """
+    Serializes the Card data into JSON
+    """
+
+    class Meta:
+        model = Card
+        fields = (
+            "id",
+            "user",
+            "stripe_card_id",
+            "last4",
+            "card_expiration_date",
+            'created_at',
+        
+        )
+
+    def get_card_expiration_date(self, card):
+        card = card.card_expiration_date.split("/")
+        new_format = "{0}/{1}".format(card[0], card[1][2:4])
+        return new_format

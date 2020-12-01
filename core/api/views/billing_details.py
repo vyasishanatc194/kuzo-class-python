@@ -4,7 +4,7 @@ import stripe as stripeErr
 from django.conf import settings
 
 from core.models import Card, User, SubscriptionOrder, UserProfile
-from core.api.serializers import CardSerializer, UserDetailsSerializer
+from core.api.serializers import CardSerializer, UserDetailsSerializer, CardListSerializer
 
 from core.api.apiviews import MyAPIView
 from core.utils import MyStripe
@@ -21,7 +21,7 @@ class CardAPIView(MyAPIView):
     """
 
     permission_classes = (IsAuthenticated,)
-    serializer_class = CardSerializer
+    serializer_class = CardListSerializer
 
     def get(self, request):
 
@@ -34,7 +34,7 @@ class CardAPIView(MyAPIView):
             try:
                 cards = Card.objects.filter(user_id=request.user.id)
 
-                serializer = CardSerializer(
+                serializer = CardListSerializer(
                     cards, many=True, context={"request": request}
                 )
                 return Response(
