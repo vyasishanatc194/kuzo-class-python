@@ -32,6 +32,7 @@ class InfluencerDetailsListSerializer(serializers.ModelSerializer):
             "user",
             "influencer",
             "photo",
+            "video",
             "about",
             "offer",
             "upcoming_events",
