@@ -74,6 +74,9 @@ class StripeAccountCreateAPI(MyAPIView):
                 'ip': '8.8.8.8', 
             }
             )
+            ob=User.objects.filter(id=request.user.id).first()
+            ob.influencer_stripe_account_id = create_acc.id
+            ob.save()
 
             return Response({"status": "OK", "message": "Successfully created event", "data": create_acc.id})
 
