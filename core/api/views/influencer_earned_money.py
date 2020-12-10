@@ -8,6 +8,8 @@ from core.api.apiviews import MyAPIView
 from core.utils.daily_earning_money import daily_earning
 
 from core.models import EventOrder
+from django.conf import settings
+
 
 
 current_datetime =  datetime.now()
@@ -28,6 +30,7 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
     def get(self, request):
 
         try:
+            settings.TIME_ZONE
 
             data = {}
             result =[]
