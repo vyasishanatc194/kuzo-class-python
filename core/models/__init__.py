@@ -25,6 +25,7 @@ from .credit import Credit
 from .credit_order import CreditOrder
 from .transaction_log import Transactionlog
 from .influncer_transferred_money import InfluencerTransferredMoney
+from .evnt_script import EventScript
 
 TokenModel = import_callable(
     getattr(settings, "REST_AUTH_TOKEN_MODEL", DefaultTokenModel)

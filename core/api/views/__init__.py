@@ -26,3 +26,15 @@ from .contact_us import ContactUsCreateAPI
 from .user_registred_event import UserEventRegisteredAPIView
 from .influencer_details import InfluencerDetailsListAPIView
 from .influencer_earned_money import InfluencerEarnMoneyListAPIView
+from.script import ScriptCreateAPI
+
+
+
+
+
+
+
+
+
+
+

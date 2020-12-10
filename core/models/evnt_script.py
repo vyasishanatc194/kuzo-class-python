@@ -23,7 +23,6 @@ class EventScript(models.Model):
         null=True,
         blank=True,
         unique=True,
-        verbose_name="Title",
     )
     created_at = models.DateTimeField(
         auto_now_add=True,

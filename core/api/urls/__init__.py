@@ -20,6 +20,7 @@ from core.api.views import (
     BannerListAPIView,
     InfluencerListAPIView,
     InfluencerDetailsListAPIView,
+    ScriptCreateAPI,
 )
 
 
@@ -90,6 +91,8 @@ urlpatterns = [
     path("timezone-list/", include(timezone)),
     path("influencer-payout/", include(influencer_payout)),
     path("influencer-profile/", include(influencer_profile)),
+    path("add-script/", ScriptCreateAPI.as_view(), name="add-script"),
+
 
 
     # Home page
