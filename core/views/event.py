@@ -26,7 +26,7 @@ class EventListView(MyListView):
     """
 
     model = Event
-    queryset = model.objects.all().order_by("event_date_time")
+    queryset = model.objects.all().order_by("-created_at")
     template_name = "core/event/list.html"
     permission_required = ("core.view_event",)
 

@@ -48,6 +48,7 @@ class EventForm(forms.ModelForm):
             "session_lenght",
             "is_featured",
             "is_popular",
+            'active',
             ]
 
     def clean(self):

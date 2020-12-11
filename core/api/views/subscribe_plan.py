@@ -106,7 +106,7 @@ class BookEventAPI(MyAPIView):
 
             if request.data['is_subscription_access']=='true':
 
-                if user_plan.subscription:
+                if user_plan.subscription or int(user_plan.credit) < int(event.credit_required):
 
                     if int(user_plan.credit) < int(event.credit_required):
 

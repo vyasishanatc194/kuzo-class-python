@@ -57,6 +57,7 @@ class Event(models.Model):
         default=0, null=True, blank=True, verbose_name="Session length"
     )
     is_featured = models.BooleanField(default=False, verbose_name="Is featured")
+    active = models.BooleanField(default=True, verbose_name="Active")
     is_popular = models.BooleanField(default=False, verbose_name="Is popular")
     time_zone = models.CharField(
         max_length=222, blank=True, null=True, verbose_name="Event timezone"
