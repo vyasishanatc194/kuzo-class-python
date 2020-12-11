@@ -21,6 +21,7 @@ from core.api.views import (
     InfluencerListAPIView,
     InfluencerDetailsListAPIView,
     ScriptCreateAPI,
+    CheckEventBooking,
 )
 
 
@@ -78,6 +79,8 @@ urlpatterns = [
     ),
     path("book-event/", BookEventAPI.as_view(), name="book-event"),
     path("user-registered-event/", include(user_registred_event)),
+    path("check-event/", CheckEventBooking.as_view(), name="check-event"),
+
 
     # Influencer side
 

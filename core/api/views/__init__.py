@@ -14,6 +14,7 @@ from .subscribe_plan import (
     BookEventAPI,
     CancelSubscriptionAPI,
     ChangeCurrentSubscriptionAPI,
+    CheckEventBooking,
 )
 
 from .offer import InfluencerOfferAPIView, InfluencerOfferCreateAPI

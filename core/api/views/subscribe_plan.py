@@ -45,6 +45,27 @@ class SubscriptionPlanListAPIView(MyAPIView):
 
 
 
+class CheckEventBooking(MyAPIView):
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+
+        """POST method to create the data"""
+
+        if request.user.is_authenticated:
+            event = Event.objects.filter(id=request.data['event']).first()
+            check_participant = EventOrder.objects.filter(user__id=request.user.id, event__id=event.id).exists()
+
+            if check_participant:
+                return Response({"status": "OK", "message": "You have already participated in this event", "data": []})
+
+            else:
+
+                return Response({"status": "FAIL", "message": "You have not participated in this event", "data": []})
+
+
+
 class BookEventAPI(MyAPIView):
 
     """API View to create Card"""
