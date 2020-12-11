@@ -30,7 +30,6 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
     def get(self, request):
 
         try:
-            settings.USE_TZ=False
 
             data = {}
             result =[]
