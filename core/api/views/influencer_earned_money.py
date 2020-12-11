@@ -30,7 +30,7 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
     def get(self, request):
 
         try:
-            settings.TIME_ZONE
+            settings.USE_TZ=False
 
             data = {}
             result =[]
