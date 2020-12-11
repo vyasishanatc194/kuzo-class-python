@@ -22,6 +22,7 @@ from core.api.views import (
     InfluencerDetailsListAPIView,
     ScriptCreateAPI,
     CheckEventBooking,
+    BookEventWithCreditAPI,
 )
 
 
@@ -95,6 +96,8 @@ urlpatterns = [
     path("influencer-payout/", include(influencer_payout)),
     path("influencer-profile/", include(influencer_profile)),
     path("add-script/", ScriptCreateAPI.as_view(), name="add-script"),
+    path("book-event-credit/", BookEventWithCreditAPI.as_view(), name="book-event-credit"),
+
 
 
 

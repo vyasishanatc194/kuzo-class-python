@@ -66,6 +66,90 @@ class CheckEventBooking(MyAPIView):
 
 
 
+
+class BookEventWithCreditAPI(MyAPIView):
+
+    """API View to create Card"""
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CardSerializer
+
+    def post(self, request, format=None):
+
+        """POST method to create the data"""
+
+        if request.user.is_authenticated:
+
+            user_obj = User.objects.filter(id=request.user.id).first()
+            user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
+            event = Event.objects.filter(id=request.data['event']).first()
+            user_serilizer=UserDetailsSerializer(user_obj)
+            check_participant = EventOrder.objects.filter(user__id=request.user.id, event__id=event.id).exists()
+
+            if check_participant:
+
+                return Response({"status": "OK", "message": "You have already participated in this event", "data": []})
+
+
+            # event registration
+
+
+            if int(user_plan.credit) < int(event.credit_required):
+
+                return Response({"status": "OK", "message": "Please Change your current subscriptin plan or buy more credit.", "data": []})
+
+            try:
+                
+                event_order_data = {
+
+                    "user": request.user,
+                    "event" : event,
+                    "used_credit" : event.credit_required,
+                    "order_status": "success",
+                    "charge_id": "credit used",
+
+                }
+
+                event.remianing_spots = int(event.remianing_spots) + 1
+                event.save()
+                event_new = EventOrder.objects.create(**event_order_data)
+
+                transaction_data = {
+
+                        "user": request.user,
+                        "transaction_type" : 'credit',
+                        "amount" : event.price,
+                        "credit": event.credit_required,
+                        "types": "debit",
+                        "transaction_status": "success" ,   
+                        "transaction_id": event_new.id,       
+
+                }
+
+                Transactionlog.objects.create(**transaction_data)
+                user_plan.credit =  int(user_plan.credit)  - int(event.credit_required)
+                user_plan.save()
+
+                serilzer = EventOrderListSerializer(event_new)
+
+                context={"user":user_serilizer.data, 'event_order':serilzer.data}
+                send_sendgrid_email(context,"Event booking Transaction Receipt",request.user.email, settings.EVENT_ORDER_TEMPLATE_ID)
+                
+                obj = User.objects.filter(id=event.user.id).first()
+                if obj:
+                    obj.earned_money = float(obj.earned_money) + float(event.price)
+                    obj.save()
+
+                return Response({"status": "OK", "message": "Event registration  process completed successfully", "data": serilzer.data})
+
+            except:
+                return Response({"status": "FAIL", "message": "Bad request", "data": []})
+
+
+
+
+
+
 class BookEventAPI(MyAPIView):
 
     """API View to create Card"""
@@ -106,7 +190,7 @@ class BookEventAPI(MyAPIView):
 
             if request.data['is_subscription_access']=='true':
 
-                if user_plan.subscription or int(user_plan.credit) < int(event.credit_required):
+                if user_plan.subscription :
 
                     if int(user_plan.credit) < int(event.credit_required):
 
