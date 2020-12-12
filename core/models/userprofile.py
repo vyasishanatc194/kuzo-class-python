@@ -55,4 +55,8 @@ class UserProfile(models.Model):
         verbose_name = "User Profile"
         verbose_name_plural = "User Profile"
 
-  
+
+    def __str__(self):
+            return "{0}".format(self.user)
+
+

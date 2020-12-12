@@ -169,7 +169,6 @@ class BookEventAPI(MyAPIView):
 
             user_obj = User.objects.filter(id=request.user.id).first()
             user_plan = UserProfile.objects.filter(user__id=request.user.id).first()
-            subscription = SubscriptionPlan.objects.filter(id=request.data['subscription']).first()
             event = Event.objects.filter(id=request.data['event']).first()
             user_serilizer=UserDetailsSerializer(user_obj)
 
@@ -189,6 +188,7 @@ class BookEventAPI(MyAPIView):
             # New Subscription & event registration
 
             if request.data['is_subscription_access']=='true':
+
 
                 if user_plan.subscription :
 
@@ -242,6 +242,8 @@ class BookEventAPI(MyAPIView):
 
 
                 try:
+                    subscription = SubscriptionPlan.objects.filter(id=request.data['subscription']).first()
+
                     if event.credit_required  > subscription.number_of_credit:
 
                         return Response({"status": "OK", "message": "This Plan is not enought for this event.Please choose another plan.", "data": []})
