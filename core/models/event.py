@@ -1,4 +1,5 @@
 from django.db import models
+from core.utils.image_thumbnail import make_thumbnail
 
 
 # ----------------------------------------------------------------------
@@ -68,9 +69,19 @@ class Event(models.Model):
         null=True,
     )
 
+
     class Meta:
         verbose_name = "Event"
         verbose_name_plural = "Events"
+
+    def save(self, *args, **kwargs):
+
+        # save for image
+        super(Event, self).save(*args, **kwargs)
+        if self.photo:
+            make_thumbnail(self.photo, self.photo, (400, 300), 'thumb')
+
+        super(Event, self).save(*args, **kwargs)    
 
     def __str__(self):
         return "{0}".format(self.event_class.name)
