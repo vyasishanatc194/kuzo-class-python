@@ -371,6 +371,7 @@ class UserUpdateDetailsSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'email',
+            "influencer_stripe_account_id",
         )
 
-        read_only_fields = ('email', 'user_permissions', 'password')
+        read_only_fields = ('email', 'user_permissions', 'password','influencer_stripe_account_id')
