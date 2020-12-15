@@ -184,6 +184,8 @@ class UserDetailsSerializer(serializers.ModelSerializer):
             'email',
             'is_active',
             "is_influencer",
+            "influencer_stripe_account_id",
+
         )
 
         read_only_fields = ('email', 'user_permissions')
