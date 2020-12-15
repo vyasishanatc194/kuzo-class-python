@@ -68,6 +68,8 @@ class Event(models.Model):
         blank=True,
         null=True,
     )
+    is_transfer = models.BooleanField(default=False, verbose_name="Is featured")
+
 
 
     class Meta:

@@ -37,6 +37,7 @@ class MyUserSerializer(serializers.ModelSerializer):
             "last_name",
             "name",
             "email",
+            "influencer_stripe_account_id",
            
         )
         
