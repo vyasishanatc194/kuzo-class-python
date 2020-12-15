@@ -85,6 +85,39 @@ class StripeAccountCreateAPI(MyAPIView):
 
 
 
+class StripeAccountConnectAPI(MyAPIView):
+
+    """API View to create offer"""
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+
+        """POST method to offer the data"""
+
+        if request.user.is_authenticated:
+
+            try:
+                code = request.data['code']
+                response = stripe.OAuth.token(
+                    grant_type='authorization_code',
+                    code=code,
+                )
+
+                ob=User.objects.filter(id=request.user.id).first()
+                ob.influencer_stripe_account_id = response['stripe_user_id']
+                ob.save()
+                return Response({"status": "OK", "message": "Successfully connected stripe account", "data": response})
+
+            except Exception as e:
+                return Response({"status": "FAIL", "message": str(e), "data": []})
+       
+       
+        else:
+            return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
+
+
+
 class StripeTransferMoneyCreateAPI(MyAPIView):
 
     """API View to create offer"""
