@@ -98,16 +98,23 @@ class StripeAccountConnectAPI(MyAPIView):
         if request.user.is_authenticated:
 
             try:
-                code = request.data['code']
-                response = stripe.OAuth.token(
-                    grant_type='authorization_code',
-                    code=code,
-                )
+                
+                account = stripe.Account.create(
+                        type='express',
+                     )   
 
                 ob=User.objects.filter(id=request.user.id).first()
-                ob.influencer_stripe_account_id = response['stripe_user_id']
+                ob.influencer_stripe_account_id = account.id
                 ob.save()
-                return Response({"status": "OK", "message": "Successfully connected stripe account", "data": response})
+
+                account_links = stripe.AccountLink.create(
+                    account=account.id,
+                    refresh_url='http://44.225.113.133/influencer-earned',
+                    return_url='http://44.225.113.133/influencer-earned',
+                    type='account_onboarding',
+                )
+
+                return Response({"status": "OK", "message": "Successfully connected stripe account", "data": account_links})
 
             except Exception as e:
                 return Response({"status": "FAIL", "message": str(e), "data": []})
