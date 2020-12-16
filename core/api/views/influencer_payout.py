@@ -107,6 +107,9 @@ class StripeAccountConnectAPI(MyAPIView):
                 if not request.user.influencer_stripe_account_id:
                     account = stripe.Account.create(
                             type='express',
+                            settings = {
+                                "payouts":{"schedule":{"interval":"weekly", "weekly_anchor":"sunday"}}
+                                },
                         )   
 
                     ob=User.objects.filter(id=request.user.id).first()
