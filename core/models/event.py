@@ -78,8 +78,6 @@ class Event(models.Model):
 
     def save(self, *args, **kwargs):
 
-        # save for image
-        super(Event, self).save(*args, **kwargs)
         if self.photo:
             make_thumbnail(self.photo, self.photo, (753, 400), 'thumb')
 

@@ -4,8 +4,14 @@ from django.conf import settings
 from core.api.apiviews import MyAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from core.models import InfluencerTransferredMoney, EventOrder, User
+from core.models import InfluencerTransferredMoney, EventOrder, User, Event
 from core.api.serializers import InfluencerTransferredMoneySerializer
+from django.db.models import Sum
+from datetime import datetime, timedelta
+
+current_datetime =  datetime.now()
+start_date = datetime.now() - timedelta(days = 7)
+
 
 
 stripe.api_key = settings.API_KEY
@@ -98,31 +104,64 @@ class StripeAccountConnectAPI(MyAPIView):
         if request.user.is_authenticated:
 
             try:
-                
-                account = stripe.Account.create(
-                        type='express',
-                     )   
+                if not request.user.influencer_stripe_account_id:
+                    account = stripe.Account.create(
+                            type='express',
+                        )   
 
-                ob=User.objects.filter(id=request.user.id).first()
-                ob.influencer_stripe_account_id = account.id
-                ob.save()
+                    ob=User.objects.filter(id=request.user.id).first()
+                    ob.influencer_stripe_account_id = account.id
+                    ob.save()
 
-                account_links = stripe.AccountLink.create(
-                    account=account.id,
-                    refresh_url='http://44.225.113.133/influencer-earned',
-                    return_url='http://44.225.113.133/influencer-earned',
-                    type='account_onboarding',
-                )
+                    account_links = stripe.AccountLink.create(
+                        account=account.id,
+                        refresh_url='http://44.225.113.133/influencer-transfer-funds',
+                        return_url='http://44.225.113.133/influencer-transfer-funds',
+                        type='account_onboarding',
+                    )
 
-                return Response({"status": "OK", "message": "Successfully connected stripe account", "data": account_links})
-
+                    return Response({"status": "OK", "message": "Successfully connected stripe account", "data": account_links})
+                    
             except Exception as e:
-                return Response({"status": "FAIL", "message": str(e), "data": []})
-       
-       
+                return Response({"status": "FAIL", "message": str(e), "data": []})   
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
 
+
+
+
+class StripeAccountLoginAPI(MyAPIView):
+
+    """API View to create offer"""
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+
+        """POST method to offer the data"""
+
+        if request.user.is_authenticated:
+
+            try:
+                check_status=stripe.Account.retrieve(str(request.user.influencer_stripe_account_id))
+                if check_status.details_submitted:
+                    link=stripe.Account.create_login_link(str(request.user.influencer_stripe_account_id))
+                    return Response({"status": "OK", "message": "Successfully created stripe login url", "data": link})
+           
+                else:
+                    account_links = stripe.AccountLink.create(
+                        account=request.user.influencer_stripe_account_id,
+                        refresh_url='http://44.225.113.133/influencer-transfer-funds',
+                        return_url='http://44.225.113.133/influencer-transfer-funds',
+                        type='account_onboarding',
+                    )
+
+                    return Response({"status": "OK", "message": "Successfully connected stripe account", "data": account_links})
+           
+            except Exception as e:
+                return Response({"status": "FAIL", "message": str(e), "data": []})   
+        else:
+            return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
 
 
 class StripeTransferMoneyCreateAPI(MyAPIView):
@@ -138,34 +177,45 @@ class StripeTransferMoneyCreateAPI(MyAPIView):
         if request.user.is_authenticated:
             
             if request.user.influencer_stripe_account_id:
+
+                event = EventOrder.objects.filter(event__user_id=request.user.id, event__event_date_time__range=[start_date, current_datetime], event__is_transfer=False)
+
+                if event:
                 
-                if request.user.earned_money < 1:
-                    return Response({"status": "OK", "message": "You have not enough amount to transfer", "data": []})
+                
+                    total=event.aggregate(Sum('event__price'))
+                    final_transfer = total['event__price__sum']
+                
+                    transaction=stripe.Transfer.create(
+                    amount=int(final_transfer)*100,
+                    currency="usd",
+                    destination= str(request.user.influencer_stripe_account_id),
+                    )
 
-                transaction=stripe.Transfer.create(
-                amount=int(request.user.earned_money)*100,
-                currency="usd",
-                destination= str(request.user.influencer_stripe_account_id),
-                )
+                    transfer = {
+                        "user": request.user.id,
+                        "amount": int(final_transfer),
+                        "status":"success",
+                        "transaction_id":transaction.id,
+                    }
+                    for k in event:
+                        ob=Event.objects.filter(id=k.event.id).first()
+                        ob.is_transfer=True
+                        ob.save()
 
-                User.objects.filter(id=request.user.id).update(earned_money=0)
-
-                transfer = {
-                    "user": request.user.id,
-                    "amount": int(request.user.earned_money),
-                    "status":"success",
-                    "transaction_id":transaction.id,
-                }
-
-                serializer = InfluencerTransferredMoneySerializer(data=transfer)
-                if serializer.is_valid():
-                    serializer.save()
-        
-                    return Response({"status": "OK", "message": "Successfully transfered money", "data": serializer.data})
-                else:
-                    return Response({"status": "OK", "message": "Serializer errors", "data": serializer.errors})
-
+                    serializer = InfluencerTransferredMoneySerializer(data=transfer)
+                    if serializer.is_valid():
+                        serializer.save()
             
+                        return Response({"status": "OK", "message": "Successfully transfered money", "data": serializer.data})
+                    else:
+                        return Response({"status": "OK", "message": "Serializer errors", "data": serializer.errors})
+
+
+                else:
+
+                    return Response({"status": "OK", "message": "Not enough money", "data": []})
+
             else:
                 return Response({"status": "OK", "message": "Please create stripe account & update into kuzo account", "data": []})
         else:
