@@ -284,3 +284,33 @@ class PayoutHistoryAPIView(MyAPIView):
             )
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
+
+
+
+
+class StripeAccountCheckAPI(MyAPIView):
+
+    """API View to Stripe Account Check API """
+
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+
+        """POST method to offer the data"""
+
+        if request.user.is_authenticated:
+
+            if not request.user.influencer_stripe_account_id:
+                return Response({"status": "FAIL", "message": "Please connect account with stripe", "data": []})
+
+            try:
+                check_status= stripe.Account.retrieve(str(request.user.influencer_stripe_account_id))
+                if check_status.details_submitted:
+                    return Response({"status": "OK", "message": "Stripe account is verified", "data": []})
+                else:
+                    return Response({"status": "FAIL", "message": "Not verified stripe account", "data": []})
+
+            except Exception as e:
+                return Response({"status": "FAIL", "message": str(e), "data": []})   
+        else:
+            return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
