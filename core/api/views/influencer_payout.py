@@ -124,7 +124,11 @@ class StripeAccountConnectAPI(MyAPIView):
                     )
 
                     return Response({"status": "OK", "message": "Successfully connected stripe account", "data": account_links})
-                    
+                else:
+
+                    return Response({"status": "FAIL", "message": "You have already coonected with stripe", "data": []})
+
+           
             except Exception as e:
                 return Response({"status": "FAIL", "message": str(e), "data": []})   
         else:
@@ -159,12 +163,40 @@ class StripeAccountLoginAPI(MyAPIView):
                         type='account_onboarding',
                     )
 
-                    return Response({"status": "OK", "message": "Successfully connected stripe account", "data": account_links})
+                    return Response({"status": "OK", "message": "Successfully created stripe registration link", "data": account_links})
            
             except Exception as e:
                 return Response({"status": "FAIL", "message": str(e), "data": []})   
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
+
+
+
+class StripeAccountDiscoonectAPI(MyAPIView):
+
+    """API View to create offer"""
+
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+
+        """POST method to offer the data"""
+
+        if request.user.is_authenticated:
+
+            try:
+                if request.user.influencer_stripe_account_id:
+                    stripe.Account.delete(request.user.influencer_stripe_account_id)
+                    ob=User.objects.filter(id=request.user.id).first()
+                    ob.influencer_stripe_account_id = ""
+                    ob.save()    
+                    return Response({"status": "OK", "message": "Successfully removed stripe accpunt", "data": account_links})
+           
+            except Exception as e:
+                return Response({"status": "FAIL", "message": str(e), "data": []})   
+        else:
+            return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
+
 
 
 class StripeTransferMoneyCreateAPI(MyAPIView):
@@ -214,7 +246,6 @@ class StripeTransferMoneyCreateAPI(MyAPIView):
                     else:
                         return Response({"status": "OK", "message": "Serializer errors", "data": serializer.errors})
 
-
                 else:
 
                     return Response({"status": "OK", "message": "Not enough money", "data": []})
@@ -223,6 +254,7 @@ class StripeTransferMoneyCreateAPI(MyAPIView):
                 return Response({"status": "OK", "message": "Please create stripe account & update into kuzo account", "data": []})
         else:
             return Response({"status": "FAIL", "message": "Unauthorised User", "data": []})
+
 
 
 

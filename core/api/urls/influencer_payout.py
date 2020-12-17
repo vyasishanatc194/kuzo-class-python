@@ -5,6 +5,7 @@ from core.api.views.influencer_payout import (
     PayoutHistoryAPIView,
     StripeAccountConnectAPI,
     StripeAccountLoginAPI,
+    StripeAccountDiscoonectAPI,
 
 )
 
@@ -15,6 +16,6 @@ urlpatterns = [
     path("history", PayoutHistoryAPIView.as_view(), name="payout-history"),
     path("stripe-connect", StripeAccountConnectAPI.as_view(), name="stripe-connect"),
     path("stripe-login", StripeAccountLoginAPI.as_view(), name="stripe-login"),
-
+    path("stripe-disconnect", StripeAccountDiscoonectAPI.as_view(), name="stripe-disconnect"),
 
 ]
