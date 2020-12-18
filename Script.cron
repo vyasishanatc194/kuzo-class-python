@@ -1,0 +1,1 @@
+* * * * * cd kuzo && source venv/bin/activate && python manage.py transfer_funds
