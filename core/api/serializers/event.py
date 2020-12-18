@@ -78,8 +78,11 @@ class EventListSerializer(serializers.ModelSerializer):
         )
 
     def get_remaining_spots(self, event):
-        remaining_spots = int(event.number_of_participants) - int(event.remianing_spots)
-        return remaining_spots
+        if event.number_of_participants>=event.remianing_spots:
+            remaining_spots = int(event.number_of_participants) - int(event.remianing_spots)
+            return remaining_spots
+        else:
+            return 0
 
 
     def get_influencer_category(self, event):

@@ -48,5 +48,9 @@ class CardListSerializer(serializers.ModelSerializer):
 
     def get_card_expiration_date(self, card):
         card = card.card_expiration_date.split("/")
-        new_format = "{0}/{1}".format(card[0], card[1][2:4])
-        return new_format
+        if int(card[0]) <9:
+            new_format = "0{0}/{1}".format(card[0], card[1][2:4])
+            return new_format
+        else:
+            new_format = "{0}/{1}".format(card[0], card[1][2:4])
+            return new_format
