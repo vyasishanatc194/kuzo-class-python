@@ -59,23 +59,41 @@ class Command(BaseCommand):
                                 event__is_transfer=False,
                             )
                             if event:
-                                total = event.aggregate(Sum("event__price"))
-                                final_transfer = total["event__price__sum"]
+                                direct_purchase = event.filter(transaction_type="direct_purchase").aggregate(Sum("event__price"))
+                                credit_purchase = event.filter(transaction_type="credit").aggregate(Sum("event__credit_required"))
 
-                                transaction = stripe.Transfer.create(
-                                    amount=int(final_transfer) * 100,
-                                    currency="usd",
-                                    destination=str(user.influencer_stripe_account_id),
-                                )
+                                credit_amount = credit_purchase['event__credit_required__sum']
+                                total_credit_price  = float(credit_amount) * 0.36
 
-                                for k in event:
-                                    ob = Event.objects.filter(id=k.event.id).first()
-                                    ob.is_transfer = True
-                                    ob.save()
-                                print(
-                                    ".........................................success"
-                                )
-               
+                                total_amount = direct_purchase["event__price__sum"] + total_credit_price
+                                kuzo_amount = float(float(total_amount) * 10)/100
+                                transfer_amount = total_amount - kuzo_amount
+
+                                final_transfer = round(transfer_amount,2)
+
+
+                                
+                                try:
+                                    transaction = stripe.Transfer.create(
+                                        amount=int(final_transfer) * 100,
+                                        currency="usd",
+                                        destination=str(user_obj.influencer_stripe_account_id),
+                                    )
+
+                                    for k in event:
+                                        ob = Event.objects.filter(id=k.event.id).first()
+                                        ob.is_transfer = True
+                                        ob.save()
+
+                                    InfluencerTransferredMoney.objects.create(user=user_obj, transfer_amount=final_transfer, status="status", transaction_id=transaction.id, kuzo_amount=kuzo_amount, total_amount=total_amount)
+                                    
+                                    print(
+                                        ".........................................success"
+                                    )
+
+                                except Exception as e: 
+                                    print("....................................................Error", e)
+
             print(".........................................success")
             self.stdout.write(self.style.SUCCESS("Successfully transfer amount"))
 
