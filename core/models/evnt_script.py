@@ -17,13 +17,7 @@ class EventScript(models.Model):
         null=True,
         blank=True,
     )
-    title = CharField(
-        _("Title"),
-        max_length=255,
-        null=True,
-        blank=True,
-        unique=True,
-    )
+    title = models.TextField(blank=True, null=True, verbose_name="Title")
     created_at = models.DateTimeField(
         auto_now_add=True,
         blank=True,
