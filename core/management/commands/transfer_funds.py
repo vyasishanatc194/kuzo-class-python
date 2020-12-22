@@ -85,7 +85,7 @@ class Command(BaseCommand):
                                         ob.is_transfer = True
                                         ob.save()
 
-                                    InfluencerTransferredMoney.objects.create(user=user_obj, transfer_amount=final_transfer, status="status", transaction_id=transaction.id, kuzo_amount=kuzo_amount, total_amount=total_amount)
+                                    InfluencerTransferredMoney.objects.create(user=user_obj, transfer_amount=final_transfer, status="success", transaction_id=transaction.id, kuzo_amount=kuzo_amount, total_amount=total_amount)
                                     
                                     print(
                                         ".........................................success"

@@ -15,6 +15,5 @@ class InfluencerTransferredMoneySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InfluencerTransferredMoney
-        fields = ["id", 'user','amount', 'status', "transaction_id", "created_at"]
-        
-   
+        fields = ["id", 'user','transfer_amount', 'status', "transaction_id", "created_at","total_amount","kuzo_amount"]
+     

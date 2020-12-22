@@ -40,4 +40,4 @@ class InfluencerTransferredMoney(models.Model):
         verbose_name_plural = "Influencer Transferred Money"
 
     def __str__(self):
-        return "{0}".format(self.amount)
+        return "{0}".format(self.transfer_amount)

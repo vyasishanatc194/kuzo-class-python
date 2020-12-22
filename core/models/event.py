@@ -68,7 +68,7 @@ class Event(models.Model):
         blank=True,
         null=True,
     )
-    is_transfer = models.BooleanField(default=False, verbose_name="Is transfred")
+    is_transfer = models.BooleanField(default=False, verbose_name="Is transfered")
 
 
 
