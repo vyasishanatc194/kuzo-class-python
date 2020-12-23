@@ -1,0 +1,1 @@
+00 10 * * * /home/ubuntu/kuzo/venv/bin/python3 /home/ubuntu/kuzo/manage.py transfer_funds >> /home/ubuntu/kuzo/cron.log 2>&1
