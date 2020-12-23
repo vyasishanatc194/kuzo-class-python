@@ -605,7 +605,11 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                 
                     return Response({"status": "OK", "message": "Your plan successfully started now.", "data":serializer.data})
 
-            
+                else:
+                    return Response({"status": "FAIL", "message": "Please Update billing details.", "data":[]})
+
+
+
             except stripeErr.error.CardError as e:
 
                 body = e.json_body
