@@ -8,11 +8,9 @@ from core.api.apiviews import MyAPIView
 from core.utils.daily_earning_money import daily_earning
 
 from core.models import EventOrder
-from django.conf import settings
-
-
 
 current_datetime =  datetime.now()
+current_datetime += timedelta(days=1)
 
 # .................................................................................
 # InfluencerEarnMoneyListAPIView Plan API
