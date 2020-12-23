@@ -16,6 +16,7 @@ class EventClassForm(forms.ModelForm):
             "user",
             "name",
             "description",
+            "active",
             ]
 
 

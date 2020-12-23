@@ -20,6 +20,7 @@ class EventClass(models.Model):
     )
     name = CharField(_("Name"), max_length=255, null=True, blank=True)
     description = models.TextField(blank=True, null=True, verbose_name="Description")
+    active = models.BooleanField(default=True, verbose_name="Active")
 
     class Meta:
         verbose_name = "Event Class"

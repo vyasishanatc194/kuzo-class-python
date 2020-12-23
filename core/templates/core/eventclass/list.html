@@ -24,6 +24,8 @@
                         <th>Name</th>
 
                         <th>Description</th>
+                        <th>Status</th>
+
                         <th></th>
                     </tr>
                 </thead>
@@ -34,6 +36,8 @@
                         <th>Name</th>
 
                         <th>Description</th>
+                        <th>Status</th>
+
                         <th></th>
                     </tr>
                 </tfoot>
@@ -47,6 +51,9 @@
                         <td>{{ o.name }}</td>
                         
                         <td>{{o.description | safe }}</td>
+                        
+                        <td>{% show_check o.active %}
+
 
                         <td class="row-actions">
                             {% include "core/partials/list_row_actions.html" %}

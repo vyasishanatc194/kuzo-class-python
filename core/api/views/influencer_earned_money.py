@@ -5,7 +5,7 @@ from django.db.models import Sum
 import stripe
 
 from core.api.apiviews import MyAPIView
-from core.utils.daily_earning_money import daily_earning
+from core.utils.daily_earning_money import daily_earning, monthly_earning, yearly_earning
 
 from core.models import EventOrder
 
@@ -27,7 +27,7 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
 
     def get(self, request):
 
-        try:
+        # try:
 
             data = {}
             result =[]
@@ -40,38 +40,66 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
             search = request.GET["q"]
 
             if search == "month":
-                day=30
-                start_date = datetime.now() - timedelta(days = day)
+                event = EventOrder.objects.filter(event__user__id=request.user.id)
+                res = monthly_earning(event)
+                total=event.aggregate(Sum('event__price'))
+                data['total_earning'] = total['event__price__sum']
+                data['total_enroll_student'] = event.count()
+                data['earning'] = res
+                result.append(data)
+
+                return Response(
+                    {
+                        "status": "OK",
+                        "message": "Successfully fetched data",
+                        "data": result,
+                    }
+                )
+
+
 
             elif search == 'year':
-                day=365
-                start_date = datetime.now() - timedelta(days = day)
+
+                event = EventOrder.objects.filter(event__user__id=request.user.id)
+                res = yearly_earning(event)
+                total=event.aggregate(Sum('event__price'))
+                data['total_earning'] = total['event__price__sum']
+                data['total_enroll_student'] = event.count()
+                data['earning'] = res
+                result.append(data)
+
+                return Response(
+                    {
+                        "status": "OK",
+                        "message": "Successfully fetched data",
+                        "data": result,
+                    }
+                )
 
             elif search == 'week':
                 day=7
                 start_date = datetime.now() - timedelta(days = day)
+                event = EventOrder.objects.filter(created_at__range=[start_date, current_datetime], event__user__id=request.user.id)
+                total=event.aggregate(Sum('event__price'))
+                data['total_earning'] = total['event__price__sum']
+                data['total_enroll_student'] = event.count()
+                res=daily_earning(request.user.id, start_date, day)
+                data['earning'] = res
+                result.append(data)
 
-            event = EventOrder.objects.filter(created_at__range=[start_date, current_datetime], event__user__id=request.user.id)
-            total=event.aggregate(Sum('event__price'))
-            data['total_earning'] = total['event__price__sum']
-            data['total_enroll_student'] = event.count()
-            res=daily_earning(request.user.id, start_date, day)
-            data['daily_earning'] = res
-            result.append(data)
-
-            return Response(
-                {
-                    "status": "OK",
-                    "message": "Successfully fetched data",
-                    "data": result,
-                }
-            )
-
-        except:
-            return Response(
+                return Response(
                     {
-                        "status": "FAIL",
-                        "message": "Bad request",
-                        "data": [],
+                        "status": "OK",
+                        "message": "Successfully fetched data",
+                        "data": result,
                     }
                 )
+
+        # except:
+        #     return Response(
+        #             {
+        #                 "status": "FAIL",
+        #                 "message": "Bad request",
+        #                 "data": [],
+        #             }
+        #         )
