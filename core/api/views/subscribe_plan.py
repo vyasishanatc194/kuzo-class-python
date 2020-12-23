@@ -598,7 +598,7 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                     send_sendgrid_email(context,"New Subscription Transaction Receipt",request.user.email, settings.SUBSCRIPTION_ORDER_TEMPLATE_ID)
                         
                 
-                    return Response({"status": "OK", "message": "Old subscription has been cancelled & new subscription started now", "data":serializer.data})
+                    return Response({"status": "OK", "message": "Your plan successfully started now.", "data":serializer.data})
 
             
             except stripeErr.error.CardError as e:
