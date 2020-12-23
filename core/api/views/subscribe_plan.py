@@ -90,7 +90,9 @@ class BookEventWithCreditAPI(MyAPIView):
 
                 return Response({"status": "OK", "message": "You have already participated in this event", "data": []})
 
-
+            if event.number_of_participants == event.remianing_spots:
+                return Response({"status": "OK", "message": "Event is full now", "data": []})
+                
             # event registration
 
 
@@ -175,9 +177,12 @@ class BookEventAPI(MyAPIView):
             check_participant = EventOrder.objects.filter(user__id=request.user.id, event__id=event.id).exists()
 
             if check_participant:
-
                 return Response({"status": "OK", "message": "You have already participated in this event", "data": []})
 
+            if event.number_of_participants == event.remianing_spots:
+                return Response({"status": "OK", "message": "Event is full now", "data": []})
+
+            
             # Check stripe customer id 
 
             if not request.user.customer_id:
