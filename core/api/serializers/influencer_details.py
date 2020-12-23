@@ -51,13 +51,13 @@ class InfluencerDetailsListSerializer(serializers.ModelSerializer):
     def get_upcoming_events(self, user_object):
 
         request = self.context.get('request')
-        event = Event.objects.filter(user__id=user_object.user.id, event_date_time__gte=now).order_by("event_date_time")
+        event = Event.objects.filter(user__id=user_object.user.id, event_date_time__gte=now, active=True).order_by("event_date_time")
         serializers = EventListSerializer(event, many=True, context={"request": request})
         return serializers.data
 
 
     def get_similar_events(self, user_object):
         request = self.context.get('request')
-        event = Event.objects.filter(event_date_time__gte=now).order_by("event_date_time")[:2]
+        event = Event.objects.filter(event_date_time__gte=now, active=True).order_by("event_date_time")[:2]
         serializers = EventListSerializer(event, many=True, context={"request": request})
         return serializers.data

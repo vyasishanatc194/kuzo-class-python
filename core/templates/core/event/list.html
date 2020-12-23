@@ -24,6 +24,7 @@
                         <th>Price</th>
                         <th>Credit required</th>
                         <th>Event date & time</th>
+                        <th>Status</th>
 
 
                         <th></th>
@@ -36,6 +37,8 @@
                     <th>Price</th>
                     <th>Credit required</th>
                     <th>Event date & time</th>
+                    <th>Status</th>
+
 
 
 
@@ -53,6 +56,8 @@
                         <td>{{ o.price }}</td>
                         <td>{{ o.credit_required }}</td>
                         <td>{{ o.event_date_time }}</td>
+
+                        <td>{% show_check o.active %}
 
                     
 
