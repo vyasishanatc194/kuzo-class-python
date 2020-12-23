@@ -45,7 +45,7 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
                 total=event.aggregate(Sum('event__price'))
                 data['total_earning'] = total['event__price__sum']
                 data['total_enroll_student'] = event.count()
-                data['earning'] = res
+                data['earning'] = res[0]
                 result.append(data)
 
                 return Response(
