@@ -25,6 +25,7 @@
                         <th>Credit required</th>
                         <th>Event date & time</th>
                         <th>Status</th>
+                        <th>Registered User</th>
 
 
                         <th></th>
@@ -38,6 +39,7 @@
                     <th>Credit required</th>
                     <th>Event date & time</th>
                     <th>Status</th>
+                    <th>Registered User</th>
 
 
 
@@ -51,13 +53,16 @@
                     <tr>
 
                         <td>{{ o.user.name | title }}</td>
+
                         <td>{{ o.event_class.name }}</td>
                         <td>{{ o.event_types }}</td>
                         <td>{{ o.price }}</td>
                         <td>{{ o.credit_required }}</td>
                         <td>{{ o.event_date_time }}</td>
+                        
 
                         <td>{% show_check o.active %}
+                            <td>{{ o.remianing_spots }}</td>
 
                     
 
