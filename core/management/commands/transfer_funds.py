@@ -62,6 +62,14 @@ class Command(BaseCommand):
                                 direct_purchase = event.filter(transaction_type="direct_purchase").aggregate(Sum("event__price"))
                                 credit_purchase = event.filter(transaction_type="credit").aggregate(Sum("event__credit_required"))
 
+
+                                if direct_purchase["event__price__sum"] is None:
+                                    direct_purchase["event__price__sum"]=0
+
+                                if  credit_purchase['event__credit_required__sum'] is None:
+                                    credit_purchase['event__credit_required__sum']=0
+
+
                                 credit_amount = credit_purchase['event__credit_required__sum']
                                 total_credit_price  = float(credit_amount) * 0.36
 
