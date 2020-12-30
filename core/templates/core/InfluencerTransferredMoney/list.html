@@ -21,7 +21,11 @@
                         <th>User name</th>
                         <th>User email</th>
 
-                        <th>Amount</th>
+                        <th>Total Amount</th>
+                        <th>Transfer Amount</th>
+                        <th>Kuzo class 10% Amount</th>
+
+
                         <th>Created at</th>
                         <th>Charge id</th>
                         <th>Order status</th>
@@ -46,8 +50,11 @@
 
                         <td>{{ o.user.name | title}}</td>
                         <td>{{ o.user.email }}</td>
+                 
+                        <td>{{o.total_amount }}</td>
+                        <td>{{o.transfer_amount }}</td>
+                        <td>{{o.kuzo_amount }}</td>
 
-                        <td>{{o.amount }}</td>
                         <td>{{o.created_at }}</td>
                         <td>{{o.transaction_id }}</td>
                         <td>{{o.status }}</td>
