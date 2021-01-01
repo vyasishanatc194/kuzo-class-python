@@ -8,7 +8,7 @@
 {% block page_content %}
 {% csrf_token %}
 
-{% include "core/includes/list_header_card.html" with title="Contact us list" subtitle="Contact us list." show_button=True %}
+{% include "core/includes/list_header_card.html" with title="Mailing list" subtitle="Mailing list." show_button=True %}
 
 <div class="ibox float-e-margins">
 
@@ -19,7 +19,6 @@
                 <thead>
                     <tr>
                         <th>Email</th>
-                        <th>Description</th>
                         <th>Date</th>
 
 
@@ -29,7 +28,6 @@
                 <tfoot>
                     <tr>
                         <th>Email</th>
-                        <th>Description</th>
                         <th>Date</th>
 
                         
@@ -41,7 +39,6 @@
                     <tr>
 
                         <td>{{ o.email }}</td>
-                        <td>{{o.description}}</td>
                         <td>{{o.created_at}}</td>
                         <td></td>
 
