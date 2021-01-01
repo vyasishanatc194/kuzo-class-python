@@ -20,8 +20,8 @@ class ContactUs(models.Model):
     )
 
     class Meta:
-        verbose_name = "Contact us"
-        verbose_name_plural = "Contact us"
+        verbose_name = "Mailing list"
+        verbose_name_plural = "Mailing list"
 
     def __str__(self):
         return "{0}".format(self.email)

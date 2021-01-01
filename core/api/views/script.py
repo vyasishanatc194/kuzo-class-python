@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from core.api.serializers import EventScriptSerializer
 from core.api.apiviews import MyAPIView
 from core.models import EventScript

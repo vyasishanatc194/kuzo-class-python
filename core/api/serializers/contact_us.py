@@ -18,7 +18,6 @@ class ContactUsSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "email",
-            "description",
         )
 
 

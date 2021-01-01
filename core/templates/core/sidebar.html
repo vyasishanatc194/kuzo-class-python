@@ -187,10 +187,10 @@
             </li>
             {% endif %}
             {% if perms.users or request.user.is_staff %}
-            <li {% if 'contactus/' in request.path %}class="active" {% endif %}>
+            <li {% if 'mailing/' in request.path %}class="active" {% endif %}>
                 <a href="{% url 'core:contactus-list' %}">
                     <i class="fa fa-envelope fa-fw fa-2x"></i>
-                    <span class="nav-label">Contact Us</span>
+                    <span class="nav-label">Mailing List</span>
                 </a>
             </li>
             {% endif %}
