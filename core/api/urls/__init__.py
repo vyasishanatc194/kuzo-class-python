@@ -20,7 +20,6 @@ from core.api.views import (
     BannerListAPIView,
     InfluencerListAPIView,
     InfluencerDetailsListAPIView,
-    ScriptCreateAPI,
     CheckEventBooking,
     BookEventWithCreditAPI,
 )
@@ -42,6 +41,7 @@ from . import influencer_category
 from . import influencer_earn_money
 from . import influencer_payout
 from . import influencer_profile
+from . import script
 
 
 urlpatterns = [
@@ -95,12 +95,10 @@ urlpatterns = [
     path("timezone-list/", include(timezone)),
     path("influencer-payout/", include(influencer_payout)),
     path("influencer-profile/", include(influencer_profile)),
-    path("add-script/", ScriptCreateAPI.as_view(), name="add-script"),
+    path("script/", include(script)),
+
+
     path("book-event-credit/", BookEventWithCreditAPI.as_view(), name="book-event-credit"),
-
-
-
-
     # Home page
 
     path("banner-list/", BannerListAPIView.as_view(), name="banner-list"),
