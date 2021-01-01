@@ -1,1 +1,13 @@
-2 * * * * source venv/bin/activate && python manage.py transfer_funds
+* * * * * /home/ubuntu/kuzo/venv/bin/python3 /home/ubuntu/kuzo/manage.py transfer_funds >> /home/ubuntu/kuzo/cron.log 2>&1
+
+
+
+
+
+
+
+
+
+
+
+

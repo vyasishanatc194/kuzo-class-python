@@ -1,1 +1,10 @@
-00 10 * * * /home/ubuntu/kuzo/venv/bin/python3 /home/ubuntu/kuzo/manage.py transfer_funds >> /home/ubuntu/kuzo/cron.log 2>&1
+0 10 * * * /home/ubuntu/kuzo/venv/bin/python3 /home/ubuntu/kuzo/manage.py subscription >> /home/ubuntu/kuzo/cron.log 2>&1
+
+0 10 * * * /home/ubuntu/kuzo/venv/bin/python3 /home/ubuntu/kuzo/manage.py transfer_funds >> /home/ubuntu/kuzo/cron.log 2>&1
+
+
+
+
+
+
+
