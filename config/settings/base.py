@@ -561,9 +561,15 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
 
 CURRENCY = "usd"
 
+# Stripe KEY
 
 API_KEY = env("stripe_api_key")
+
+# Frontend URL
+
 FRONTEND_URL = env("FRONTEND_URL")
+FRONTEND_STRIPE_RETURN_URL = env("FRONTEND_STRIPE_RETURN_URL")
+
 
 #django-cors
 CORS_ALLOWED_ORIGINS = [

@@ -3,7 +3,7 @@ import time
 from django.conf import settings
 from core.api.apiviews import MyAPIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from core.models import InfluencerTransferredMoney, EventOrder, User, Event
 from core.api.serializers import InfluencerTransferredMoneySerializer
 from django.db.models import Sum
@@ -105,10 +105,11 @@ class StripeAccountConnectAPI(MyAPIView):
 
             try:
                 if not request.user.influencer_stripe_account_id:
+                    today = datetime.today().strftime('%A')
                     account = stripe.Account.create(
                             type='express',
                             settings = {
-                                "payouts":{"schedule":{"interval":"weekly", "weekly_anchor":"sunday"}}
+                                "payouts":{"schedule":{"interval":"weekly", "weekly_anchor":str(today).lower()}}
                                 },
                         )   
 
@@ -118,8 +119,8 @@ class StripeAccountConnectAPI(MyAPIView):
 
                     account_links = stripe.AccountLink.create(
                         account=account.id,
-                        refresh_url='http://44.225.113.133/influencer-transfer-funds',
-                        return_url='http://44.225.113.133/influencer-transfer-funds',
+                        refresh_url=settings.FRONTEND_STRIPE_RETURN_URL,
+                        return_url=settings.FRONTEND_STRIPE_RETURN_URL,
                         type='account_onboarding',
                     )
 

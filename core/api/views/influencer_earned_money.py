@@ -27,7 +27,7 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
 
     def get(self, request):
 
-        # try:
+        try:
 
             data = {}
             result =[]
@@ -95,11 +95,11 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
                     }
                 )
 
-        # except:
-        #     return Response(
-        #             {
-        #                 "status": "FAIL",
-        #                 "message": "Bad request",
-        #                 "data": [],
-        #             }
-        #         )
+        except:
+            return Response(
+                    {
+                        "status": "FAIL",
+                        "message": "Bad request",
+                        "data": [],
+                    }
+                )
