@@ -48,9 +48,9 @@ class ScriptListAPIView(MyAPIView):
     serializer_class = EventScriptSerializer
 
     def get(self, request, pk):
-        banner = EventScript.objects.filter(event__id=pk).order_by("-created_at")
+        script = EventScript.objects.filter(event__id=pk).order_by("-created_at").latest("created_at")
         serializer = self.serializer_class(
-            banner, many=True, context={"request": request}
+            script, context={"request": request}
         )
         return Response(
             {
