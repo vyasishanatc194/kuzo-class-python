@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import time
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum
@@ -43,6 +44,7 @@ class InfluencerEarnMoneyListAPIView(MyAPIView):
                 new_result = stripe.Account.retrieve(
                     str(request.user.influencer_stripe_account_id)
                 )
+                new_result["settings"]["payouts"]['schedule']['delay_days'] = time.strptime(new_result["settings"]["payouts"]['schedule']['weekly_anchor'], '%A').tm_wday 
                 data["next_payout"] = new_result["settings"]["payouts"]
 
             search = request.GET["q"]
