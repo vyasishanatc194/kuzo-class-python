@@ -16,6 +16,13 @@ class ScriptCreateAPI(MyAPIView):
     serializer_class = EventScriptSerializer
 
     def post(self, request):
+
+        check = EventScript.objects.filter(event__id=request.data['event']).exists()
+
+        if check:
+            check = EventScript.objects.filter(event__id=request.data['event']).delete()
+
+
         serializer = self.serializer_class(
             data=request.data, context={"request": request}
         )
@@ -48,17 +55,25 @@ class ScriptListAPIView(MyAPIView):
     serializer_class = EventScriptSerializer
 
     def get(self, request, pk):
-        script = EventScript.objects.filter(event__id=pk).order_by("-created_at").latest("created_at")
-        serializer = self.serializer_class(
-            script, context={"request": request}
-        )
-        return Response(
-            {
-                "status": "OK",
-                "message": "Successfully fetched script list",
-                "data": serializer.data,
-            }
-        )
+
+        try:
+            script = EventScript.objects.filter(event__id=pk).order_by("-created_at").latest("created_at")
+
+            serializer = self.serializer_class(
+                script, context={"request": request}
+            )
+            return Response(
+                {
+                    "status": "OK",
+                    "message": "Successfully fetched script list",
+                    "data": serializer.data,
+                }
+            )
+
+        except EventScript.DoesNotExist:
+                return Response(
+                    {"status": "FAIL", "message": "Event script not found", "data": []}
+                )    
 
 
 
