@@ -171,6 +171,7 @@ class UserGroupSerializer(serializers.ModelSerializer):
 
 
 class UserDetailsSerializer(serializers.ModelSerializer):
+    user_first_name = serializers.SerializerMethodField('user_first_name')
 
     """
     User model w/o password
@@ -185,10 +186,22 @@ class UserDetailsSerializer(serializers.ModelSerializer):
             'is_active',
             "is_influencer",
             "influencer_stripe_account_id",
+            "user_first_name",
 
         )
 
-        read_only_fields = ('email', 'user_permissions')
+        read_only_fields = ('email', 'user_permissions', 'user_first_name')
+
+
+        def user_first_name(self, user):
+
+            if user.name:
+                if str(user.name).isspace():
+                    name = str(user.name).split(" ")
+                    return name[0]
+            else:
+                return user.name
+
 
 
 

@@ -28,11 +28,6 @@ class AccountAdapter(DefaultAccountAdapter):
             "activate_url": str(activate_url),
             "subject":"Welcome !!!",
         }
-
-        # email = Emails(subject="Welcome !!!", recipient_list=emailconfirmation.email_address.email, )
-        # email.set_html_message('welcome/user.html',ctx)
-        # email.send()
-
         send_sendgrid_email(ctx, "Welcome !!!", emailconfirmation.email_address.email, settings.EMAIL_VERIFICATION_TEMPLATE_ID)
         return 
 
