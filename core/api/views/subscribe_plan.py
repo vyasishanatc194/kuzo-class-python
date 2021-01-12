@@ -545,7 +545,7 @@ class ChangeCurrentSubscriptionAPI(MyAPIView):
                     user_obj.save()
 
                 if not card:
-                    return Response({"status": "OK", "message": "Please update billing details", "data":[]})
+                    return Response({"status": "FAIL", "message": "Please update billing details", "data":[]})
                     
                 subscribe_new_plan = stripe.subscribePlan(user_obj.customer_id, subscription.stripe_plan_id, card.stripe_card_id)
                 
