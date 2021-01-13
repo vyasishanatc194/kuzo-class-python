@@ -19,12 +19,19 @@ class AccountAdapter(DefaultAccountAdapter):
 
     def send_confirmation_mail(self, request, emailconfirmation, signup):
 
-        current_site = get_current_site(request)
         activate_url = settings.FRONTEND_URL+"/verify-link/{0}".format(emailconfirmation.key)
+        first_name=''
+        if emailconfirmation.email_address.user:
+            name = str(emailconfirmation.email_address.user).split(" ")
+            first_name+=name[0]
+
+        else:
+            first_name+=emailconfirmation.email_address.user
 
 
         ctx = {
             "user": str(emailconfirmation.email_address.user),
+            'first_name':first_name,
             "activate_url": str(activate_url),
             "subject":"Welcome !!!",
         }
