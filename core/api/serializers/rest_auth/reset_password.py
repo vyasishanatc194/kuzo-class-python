@@ -30,6 +30,7 @@ UserModel = get_user_model()
 
 class UserDetailsSerializer(serializers.ModelSerializer):
 
+    first_name = serializers.SerializerMethodField('get_first_name')
     """
     User model w/o password
     """
@@ -42,11 +43,24 @@ class UserDetailsSerializer(serializers.ModelSerializer):
             'email',
             'is_active',
             "is_influencer",
+            'first_name'
         )
 
-        read_only_fields = ('email', 'user_permissions')
+        read_only_fields = ('email', 'user_permissions','first_name')
+
+
+    def get_first_name(self, user):
+
+        if user.name:
+            name = str(user.name).split(" ")
+            return name[0]
+
+        else:
+            return user.name    
+       
 
 def _unicode_ci_compare(s1, s2):
+    
     """
     Perform case-insensitive comparison of two identifiers, using the
     recommended algorithm from Unicode Technical Report 36, section
