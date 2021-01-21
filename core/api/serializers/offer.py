@@ -54,6 +54,7 @@ class InfluencerOfferSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "offer",
+            "event"
          
         
         )

@@ -24,6 +24,20 @@ class InfluencerOffer(models.Model):
         blank=True,
     )
 
+    event = models.ForeignKey(
+        "core.event",
+        on_delete=models.CASCADE,
+        related_name="evnt_offer",
+        null=True,
+        blank=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True,
+    )
+
     class Meta:
         verbose_name = "Influencer Offer"
         verbose_name_plural = "Influencer Offer"

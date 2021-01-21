@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework import generics
 
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from core.models import Event, UserProfile
-from core.api.serializers import EventSerializer, EventListSerializer
+from core.models import Event, UserProfile, InfluencerOffer
+from core.api.serializers import EventSerializer, EventListSerializer, InfluencerOfferSerializer
 from core.api.apiviews import MyAPIView
 from django.utils import timezone
 
@@ -142,6 +142,17 @@ class EventCreateAPI(MyAPIView):
             serializer = self.serializer_class(data=request.data,  context={"request": request})
             if serializer.is_valid():
                 serializer.save()
+
+                data={
+                    'user': request.user.id,
+                    "offer": request.data['offer'],
+                    'event':serializer.data['id']
+                }    
+
+                serializers = InfluencerOfferSerializer(data=data)
+                if serializers.is_valid():
+                    serializers.save()
+               
                 return Response({"status": "OK", "message": "Successfully created event", "data": serializer.data})
 
             else:

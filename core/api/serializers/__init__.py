@@ -12,7 +12,7 @@ from .transaction_log import TransactionlogSerializer
 
 from .subscription_order import SubscriptionOrderSerializer
 
-from .offer import InfluencerOfferSerializer, InfluencerOfferListSerializer
+from .offer import InfluencerOfferSerializer, InfluencerOfferListSerializer, OfferSerializer
 
 from .credit import CreditSerializer
 
