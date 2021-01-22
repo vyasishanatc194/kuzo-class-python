@@ -11,6 +11,7 @@ from core.api.views import (
     ChangeCurrentPassword,
     PasswordResetView,
     PasswordResetConfirmView,
+    VerifyEmailView
 )
 
 from core.api.views import (
@@ -59,6 +60,8 @@ urlpatterns = [
         name="change-current-password",
     ),
     path("forget-password/", PasswordResetView.as_view(), name="forget-password"),
+    path("verify-email/", VerifyEmailView.as_view(), name="verify-email"),
+
     path(
         "set-new-password/", PasswordResetConfirmView.as_view(), name="set-new-password"
     ),

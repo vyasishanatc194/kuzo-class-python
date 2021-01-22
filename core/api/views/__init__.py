@@ -6,6 +6,7 @@ from .login import (
     ChangeCurrentPassword,
     PasswordResetConfirmView,
     PasswordResetView,
+    VerifyEmailView
 )
 
 from .profile import ProfileDetailsView, ProfileUpdateView

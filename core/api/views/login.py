@@ -29,9 +29,15 @@ sensitive_post_parameters_m = method_decorator(
         'password', 'old_password', 'new_password1', 'new_password2'
     )
 )
+
+
+from allauth.account.views import ConfirmEmailView
+from rest_auth.registration.serializers import VerifyEmailSerializer
+
 from core.models import User
 from core.utils import modify_api_response
 from django.contrib.auth.hashers import check_password
+
 
 
 class LoginView(MyGenericAPIView):
@@ -272,4 +278,33 @@ class ChangeCurrentPassword(MyAPIView):
 
         else:
             return Response({"status": "FAIL", "message": "user not found", "data": []})
+
+
+# Email verification
+
+class VerifyEmailView(APIView, ConfirmEmailView):
+    permission_classes = (AllowAny,)
+    allowed_methods = ('POST', 'OPTIONS', 'HEAD')
+
+    def get_serializer(self, *args, **kwargs):
+        return VerifyEmailSerializer(*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+
+        from rest_framework_jwt.settings import api_settings
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.kwargs['key'] = serializer.validated_data['key']
+
+        confirmation = self.get_object()
+        confirmation.confirm(self.request)
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+        payload = jwt_payload_handler(confirmation.email_address.user)
+        token = jwt_encode_handler(payload)
+
+        return Response({'detail': _('ok'), 'token':token}, status=status.HTTP_200_OK)
+
 
