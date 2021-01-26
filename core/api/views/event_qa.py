@@ -58,7 +58,7 @@ class EventPracticeAudienceQACreateAPI(MyAPIView):
             serializer = self.serializer_class(data=request.data,  context={"request": request})
             if serializer.is_valid():
                 serializer.save()
-                return Response({"status": "OK", "message": "Successfully created Event Practice Audience QA t", "data": serializer.data})
+                return Response({"status": "OK", "message": "Successfully created Event Practice Audience QA.", "data": serializer.data})
 
             else:
                 return Response({"status": "FAIL", "message": "Cannot create Event Practice Audience QA ", "data": serializer.errors})
