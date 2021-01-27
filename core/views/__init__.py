@@ -141,3 +141,5 @@ from .influencer_transfer_money import (
     InfluencerTransferredMoneyListView,
     InfluencerTransferredMoneyAjaxPagination,
 )
+
+from .transfer import run_transfer_fund

@@ -139,6 +139,8 @@ urlpatterns += [
     path("Influencertransferredmoney/", views.InfluencerTransferredMoneyListView.as_view(), name="Influencertransferredmoney-list"),
     path("ajax-influencertransferredmoney", views.InfluencerTransferredMoneyAjaxPagination.as_view(), name="influencertransferredmoney-list-ajax"),
 
+    path("run_transfer_fund/", views.run_transfer_fund, name="run_transfer_fund-list"),
+
 
 
 ]
