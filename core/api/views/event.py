@@ -34,7 +34,7 @@ class EventAPIView(MyAPIView):
             """ use event id """
 
             try:
-                event = Event.objects.filter(user__id=request.user.id, user__is_influencer=True).order_by('event_date_time')
+                event = Event.objects.filter(user__id=request.user.id, user__is_influencer=True).order_by('-created_at')
                 serializer = self.serializer_class(event, many=True, context={"request": request})
                 return Response({"status": "OK", "message": "Successfully fetched event list", "data": serializer.data})
 
