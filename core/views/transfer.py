@@ -29,8 +29,6 @@ def run_transfer_fund(request):
 
         user = User.objects.filter(is_influencer=True)
 
-        print(start_date_week, end_date,"okkkkkkkkkkkkk")
-
         for user_obj in user:
 
             """ Check influencer stripe """
@@ -96,7 +94,6 @@ def run_transfer_fund(request):
                                     ob.save()
 
                                 InfluencerTransferredMoney.objects.create(user=user_obj, transfer_amount=final_transfer, status="success", transaction_id=transaction.id, kuzo_amount=kuzo_amount, total_amount=total_amount)
-                                
                                 print(
                                     ".........................................success"
                                 )

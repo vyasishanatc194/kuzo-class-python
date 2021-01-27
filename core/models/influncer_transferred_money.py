@@ -17,9 +17,9 @@ class InfluencerTransferredMoney(models.Model):
         null=True,
         blank=True,
     )
-    transfer_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
-    total_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
-    kuzo_amount = models.PositiveIntegerField(default=0, blank=True, null=True)
+    transfer_amount = models.CharField(default=0, blank=True, null=True, max_length=222)
+    total_amount = models.CharField(default=0, blank=True, null=True, max_length=222)
+    kuzo_amount = models.CharField(default=0, blank=True, null=True, max_length=222)
 
     status = models.CharField(
         max_length=222, blank=True, null=True, choices=STATUS, default="fail"
