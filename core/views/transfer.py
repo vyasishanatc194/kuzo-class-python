@@ -80,13 +80,11 @@ def run_transfer_fund(request):
                                 kuzo_amount = float(float(total_amount) * 10)/100
                                 transfer_amount = total_amount - kuzo_amount
 
-                                final_transfer = round(transfer_amount,2)
-
-
+                                final_transfer = round(transfer_amount,2) * 100
                                 
                                 try:
                                     transaction = stripe.Transfer.create(
-                                        amount=int(final_transfer) * 100,
+                                        amount=int(final_transfer),
                                         currency="usd",
                                         destination=str(user_obj.influencer_stripe_account_id),
                                     )
