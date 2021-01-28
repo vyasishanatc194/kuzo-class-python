@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from django.db.models import Sum
 import stripe
 
@@ -9,56 +9,59 @@ from core.utils import send_sendgrid_email
 from core.models import InfluencerTransferredMoney, EventOrder, User, Event
 
 from django.http import JsonResponse
+import pytz
+
 
 # Date Format
 
-today = date.today()
-yesterday = today - timedelta(days=1)
 
-yesterday_date = today - timedelta(days=7)
-start_date_week = f"{yesterday_date} 00:00:00"
-end_date = f"{yesterday} 23:59:00"
+timez_zone= pytz.timezone('America/New_York')
+
 
 
 def run_transfer_fund(request):
 
     start_date_week = request.GET["start_date_week"]
+    start_date_week = datetime.strptime(start_date_week, '%Y-%m-%d %H:%M:%S')
     end_date = request.GET["end_date"]
+    start_date_week = timez_zone.localize(start_date_week)
 
-    try:
 
-        user = User.objects.filter(is_influencer=True)
+    # try:
 
-        for user_obj in user:
+    user = User.objects.filter(is_influencer=True)
 
-            """ Check influencer stripe """
+    for user_obj in user:
 
-            if user_obj.influencer_stripe_account_id:
-                connected_stripe_status = stripe.Account.retrieve(
-                    str(user_obj.influencer_stripe_account_id)
+        """ Check influencer stripe """
+
+        if user_obj.influencer_stripe_account_id:
+            connected_stripe_status = stripe.Account.retrieve(
+                str(user_obj.influencer_stripe_account_id)
+            )
+
+            """ Check influencer stripe card  details"""
+
+            if connected_stripe_status.details_submitted:
+
+                """ Check influencer account to any  transaction this week"""
+
+                transfer = InfluencerTransferredMoney.objects.filter(
+                    user__id=user_obj.id,
+                    created_at__range=[start_date_week, end_date],
                 )
 
-                """ Check influencer stripe card  details"""
-
-                if connected_stripe_status.details_submitted:
-
-                    """ Check influencer account to any  transaction this week"""
-
-                    transfer = InfluencerTransferredMoney.objects.filter(
-                        user__id=user_obj.id,
-                        created_at__range=[start_date_week, end_date],
+                if not transfer:
+                    event = EventOrder.objects.filter(
+                        event__user_id=user_obj.id,
+                        
+                        event__is_transfer=False,
                     )
 
-                    if not transfer:
-                        event = EventOrder.objects.filter(
-                            event__user_id=user_obj.id,
-                            event__event_date_time__range=[
-                                start_date_week,
-                                end_date,
-                            ],
-                            event__is_transfer=False,
-                        )
-                        if event:
+                    for k in event:            
+
+                        if k.event.event_date_time  < start_date_week:
+
                             direct_purchase = event.filter(transaction_type="direct_purchase").aggregate(Sum("event__price"))
                             credit_purchase = event.filter(transaction_type="credit").aggregate(Sum("event__credit_required"))
 
@@ -102,10 +105,10 @@ def run_transfer_fund(request):
                                 print("....................................................Error", e)
                                 return JsonResponse({"message":str(e), "status":False})
 
-        print(".........................................success")
-        return JsonResponse({"message":"Successfully run cron", "status":True})
+    print(".........................................success")
+    return JsonResponse({"message":"Successfully run cron", "status":True})
 
 
-    except:
-        print(".........................................Error")
-        return JsonResponse({"message":"Bad request", "status":False})
+    # except:
+    #     print(".........................................Error")
+    #     return JsonResponse({"message":"Bad request", "status":False})
