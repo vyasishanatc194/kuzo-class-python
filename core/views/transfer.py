@@ -23,8 +23,8 @@ def run_transfer_fund(request):
 
     start_date_week = request.GET["start_date_week"]
     start_date_week = datetime.strptime(start_date_week, '%Y-%m-%d %H:%M:%S')
-    end_date = request.GET["end_date"]
     start_date_week = timez_zone.localize(start_date_week)
+    end_date=start_date_week+timedelta(days=7)
 
 
     try:
